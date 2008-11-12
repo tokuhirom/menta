@@ -14,7 +14,7 @@ config({
         # 最大表示文字数
         max_post_body => 1000000,
         # テンプレートファイルディレクトリへのパス
-        tmpl_dir => 'out/tmpl',
+        tmpl_dir => 'tmpl/',
     },
     # あなたのアプリの設定
     application => {
