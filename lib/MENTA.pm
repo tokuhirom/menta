@@ -2,12 +2,21 @@ package MENTA;
 use strict;
 use warnings;
 use utf8;
+use constant DEFAULT_MAX_POST_BODY => 1_024_000;
 
 our $FINISHED;
 our $REQ;
 our $CONFIG;
 
-sub config { $CONFIG }
+sub config {
+    if (@_) {
+        my $config = @_ == 1 ? $_[0] : {@_};
+        $config->{menta}->{max_post_body} ||= DEFAULT_MAX_POST_BODY;
+        $CONFIG = $config;
+    }
+
+    $CONFIG
+}
 
 sub run {
     eval {
