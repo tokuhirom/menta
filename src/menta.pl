@@ -7,11 +7,9 @@ use utf8;
 
 ### CONTROLLER_BASE ###
 
-{
-    no strict 'refs';
-    *{"main::redirect"} = *{"MENTA::Controller::Base::redirect"};
-    *{"main::render"}   = *{"MENTA::Controller::Base::render"};
-}
+### INJECTOR ###
+
+MENTA::Injector->inject();
 
 ### CONTROLLER ###
 

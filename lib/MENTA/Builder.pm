@@ -29,6 +29,9 @@ sub run {
 
         say "index.cgi をつくりあげる";
         $menta = replace($menta, {
+            INJECTOR => do {
+                "{\n" . read_file('lib/MENTA/Injector.pm') . '}'
+            },
             MAIN => do {
                 "{\n" . read_file('lib/MENTA.pm') . '}'
             },
