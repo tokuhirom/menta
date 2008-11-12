@@ -1,7 +1,7 @@
-# Copyright (C) 2010, Sebastian Riedel.
+# based on Mojo::Template. Copyright (C) 2010, Sebastian Riedel.
 # some modified by tokuhirom
 
-package Mojo::Template;
+package MENTA::Template;
 use strict;
 use warnings;
 use constant DEBUG => $ENV{MOJO_TEMPLATE_DEBUG} || 0;
