@@ -61,7 +61,7 @@ sub generate_template_files {
         $mt->parse($src);
         $mt->build();
         my $code = $mt->code();
-        write_file("$OUTPUT_DIR/tmpl/$file", "use utf8;\n$code");
+        write_file("$OUTPUT_DIR/tmpl/$file", "package main; use utf8;\n$code");
     }
     closedir $dir;
 }

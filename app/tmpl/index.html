@@ -1,5 +1,4 @@
-% my ($title, ) = @_;
 <html>
-<title><%= $title %></title>
+<title><%= config()->{application}->{title} %></title>
 <body><div> <%= localtime time %></div></body>
 </html>

@@ -23,7 +23,7 @@ config({
 # あなたのプログラム
 sub do_index {
     my $REQ = shift;
-    render('index.html', config()->{application}->{title});
+    render('index.html');
 }
 
 sub do_goto_wassr {
