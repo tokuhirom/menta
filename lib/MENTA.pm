@@ -127,13 +127,35 @@ sub guess_mime_type {
 sub render {
     my ($tmpl, @params) = @_;
     my $tmpldir = config()->{menta}->{tmpl_dir} or die "[menta] セクションに tmpl_dir が設定されていません";
+    my $cachedir = config()->{menta}->{tmpl_cache_dir} or die "[menta] セクションに tmpl_cache_dir が設定されていません";
+    mkdir $cachedir unless -d $cachedir;
+    my $cachefname = "$cachedir/$tmpl";
     my $tmplfname = "$tmpldir/$tmpl";
-    die "$tmplfname という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
-    my $tmplcode = do $tmplfname;
-    die $@ if $@;
-    my $out = $tmplcode->(@params);
-    utf8::encode($out);
+    my $use_cache = sub {
+        my @orig = stat $tmplfname or return;
+        my @cached = stat $cachefname or return;
+        return $orig[9] < $cached[9];
+    }->();
+    my $out;
+    if ($use_cache) {
+        my $tmplcode = do $cachefname;
+        die $@ if $@;
+        $out = $tmplcode->(@params);
+    } else {
+        die "$tmplfname という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
+        require MENTA::Template;
+        my $tmplsrc = read_file($tmplfname);
+        my $mt = MENTA::Template->new;
+        $mt->parse($tmplsrc);
+        $mt->build();
+        my $src = $mt->code();
+        my $tmplcode = eval $src;
+        die $@ if $@;
+        $out = $tmplcode->(@params);
+        write_file($cachefname, $src);
+    }
 
+    utf8::encode($out);
     print "Content-Type: text/html; charset=utf-8\r\n";
     print "\r\n";
     print $out;
@@ -159,6 +181,21 @@ sub finalize {
     print $str;
 
     $MENTA::FINISHED++;
+}
+
+sub read_file {
+    my $fname = shift;
+    open my $fh, '<:utf8', $fname or die $!;
+    my $s = do { local $/; join '', <$fh> };
+    close $fh;
+    $s;
+}
+
+sub write_file {
+    my ($fname, $stuff) = @_;
+    open my $fh, '>:utf8', $fname or die $!;
+    print $fh $stuff;
+    close $fh;
 }
 
 1;

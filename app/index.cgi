@@ -1,9 +1,9 @@
 #!/usr/bin/perl
-use lib 'lib';
+use lib '../lib';
 use MENTA;
 # -- ここまではおまじない --
 
-require "plugins/mail.pl";
+require "../plugins/mail.pl";
 
 run_menta({
     # MENTA 自体の設定
@@ -14,6 +14,8 @@ run_menta({
         max_post_body => 1000000,
         # テンプレートファイルディレクトリへのパス
         tmpl_dir => 'tmpl/',
+        # テンプレートファイルのキャッシュディレクトリへのパス
+        tmpl_cache_dir => 'tmpl_cache/',
     },
     # あなたのアプリの設定
     application => {
