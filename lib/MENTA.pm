@@ -13,14 +13,14 @@ sub import {
     utf8->import;
 }
 
-package main;
-
 sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
+
+package main;
 
 sub config {
     if (@_) {
         my $config = @_ == 1 ? $_[0] : {@_};
-        $config->{menta}->{max_post_body} ||= DEFAULT_MAX_POST_BODY;
+        $config->{menta}->{max_post_body} ||= MENTA::DEFAULT_MAX_POST_BODY;
         $MENTA::CONFIG = $config;
     }
 
