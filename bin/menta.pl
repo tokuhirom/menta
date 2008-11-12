@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use utf8;
-use lib 'vender/lib/', 'lib';
+use lib 'vendor/lib', 'lib';
 use MENTA::Builder;
 
 binmode STDOUT, ':utf8';
