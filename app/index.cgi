@@ -3,6 +3,8 @@ use lib 'lib';
 use MENTA::Base;
 # -- ここまではおまじない --
 
+require "plugins/mail.pl";
+
 # 設定
 config({
     # MENTA 自体の設定
@@ -28,6 +30,11 @@ sub do_index {
 
 sub do_goto_wassr {
     redirect('http://wassr.jp/');
+}
+
+sub do_mail {
+    mail_send('info@example.com', 'this is subject', 'hi!');
+    redirect('http://example.com');
 }
 
 # おまじない

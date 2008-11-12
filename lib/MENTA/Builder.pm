@@ -12,13 +12,29 @@ my $SOURCE_DIR = 'app/';
 sub replace {
     my ($src, $params) = @_;
     $src =~ s{###\s+INCLUDE\s+'([^']+)'\s+###}{
-        my $fname = $1;
-        "{\n    " . join("\n    ", split("\n", read_file($fname))) . "\n}\n"
+        read_source($1);
     }gem;
     while (my ($key, $val) = each %$params) {
         $src =~ s/### $key ###/$val/g;
     }
     $src;
+}
+
+sub read_source {
+    my $fname = shift;
+    my $src = _read_and_indent($fname, 1);
+    $src =~ s{require\s+['"]([^'"]+)['"]\s*;}{
+        my $fname = $1;
+        _read_and_indent($1, 2);
+    }ge;
+    $src;
+}
+
+sub _read_and_indent {
+    my ($fname, $indent_level) = @_;
+    my $one_level = 4;
+    my $indent = ' ' x ($indent_level*$one_level);
+    "{\n$indent" . join("\n$indent", split("\n", read_file($fname))) . "\n" . (' ' x (($indent_level-1)*$one_level)) . "}\n";
 }
 
 sub run {
