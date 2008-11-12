@@ -4,7 +4,8 @@
 <script type="text/javascript" src="/static/jquery-latest.js"></script>
 <script type="text/javascript">
 $(function() {
-    $('h1').css({background : 'orange'});
+    var $this = $('h1');
+    $this.css({background : 'orange'}).text($this.text().replace('MENTA', 'めんた'));
 });
 </script>
 <h1><%= config()->{application}->{title} %></h1>
