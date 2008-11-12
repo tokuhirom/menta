@@ -2,7 +2,7 @@ package MENTA;
 use strict;
 use warnings;
 use utf8;
-use constant DEFAULT_MAX_POST_BODY => 1_024_000;
+sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
 our $FINISHED;
 our $REQ;
