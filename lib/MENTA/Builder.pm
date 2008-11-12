@@ -2,7 +2,7 @@ package MENTA::Builder;
 use strict;
 use warnings;
 use utf8;
-use Mojo::Template;
+use MENTA::Template;
 use MENTA::Util;
 
 my $OUTPUT_DIR = 'out';
@@ -74,7 +74,7 @@ sub generate_template_files {
         my $fname = "$SOURCE_DIR/tmpl/$file";
         next unless -f $fname;
         my $src = read_file($fname);
-        my $mt = Mojo::Template->new;
+        my $mt = MENTA:Template->new;
         utf8::decode($src) unless utf8::is_utf8($src);
         $mt->parse($src);
         $mt->build();
