@@ -48,7 +48,7 @@ sub run {
         # TODO: 美麗な画面を出す
         warn $err;
 
-        print "Content-type: text/html; charset=utf-8\n";
+        print "Content-Type: text/html; charset=utf-8\n";
         print "\n";
         if ($CONFIG->{menta}->{kcatch_mode}) {
             print qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n};

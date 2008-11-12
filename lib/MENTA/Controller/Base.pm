@@ -16,7 +16,7 @@ sub render {
     my $out = $tmplcode->(@params);
     utf8::encode($out);
 
-    print "Content-type: text/html; charset=utf-8\n";
+    print "Content-Type: text/html; charset=utf-8\n";
     print "\n";
     print $out;
 

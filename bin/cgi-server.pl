@@ -15,7 +15,7 @@ use MENTA::BindSTDOUT;
         if ($pid) {
             waitpid($pid, POSIX::WNOHANG);
         } elsif ($pid == 0) {
-            system 'bin/menta.pl';
+            system "$^X bin/menta.pl";
             my $out = MENTA::BindSTDOUT->bind(sub {
                 do 'out/index.cgi';
                 die $@ if $@;
