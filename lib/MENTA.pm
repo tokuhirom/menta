@@ -29,7 +29,7 @@ sub run_menta {
     eval {
         my $config = config();
         if (! $config) {
-            die "config()でアプリケーション設定がされていません!";
+            die "config() でアプリケーション設定がされていません!";
         }
 
         my $input;
@@ -55,27 +55,29 @@ sub run_menta {
             $MENTA::REQ->{$key} = $val;
         }
 
-        my $static_file = $ENV{PATH_INFO} || '';
-        $static_file =~ s!^/*!!g;
-        if ($static_file !~ /index\.cgi/ && -f $static_file) {
-            if (open my $fh, '<', $static_file) {
-                printf "Content-Type: %s\n\n", guess_mime_type($static_file);
-                print do { local $/; <$fh> };
-                close $fh;
-            } else {
-                die "ファイルが見つかりません";
+        if (my $static_file = $ENV{PATH_INFO}) {
+            $static_file =~ s!^/+!!g;
+            if ($static_file !~ /\bindex\.cgi\b/ && -f $static_file) {
+                if (open my $fh, '<', $static_file) {
+                    printf "Content-Type: %s\r\n\r\n", guess_mime_type($static_file);
+                    print do { local $/; <$fh> };
+                    close $fh;
+                    return 1;
+                } else {
+                    die "ファイルが開きません";
+                }
+            }
+        }
+
+        my $mode = $MENTA::REQ->{mode} || 'index';
+        my $meth = "do_$mode";
+        if (my $code = main->can($meth)) {
+            $code->($MENTA::REQ);
+            unless ($MENTA::FINISHED) {
+                die "なにも出力してません";
             }
         } else {
-            my $mode = $MENTA::REQ->{mode} || 'index';
-            my $meth = "do_$mode";
-            if (my $code = main->can($meth)) {
-                $code->($MENTA::REQ);
-                unless ($MENTA::FINISHED) {
-                    die "なにも出力してません";
-                }
-            } else {
-                die "'$mode' というモードは存在しません";
-            }
+            die "「$mode」というモードは存在しません";
         }
     };
     if (my $err = $@) {
@@ -90,9 +92,9 @@ sub run_menta {
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 $err = escape_html($err);
-                qq{<html><body style="background: red; color: white"><p>500 Internal Server Error: $err</p></body></html>\n};
+                qq{<html><body style="background: red; color: white; font-weight: bold"><p><span style="font-size: xx-large; color: black">&#x2620;</span> 500 Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span>: $err</p></body></html>\n};
             } else {
-                qq{<html><body style="background: red; color: white"><p>500 Internal Server Error</p></body></html>\n};
+                qq{<html><body><p style="color: red">500 Internal Server Error</p></body></html>\n};
             }
         };
         utf8::encode($body);
@@ -142,7 +144,7 @@ sub render {
         die $@ if $@;
         $out = $tmplcode->(@params);
     } else {
-        die "$tmplfname という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
+        die "「$tmplfname」という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
         require MENTA::Template;
         my $tmplsrc = read_file($tmplfname);
         my $mt = MENTA::Template->new;

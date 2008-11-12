@@ -1,12 +1,15 @@
+% my $docroot = config()->{application}->{docroot}
+% my $title   = config()->{application}->{title}
 <!doctype html>
-<title><%= config()->{application}->{title} %></title>
-<link rel="stylesheet" type="text/css" href="/static/style-sites.css">
-<script type="text/javascript" src="/static/jquery-latest.js"></script>
-<script type="text/javascript">
+<title><%= $title %></title>
+<link rel="stylesheet" type="text/css" href="<%= $docroot %>static/style-sites.css">
+<script type="text/javascript" src="<%= $docroot %>static/jquery.js"></script>
+<script type="text/javascript"><!--
 $(function() {
     var $this = $('h1');
     $this.css({background : 'orange'}).text($this.text().replace('MENTA', 'めんた'));
 });
-</script>
-<h1><%= config()->{application}->{title} %></h1>
+//--></script>
+
+<h1><%= $title %></h1>
 <p><%= localtime time %></p>

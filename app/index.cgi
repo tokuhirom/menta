@@ -20,7 +20,8 @@ run_menta({
     },
     # あなたのアプリの設定
     application => {
-        title => "MENTA サンプルアプリ",
+        docroot => '',
+        title => 'MENTA サンプルアプリ',
     },
 });
 

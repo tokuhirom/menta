@@ -34,7 +34,9 @@ sub _read_and_indent {
     my ($fname, $indent_level) = @_;
     my $one_level = 4;
     my $indent = ' ' x ($indent_level*$one_level);
-    "{\n$indent" . join("\n$indent", split("\n", read_file($fname))) . "\n" . (' ' x (($indent_level-1)*$one_level)) . "}\n";
+    "{\n" . join("\n", grep { /^\s*$/ or $_ = $indent . $_; 1 }
+                       split("\n", read_file($fname)))
+          . "\n" . (' ' x (($indent_level-1)*$one_level)) . "}\n";
 }
 
 sub run {
