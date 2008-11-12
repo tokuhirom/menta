@@ -27,7 +27,7 @@ sub run {
 
         my $input;
         if ($ENV{'REQUEST_METHOD'} eq "POST") {
-            if ($ENV{CONTENT_LENGTH} > $CONFIG->{menta}->{max_post_body}) {
+            if ($ENV{CONTENT_LENGTH} > $config->{menta}->{max_post_body}) {
                 die "投稿データが長すぎです";
             } else {
                 read(STDIN, $input, $ENV{'CONTENT_LENGTH'});
@@ -64,7 +64,9 @@ sub run {
 
         print "Content-Type: text/html; charset=utf-8\n";
         print "\n";
-        if ($CONFIG->{menta}->{kcatch_mode}) {
+
+        my $config = config() || {};
+        if ($config->{menta}->{kcatch_mode}) {
             print qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n};
         } else {
             print qq{<html><body><div color="red">500 Internal Server Error</div></body></html>\n};
