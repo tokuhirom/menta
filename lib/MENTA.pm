@@ -43,7 +43,7 @@ sub run {
             my ($key, $val) = split /=/, $_;
             if ($val) {
                 $val =~ tr/+/ /;
-                $val =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("H2", $1)/eg;
+                $val =~ s/%([a-fA-F0-9]{2})/pack("H2", $1)/eg;
             }
             $REQ->{$key} = $val;
         }

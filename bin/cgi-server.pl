@@ -29,7 +29,7 @@ use MENTA::BindSTDOUT;
             exit;
         } elsif (defined $pid) {
             die $!;
-        } 
+        }
     }
 }
 

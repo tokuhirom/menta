@@ -39,7 +39,7 @@ sub generate_cgi {
     say "index.cgi をつくりあげる";
     $menta = replace($menta, {
         SHEBANG => do {
-            my ($shebang,) = split /\n/, read_file('app/index.cgi');
+            my ($shebang,) = split /\r\n|[\r\n]/, read_file('app/index.cgi');
             $shebang;
         },
     });
