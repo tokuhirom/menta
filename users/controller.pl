@@ -4,3 +4,6 @@ sub do_index {
     render('index.html');
 }
 
+sub do_goto_wassr {
+    redirect('http://wassr.jp/');
+}
