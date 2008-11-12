@@ -3,13 +3,11 @@ use strict;
 use warnings;
 use utf8;
 
-### MAIN ###
-
-### CONTROLLER_BASE ###
-
-### INJECTOR ###
+### INCLUDE 'lib/MENTA.pm' ###
+### INCLUDE 'lib/MENTA/Controller/Base.pm' ###
+### INCLUDE 'lib/MENTA/Injector.pm' ###
 
 MENTA::Injector->inject();
 
-### CONTROLLER ###
+### INCLUDE 'app/index.cgi' ###
 
