@@ -22,9 +22,12 @@ sub run {
 sub generate_cgi {
     say "menta.cgi をつくりあげる";
     my ($shebang,) = split /\r\n|[\r\n]/, read_file('app/menta.cgi');
-    my $menta = "$shebang\n$TMPL";
-    $menta .= read_file('lib/MENTA.pm');
-    $menta .= read_file('app/menta.cgi');
+    my $menta = join( "\n",
+        $shebang,
+        "use strict;use warnings;use utf8;",
+        read_file('lib/MENTA.pm'),
+        read_file('app/menta.cgi'),
+    );
     $menta =~ s/use MENTA;/package main;/g;
     $menta =~ s!use lib '\..\/lib';!!;
     say "menta.cgi を出力しています";
