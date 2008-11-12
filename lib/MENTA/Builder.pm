@@ -8,47 +8,6 @@ use MENTA::Util;
 my $OUTPUT_DIR = 'out';
 my $SOURCE_DIR = 'app';
 
-my $TMPL = <<'...';
-### SHEBANG ###
-use strict;
-use warnings;
-use utf8;
-
-### INCLUDE 'lib/MENTA.pm' ###
-### INCLUDE 'app/menta.cgi' ###
-...
-
-sub replace {
-    my ($src, $params) = @_;
-    $src =~ s{###\s+INCLUDE\s+'([^']+)'\s+###}{
-        read_source($1);
-    }gem;
-    while (my ($key, $val) = each %$params) {
-        $src =~ s/### $key ###/$val/g;
-    }
-    $src;
-}
-
-sub read_source {
-    my $fname = shift;
-    my $src = _read_and_indent($fname, 1);
-    $src =~ s{require\s+['"]([^'"]+)['"]\s*;}{
-        my $fname = $1;
-        $fname =~ s!^\.\./*!!;
-        _read_and_indent($fname, 2);
-    }ge;
-    $src;
-}
-
-sub _read_and_indent {
-    my ($fname, $indent_level) = @_;
-    my $one_level = 4;
-    my $indent = ' ' x ($indent_level*$one_level);
-    "{\n" . join("\n", grep { /^\s*$/ or $_ = $indent . $_; 1 }
-                       split("\n", read_file($fname)))
-          . "\n" . (' ' x (($indent_level-1)*$one_level)) . "}\n";
-}
-
 sub run {
     say "出力先ディレクトリを作成しています";
     mkdir $OUTPUT_DIR unless -d $OUTPUT_DIR;
@@ -62,15 +21,12 @@ sub run {
 
 sub generate_cgi {
     say "menta.cgi をつくりあげる";
-    my $menta = $TMPL;
-    $menta = replace($menta, {
-        SHEBANG => do {
-            my ($shebang,) = split /\r\n|[\r\n]/, read_file('app/menta.cgi');
-            $shebang;
-        },
-    });
+    my ($shebang,) = split /\r\n|[\r\n]/, read_file('app/menta.cgi');
+    my $menta = "$shebang\n$TMPL";
+    $menta .= read_file('lib/MENTA.pm');
+    $menta .= read_file('app/menta.cgi');
     $menta =~ s/use MENTA;/package main;/g;
-    $menta =~ s/use lib 'lib';//;
+    $menta =~ s!use lib '\..\/lib';!!;
     say "menta.cgi を出力しています";
     write_file("$OUTPUT_DIR/menta.cgi" => $menta);
     my $mode = 755; #TODO

@@ -17,3 +17,4 @@ sub dbi_select {
     @res;
 }
 
+1;

@@ -15,9 +15,9 @@ use HTTP::Response;
         if ($pid) {
             waitpid($pid, POSIX::WNOHANG);
         } elsif ($pid == 0) {
-            system "$^X bin/menta.pl";
-            chdir 'out';
+            chdir 'app';
             my $out = MENTA::BindSTDOUT->bind(sub {
+                package main;
                 do './menta.cgi';
                 die $@ if $@;
             });
