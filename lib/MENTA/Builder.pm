@@ -8,6 +8,7 @@ use MENTA::Util;
 
 my $OUTPUT_DIR = 'out/';
 my $SOURCE_DIR = 'users/';
+my $CONTROLLER_FILE = 'users/controller.pl';
 
 sub replace {
     my ($src, $params) = @_;
@@ -25,9 +26,6 @@ sub run {
     sub {
         say "ソースファイルを読み込んでいます";
         my $menta = read_file('src/menta.pl');
-        say ".ini ファイルを読んでいます";
-        do 'users/controller.pl';
-        die $@ if $@;
 
         say "index.cgi をつくりあげる";
         $menta = replace($menta, {
@@ -38,11 +36,11 @@ sub run {
                 '{' . read_file('lib/MENTA/Controller/Base.pm') . '}'
             },
             CONTROLLER => do {
-                '{' . read_file('users/controller.pl') . '}'
+                '{' . read_file($CONTROLLER_FILE) . '}'
             },
             SHEBANG => do {
-                my $perlpath = $MENTA::CONFIG->{menta}->{perlpath} or die "config.ini の [menta] の中に perl のパスに関する設定がありません";
-                "#!$perlpath";
+                my ($shebang,) = split /\n/, read_file($CONTROLLER_FILE);
+                $shebang;
             },
         });
         $menta =~ s/use MENTA::Base;/package main;/g;

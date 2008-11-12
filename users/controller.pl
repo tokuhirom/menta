@@ -5,8 +5,6 @@ use MENTA::Base;
 $MENTA::CONFIG = {
     # MENTA 自体の設定
     menta => {
-        # Perl のパス
-        perlpath => '/usr/bin/perl',
         # エラー出力するか？
         kcatch_mode => 1,
         # 最大表示文字数
