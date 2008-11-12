@@ -2,7 +2,6 @@ package MENTA;
 use strict;
 use warnings;
 use utf8;
-use Encode;
 
 our $FINISHED;
 our $REQ;
@@ -52,7 +51,7 @@ sub run {
         print "Content-type: text/html; charset=utf-8\n";
         print "\n";
         if ($CONFIG->{menta}->{kcatch_mode}) {
-            print encode_utf8(qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n});
+            print qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n};
         } else {
             print qq{<html><body><div color="red">500 Internal Server Error</div></body></html>\n};
         }
