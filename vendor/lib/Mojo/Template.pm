@@ -4,28 +4,32 @@
 package Mojo::Template;
 use strict;
 use warnings;
-use base 'Mojo::Base';
 use constant DEBUG => $ENV{MOJO_TEMPLATE_DEBUG} || 0;
 
 use Carp 'croak';
-use IO::File;
 
-__PACKAGE__->attr('code'           , chained => 1, default => '');
-__PACKAGE__->attr('comment_mark'   , chained => 1, default => '#');
-__PACKAGE__->attr('compiled'       , chained => 1);
-__PACKAGE__->attr('expression_mark', chained => 1, default => '=');
-__PACKAGE__->attr('line_start'     , chained => 1, default => '%');
-__PACKAGE__->attr('template'       , chained => 1, default => '');
-__PACKAGE__->attr('tree'           , chained => 1, default => sub { [] });
-__PACKAGE__->attr('tag_start'      , chained => 1, default => '<%');
-__PACKAGE__->attr('tag_end'        , chained => 1, default => '%>');
+sub new {
+    my $class = shift;
+    return bless {
+        code => '',
+        comment_mark => '#',
+        expression_mark => '=',
+        line_start => '%',
+        template => '',
+        tree => [],
+        tag_start => '<%',
+        tag_end => '%>',
+    }, $class;
+}
+
+sub code { shift->{code} }
 
 sub build {
     my $self = shift;
 
     # Compile
     my @lines;
-    for my $line (@{$self->tree}) {
+    for my $line (@{$self->{tree}}) {
 
         # New line
         push @lines, '';
@@ -63,65 +67,24 @@ sub build {
     $lines[0]   = q/sub { my $_MOJO = '';/ . $lines[0];
     $lines[-1] .= q/return $_MOJO; };/;
 
-    $self->code(join "\n", @lines);
+    $self->{code} = join "\n", @lines;
     return $self;
-}
-
-sub compile {
-    my $self = shift;
-
-    # Shortcut
-    my $code = $self->code;
-    return undef unless $code;
-
-    # Catch compilation warnings
-    local $SIG{__WARN__} = sub {
-        my $error = shift;
-        warn $self->_error($error);
-    };
-
-    # Compile
-    my $compiled = eval $code;
-    die $self->_error($@) if $@;
-
-    $self->compiled($compiled);
-    return $self;
-}
-
-sub interpret {
-    my $self = shift;
-
-    # Shortcut
-    my $compiled = $self->compiled;
-    return undef unless $compiled;
-
-    # Catch interpreter warnings
-    local $SIG{__WARN__} = sub {
-        my $error = shift;
-        warn $self->_error($error);
-    };
-
-    # Interpret
-    my $result = eval { $compiled->(@_) };
-    return $self->_error($@) if $@;
-
-    return $result;
 }
 
 # I am so smart! I am so smart! S-M-R-T! I mean S-M-A-R-T...
 sub parse {
     my ($self, $tmpl) = @_;
-    $self->template($tmpl);
+    $self->{template} = $tmpl;
 
     # Clean start
     delete $self->{tree};
 
     # Tags
-    my $line_start = quotemeta $self->line_start;
-    my $tag_start  = quotemeta $self->tag_start;
-    my $tag_end    = quotemeta $self->tag_end;
-    my $cmnt_mark  = quotemeta $self->comment_mark;
-    my $expr_mark  = quotemeta $self->expression_mark;
+    my $line_start = quotemeta $self->{line_start};
+    my $tag_start  = quotemeta $self->{tag_start};
+    my $tag_end    = quotemeta $self->{tag_end};
+    my $cmnt_mark  = quotemeta $self->{comment_mark};
+    my $expr_mark  = quotemeta $self->{expression_mark};
 
     # Tokenize
     my $state = 'text';
@@ -130,21 +93,21 @@ sub parse {
 
         # Perl line without return value
         if ($line =~ /^$line_start\s+(.+)$/) {
-            push @{$self->tree}, ['code', $1];
+            push @{$self->{tree}}, ['code', $1];
             $multiline_expression = 0;
             next;
         }
 
         # Perl line with return value
         if ($line =~ /^$line_start$expr_mark\s+(.+)$/) {
-            push @{$self->tree}, ['expr', $1];
+            push @{$self->{tree}}, ['expr', $1];
             $multiline_expression = 0;
             next;
         }
 
         # Comment line, dummy token needed for line count
         if ($line =~ /^$line_start$cmnt_mark\s+(.+)$/) {
-            push @{$self->tree}, [];
+            push @{$self->{tree}}, [];
             $multiline_expression = 0;
             next;
         }
@@ -217,28 +180,11 @@ sub parse {
                 push @token, $state, $token;
             }
         }
-        push @{$self->tree}, \@token;
+        push @{$self->{tree}}, \@token;
     }
 
     return $self;
 }
-
-#ub render {
-#   my $self = shift;
-#   my $tmpl  = shift;
-
-#   # Parse
-#   $self->parse($tmpl);
-
-#   # Build
-#   $self->build;
-
-#   # Compile
-#   $self->compile;
-
-#   # Interpret
-#   return $self->interpret(@_);
-#
 
 sub _context {
     my ($self, $text, $line) = @_;
@@ -285,7 +231,7 @@ sub _error {
         my $delim = '-' x 76;
 
         my $report = "\nTemplate error around line $line.\n";
-        my $template = $self->_context($self->template, $line);
+        my $template = $self->_context($self->{template}, $line);
         $report .= "$delim\n$template$delim\n";
 
         # Advanced debugging
