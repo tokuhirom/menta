@@ -8,6 +8,7 @@ use utf8;
     use strict;
     use warnings;
     use utf8;
+    use Encode;
 
     # TODO: ディレクトリトラバーサル対策
     sub render {
@@ -20,7 +21,7 @@ use utf8;
 
         print "Content-type: text/html; charset=utf-8\n";
         print "\n";
-        print $tmplcode->(@params);
+        print encode_utf8($tmplcode->(@params));
 
         $MENTA::FINISHED++;
     }
@@ -44,6 +45,7 @@ use utf8;
     use strict;
     use warnings;
     use utf8;
+    use Encode;
 
     our $FINISHED;
     our $REQ;
@@ -92,7 +94,7 @@ use utf8;
             print "Content-type: text/html; charset=utf-8\n";
             print "\n";
             if ($CONFIG->{menta}->{kcatch_mode}) {
-                print qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n};
+                print encode_utf8(qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n});
             } else {
                 print qq{<html><body><div color="red">500 Internal Server Error</div></body></html>\n};
             }
