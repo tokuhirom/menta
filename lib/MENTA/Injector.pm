@@ -4,7 +4,7 @@ use warnings;
 
 sub inject {
     no strict 'refs';
-    for my $meth (qw/render redirect/) {
+    for my $meth (qw/render redirect finalize/) {
         *{"main\::$meth"} = *{"MENTA::Controller::Base::$meth"};
     }
     for my $meth (qw/config/) {

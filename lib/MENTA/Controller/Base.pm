@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use utf8;
 
-our @METHODS = qw/render redirect/;
+our @METHODS = qw/render redirect finalize/;
 
 # TODO: ディレクトリトラバーサル対策
 sub render {
@@ -29,6 +29,17 @@ sub redirect {
     print "Location: $location\n";
     print "\n";
 
+    $MENTA::FINISHED++;
+}
+
+sub finalize {
+    my $str = shift;
+    my $content_type = shift || 'text/html; charset=utf-8';
+
+    print "Content-Type: $content_type\n";
+    print "\n";
+    print $str;
+    
     $MENTA::FINISHED++;
 }
 
