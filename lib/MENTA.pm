@@ -27,7 +27,8 @@ sub run {
 
         my $input;
         if ($ENV{'REQUEST_METHOD'} eq "POST") {
-            if ($ENV{CONTENT_LENGTH} > $config->{menta}->{max_post_body}) {
+            my $max_post_body = $config->{menta}->{max_post_body};
+            if ($max_post_body > 0 && $ENV{CONTENT_LENGTH} > $max_post_body) {
                 die "投稿データが長すぎです";
             } else {
                 read(STDIN, $input, $ENV{'CONTENT_LENGTH'});
