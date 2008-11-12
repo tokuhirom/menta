@@ -1,26 +1,31 @@
 package MENTA::Builder;
-use strict;
-use warnings;
-use utf8;
+use MENTA;
 use MENTA::Template;
-use MENTA::Util;
 
 my $OUTPUT_DIR = 'out';
 my $SOURCE_DIR = 'app';
 
+{
+    no strict 'refs';
+    *{"MENTA::Builder::read_file"} = *{"main::read_file"};
+    *{"MENTA::Builder::write_file"} = *{"main::write_file"};
+}
+
+sub puts { print @_, "\n" };
+
 sub run {
-    say "出力先ディレクトリを作成しています";
+    puts "出力先ディレクトリを作成しています";
     mkdir $OUTPUT_DIR unless -d $OUTPUT_DIR;
 
-    say "メインソースをコンパイルします";
+    puts "メインソースをコンパイルします";
     generate_cgi();
 
-    say "テンプレートファイルをコンパイルします";
+    puts "テンプレートファイルをコンパイルします";
     generate_template_files();
 }
 
 sub generate_cgi {
-    say "menta.cgi をつくりあげる";
+    puts "menta.cgi をつくりあげる";
     my ($shebang,) = split /\r\n|[\r\n]/, read_file('app/menta.cgi');
     my $menta = join( "\n",
         $shebang,
@@ -30,10 +35,10 @@ sub generate_cgi {
     );
     $menta =~ s/use MENTA;/package main;/g;
     $menta =~ s!use lib '\..\/lib';!!;
-    say "menta.cgi を出力しています";
+    puts "menta.cgi を出力しています";
     write_file("$OUTPUT_DIR/menta.cgi" => $menta);
     my $mode = 755; #TODO
-    say "chmod $mode";
+    puts "chmod $mode";
     chmod oct($mode), "$OUTPUT_DIR/menta.cgi";
 }
 
