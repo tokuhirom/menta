@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use lib 'vender/lib', 'lib';
+use lib 'vendor/lib', 'lib';
 require HTTP::Server::Simple::CGI;
 use POSIX;
 use MENTA::BindSTDOUT;
