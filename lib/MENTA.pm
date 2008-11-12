@@ -20,6 +20,11 @@ sub config {
 
 sub run {
     eval {
+        my $config = config();
+        if (! $config) {
+            die "config()でアプリケーション設定がされていません!";
+        }
+
         my $input;
         if ($ENV{'REQUEST_METHOD'} eq "POST") {
             if ($ENV{CONTENT_LENGTH} > $CONFIG->{menta}->{max_post_body}) {
