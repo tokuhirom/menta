@@ -15,7 +15,7 @@ sub say { print @_, "\n" };
 
 sub read_file {
     my $fname = shift;
-    open my $fh, '<', $fname or die $!;
+    open my $fh, '<:utf8', $fname or die $!;
     my $s = do { local $/; join '', <$fh> };
     close $fh;
     $s;
@@ -24,7 +24,7 @@ sub read_file {
 sub write_file {
     my ($fname, $stuff) = @_;
     say "$fname を書き出します";
-    open my $fh, '>', $fname or die $!;
+    open my $fh, '>:utf8', $fname or die $!;
     print $fh $stuff;
     close $fh;
 }

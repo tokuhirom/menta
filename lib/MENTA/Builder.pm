@@ -74,12 +74,10 @@ sub generate_template_files {
         my $fname = "$SOURCE_DIR/tmpl/$file";
         next unless -f $fname;
         my $src = read_file($fname);
-        my $mt = MENTA:Template->new;
-        utf8::decode($src) unless utf8::is_utf8($src);
+        my $mt = MENTA::Template->new;
         $mt->parse($src);
         $mt->build();
         my $code = $mt->code();
-        utf8::encode($code);
         write_file("$OUTPUT_DIR/tmpl/$file", "package main; use utf8;\n$code");
     }
     closedir $dir;
