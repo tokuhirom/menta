@@ -57,7 +57,7 @@ sub run_menta {
 
         if (my $static_file = $ENV{PATH_INFO}) {
             $static_file =~ s!^/+!!g;
-            if ($static_file !~ /\bindex\.cgi\b/ && -f $static_file) {
+            if ($static_file !~ /\bmenta\.cgi\b/ && -f $static_file) {
                 if (open my $fh, '<', $static_file) {
                     printf "Content-Type: %s\r\n\r\n", guess_mime_type($static_file);
                     print do { local $/; <$fh> };
