@@ -48,7 +48,17 @@ sub run {
             $REQ->{$key} = $val;
         }
 
-        {
+        my $static_file = $ENV{PATH_INFO} || '';
+        $static_file =~ s!^/*!app/!g;
+        if ($static_file !~ /index\.cgi/ && -f $static_file) {
+            if (open my $fh, '<', $static_file) {
+                printf "Content-Type: %s\n\n", guess_mime_type($static_file);
+                while(<$fh>) { print $_ }
+                close $fh;
+            } else {
+                die "ファイルが見つかりません";
+            }
+        } else {
             my $mode = $REQ->{mode} || 'index';
             my $meth = "do_$mode";
             if (my $code = main->can($meth)) {
@@ -91,6 +101,18 @@ sub escape_html {
     $str =~ s/"/&quot;/g;
     $str =~ s/'/&#39;/g;
     return $str;
+}
+
+sub guess_mime_type {
+    my $ext = shift;
+    $ext =~ s/.+\.(.+)$/$1/;
+
+    # TODO should be moved to other.
+    my $mime_map = {
+	    css => 'text/css',
+	    txt => 'text/plain',
+	};
+	$mime_map->{$ext} || 'application/octet-stream';
 }
 
 1;
