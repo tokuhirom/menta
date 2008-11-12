@@ -62,12 +62,14 @@ sub run {
         # TODO: 美麗な画面を出す
         warn $err;
 
-        print "Content-Type: text/html; charset=utf-8\n";
+        print "Status: 500\n";
+        print "Content-type: text/html; charset=utf-8\n";
         print "\n";
 
         my $config = config() || {};
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
+                $err = escape_html($err);
                 qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n};
             } else {
                 qq{<html><body><div color="red">500 Internal Server Error</div></body></html>\n};
@@ -76,6 +78,16 @@ sub run {
         utf8::encode($body);
         print $body;
     }
+}
+
+sub escape_html {
+    my $str = shift;
+    $str =~ s/&/&amp;/g;
+    $str =~ s/>/&gt;/g;
+    $str =~ s/</&lt;/g;
+    $str =~ s/"/&quot;/g;
+    $str =~ s/'/&#39;/g;
+    return $str;
 }
 
 1;
