@@ -8,6 +8,16 @@ use MENTA::Util;
 my $OUTPUT_DIR = 'out';
 my $SOURCE_DIR = 'app';
 
+my $TMPL = <<'...';
+### SHEBANG ###
+use strict;
+use warnings;
+use utf8;
+
+### INCLUDE 'lib/MENTA.pm' ###
+### INCLUDE 'app/menta.cgi' ###
+...
+
 sub replace {
     my ($src, $params) = @_;
     $src =~ s{###\s+INCLUDE\s+'([^']+)'\s+###}{
@@ -51,10 +61,8 @@ sub run {
 }
 
 sub generate_cgi {
-    say "ソースファイルを読み込んでいます";
-    my $menta = read_file('src/menta.pl');
-
     say "menta.cgi をつくりあげる";
+    my $menta = $TMPL;
     $menta = replace($menta, {
         SHEBANG => do {
             my ($shebang,) = split /\r\n|[\r\n]/, read_file('app/menta.cgi');
