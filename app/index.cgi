@@ -4,7 +4,7 @@ use MENTA::Base;
 # -- ここまではおまじない --
 
 # 設定
-$MENTA::CONFIG = {
+config({
     # MENTA 自体の設定
     menta => {
         # エラー出力するか？
@@ -18,12 +18,12 @@ $MENTA::CONFIG = {
     application => {
         title => "MENTA サンプルアプリ",
     },
-};
+});
 
 # あなたのプログラム
 sub do_index {
     my $REQ = shift;
-    render('index.html');
+    render('index.html', config()->{application}->{title});
 }
 
 sub do_goto_wassr {
