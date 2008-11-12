@@ -22,6 +22,8 @@ config({
     },
 });
 
+run_menta();
+
 # あなたのプログラム
 sub do_index {
     my $REQ = shift;
@@ -36,7 +38,4 @@ sub do_mail {
     mail_send('info@example.com', 'this is subject', 'hi!');
     redirect('http://example.com');
 }
-
-# おまじない
-MENTA->run;
 

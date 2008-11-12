@@ -2,7 +2,6 @@ package MENTA;
 use strict;
 use warnings;
 use utf8;
-sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
 our $FINISHED;
 our $REQ;
@@ -12,28 +11,23 @@ sub import {
     strict->import;
     warnings->import;
     utf8->import;
-
-    MENTA->inject();
 }
 
-sub inject {
-    no strict 'refs';
-    for my $meth (qw/render redirect finalize config/) {
-        *{"main::$meth"} = *{"MENTA::$meth"};
-    }
-}
+package main;
+
+sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
 sub config {
     if (@_) {
         my $config = @_ == 1 ? $_[0] : {@_};
         $config->{menta}->{max_post_body} ||= DEFAULT_MAX_POST_BODY;
-        $CONFIG = $config;
+        $MENTA::CONFIG = $config;
     }
 
-    $CONFIG
+    $MENTA::CONFIG;
 }
 
-sub run {
+sub run_menta {
     eval {
         my $config = config();
         if (! $config) {
@@ -51,8 +45,8 @@ sub run {
         } else {
             $input = $ENV{QUERY_STRING};
         }
-        local $REQ = {};
-        local $FINISHED = 0;
+        local $MENTA::REQ = {};
+        local $MENTA::FINISHED = 0;
 
         for ( split /&/, $input) {
             my ($key, $val) = split /=/, $_;
@@ -60,7 +54,7 @@ sub run {
                 $val =~ tr/+/ /;
                 $val =~ s/%([a-fA-F0-9]{2})/pack("H2", $1)/eg;
             }
-            $REQ->{$key} = $val;
+            $MENTA::REQ->{$key} = $val;
         }
 
         my $static_file = $ENV{PATH_INFO} || '';
@@ -74,11 +68,11 @@ sub run {
                 die "ファイルが見つかりません";
             }
         } else {
-            my $mode = $REQ->{mode} || 'index';
+            my $mode = $MENTA::REQ->{mode} || 'index';
             my $meth = "do_$mode";
             if (my $code = main->can($meth)) {
-                $code->($REQ);
-                unless ($FINISHED) {
+                $code->($MENTA::REQ);
+                unless ($MENTA::FINISHED) {
                     die "なにも出力してません";
                 }
             } else {
