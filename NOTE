@@ -6,7 +6,7 @@ MENTA 設計メモ
     perl 5.8.0 以後をサポート対象とする
     CGI 環境でも高速である
     よくない習慣を身につけさせない(use strict 必須)
-    windows でも動く(といいな)
+    windows でも動く
     utf8 で書く
     use strict; use warnings; use utf8; を強制する
     テストを書く習慣をつけさせる
@@ -25,7 +25,7 @@ MENTA 設計メモ
 使い方
 ------
 
-    users/ 以下をいじくって自分のアプリをつくる
+    app/ 以下をいじくって自分のアプリをつくる
 
 TODO
 ----
