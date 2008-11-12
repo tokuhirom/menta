@@ -32,16 +32,11 @@ sub main {
         say "ソースファイルを読み込んでいます";
         my $menta = read_file('src/menta.pl');
         say ".ini ファイルを読んでいます";
-        my $ini = Config::Tiny->read("$SOURCE_DIR/config.ini") or die "$SOURCE_DIR/config.ini を読み込むことができませんでした: $!";
+        do 'users/controller.pl';
+        die $@ if $@;
 
         say "index.cgi をつくりあげる";
         $menta = replace($menta, {
-            CONFIG => do {
-                local $Data::Dumper::Indent = 1;
-                local $Data::Dumper::Terse  = 1;
-                local $Data::Dumper::Sortkeys = 1;
-                q{$MENTA::CONFIG = } . Data::Dumper->Dump([{%$ini}]) . q{;};
-            },
             MAIN => do {
                 '{' . read_file('lib/MENTA.pm') . '}'
             },
@@ -49,7 +44,7 @@ sub main {
                 '{' . read_file('users/controller.pl') . '}'
             },
             SHEBANG => do {
-                my $perlpath = $ini->{menta}->{perlpath} or die "config.ini の [menta] の中に perl のパスに関する設定がありません";
+                my $perlpath = $MENTA::CONFIG->{menta}->{perlpath} or die "config.ini の [menta] の中に perl のパスに関する設定がありません";
                 "#!$perlpath";
             },
         });
