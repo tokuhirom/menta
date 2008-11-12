@@ -13,7 +13,7 @@ sub replace {
     my ($src, $params) = @_;
     $src =~ s{###\s+INCLUDE\s+'([^']+)'\s+###}{
         my $fname = $1;
-        "{\n" . read_file($fname) . "}\n"
+        "{\n    " . join("\n    ", split("\n", read_file($fname))) . "\n}\n"
     }gem;
     while (my ($key, $val) = each %$params) {
         $src =~ s/### $key ###/$val/g;
@@ -44,6 +44,7 @@ sub generate_cgi {
         },
     });
     $menta =~ s/use MENTA::Base;/package main;/g;
+    $menta =~ s/use lib 'lib';//;
     say "index.cgi を出力しています";
     write_file("$OUTPUT_DIR/index.cgi" => $menta);
     say "chmod +x";
