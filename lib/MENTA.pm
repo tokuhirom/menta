@@ -53,7 +53,7 @@ sub run {
         if ($static_file !~ /index\.cgi/ && -f $static_file) {
             if (open my $fh, '<', $static_file) {
                 printf "Content-Type: %s\n\n", guess_mime_type($static_file);
-                print do { local $/; <$fh> }
+                print do { local $/; <$fh> };
                 close $fh;
             } else {
                 die "ファイルが見つかりません";
