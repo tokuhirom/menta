@@ -4,19 +4,47 @@ use warnings;
 use lib 'vendor/lib', 'lib';
 require HTTP::Server::Simple::CGI;
 use POSIX;
-use MENTA::BindSTDOUT;
 use HTTP::Response;
+
+{
+    package MENTA::BindSTDOUT::Tie;
+    require Tie::Handle;
+    use base qw/Tie::Handle/;
+    use Carp;
+
+    sub TIEHANDLE {
+        my ($class, $bufref) = @_;
+        bless {buf => $bufref}, $class;
+    }
+
+    sub WRITE {
+        my $self = shift;
+        ${$self->{buf}} .= shift;
+    }
+
+    sub READ { croak "This handle is readonly" }
+    sub CLOSE { }
+}
 
 {
     package MENTA::Server;
     use base qw/HTTP::Server::Simple::CGI/;
+
+    sub bind_stdout {
+        my ($code, ) = @_;
+        tie *STDOUT, 'MENTA::BindSTDOUT::Tie', \my $out;
+        $code->();
+        untie *STDOUT;
+        $out;
+    }
+
     sub handle_request {
         my $pid = fork();
         if ($pid) {
             waitpid($pid, POSIX::WNOHANG);
         } elsif ($pid == 0) {
             chdir 'app';
-            my $out = MENTA::BindSTDOUT->bind(sub {
+            my $out = bind_stdout(sub {
                 package main;
                 do './menta.cgi';
                 die $@ if $@;
