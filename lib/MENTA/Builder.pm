@@ -2,12 +2,11 @@ package MENTA::Builder;
 use strict;
 use warnings;
 use utf8;
-use Data::Dumper;
 use Mojo::Template;
 use MENTA::Util;
 
-my $OUTPUT_DIR = 'out/';
-my $SOURCE_DIR = 'app/';
+my $OUTPUT_DIR = 'out';
+my $SOURCE_DIR = 'app';
 
 sub replace {
     my ($src, $params) = @_;
@@ -63,8 +62,9 @@ sub generate_cgi {
     $menta =~ s/use lib 'lib';//;
     say "index.cgi を出力しています";
     write_file("$OUTPUT_DIR/index.cgi" => $menta);
-    say "chmod +x";
-    chmod oct(766), "$OUTPUT_DIR/index.cgi";
+    my $mode = 755; #TODO
+    say "chmod $mode";
+    chmod oct($mode), "$OUTPUT_DIR/index.cgi";
 }
 
 sub generate_template_files {

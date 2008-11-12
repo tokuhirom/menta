@@ -16,8 +16,8 @@ sub render {
     my $out = $tmplcode->(@params);
     utf8::encode($out);
 
-    print "Content-Type: text/html; charset=utf-8\n";
-    print "\n";
+    print "Content-Type: text/html; charset=utf-8\r\n";
+    print "\r\n";
     print $out;
 
     $MENTA::FINISHED++;
@@ -25,9 +25,9 @@ sub render {
 
 sub redirect {
     my ($location, ) = @_;
-    print "Status: 302\n";
-    print "Location: $location\n";
-    print "\n";
+    print "Status: 302\r\n";
+    print "Location: $location\r\n";
+    print "\r\n";
 
     $MENTA::FINISHED++;
 }
@@ -36,10 +36,10 @@ sub finalize {
     my $str = shift;
     my $content_type = shift || 'text/html; charset=utf-8';
 
-    print "Content-Type: $content_type\n";
-    print "\n";
+    print "Content-Type: $content_type\r\n";
+    print "\r\n";
     print $str;
-    
+
     $MENTA::FINISHED++;
 }
 

@@ -25,7 +25,7 @@ sub mail_send {
     my $mailer = $find_sendmail->() or die "sendmail が見つかりません";
 
     my $pipe = Symbol::gensym();
-    open $pipe, "| $mailer -t -oi" || die "$mailer を開けませんでした: $!"; 
+    open $pipe, "| $mailer -t -oi" || die "$mailer を開けませんでした: $!";
 
     my @lines;
     push @lines, "To: $to\r\n";

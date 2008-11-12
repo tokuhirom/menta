@@ -75,17 +75,17 @@ sub run {
         # TODO: 美麗な画面を出す
         warn $err;
 
-        print "Status: 500\n";
-        print "Content-type: text/html; charset=utf-8\n";
-        print "\n";
+        print "Status: 500\r\n";
+        print "Content-type: text/html; charset=utf-8\r\n";
+        print "\r\n";
 
         my $config = config() || {};
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 $err = escape_html($err);
-                qq{<html><body><div style="color: red">500 Internal Server Error: $err</div></body></html>\n};
+                qq{<html><body style="background: red; color: white"><p>500 Internal Server Error: $err</p></body></html>\n};
             } else {
-                qq{<html><body><div style="color: red">500 Internal Server Error</div></body></html>\n};
+                qq{<html><body style="background: red; color: white"><p>500 Internal Server Error</p></body></html>\n};
             }
         };
         utf8::encode($body);
@@ -110,6 +110,7 @@ sub guess_mime_type {
     # TODO should be moved to other.
     my $mime_map = {
         css => 'text/css',
+        js  => 'application/javascript',
         txt => 'text/plain',
     };
     $mime_map->{$ext} || 'application/octet-stream';

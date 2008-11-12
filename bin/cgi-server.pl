@@ -21,7 +21,7 @@ use HTTP::Response;
                 do './index.cgi';
                 die $@ if $@;
             });
-            my $res = HTTP::Response->parse("HTTP/1.0 200 OK\n$out");
+            my $res = HTTP::Response->parse("HTTP/1.0 200 OK\r\n$out");
             if (my $status = $res->header('Status')) {
                 $res->code($status);
                 $res->message(HTTP::Status::status_message($status));
