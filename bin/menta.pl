@@ -40,7 +40,10 @@ sub main {
                 local $Data::Dumper::Indent = 1;
                 local $Data::Dumper::Terse  = 1;
                 local $Data::Dumper::Sortkeys = 1;
-                q{my $CONFIG = } . Data::Dumper->Dump([{%$ini}]) . q{;};
+                q{$MENTA::CONFIG = } . Data::Dumper->Dump([{%$ini}]) . q{;};
+            },
+            MAIN => do {
+                '{' . read_file('lib/MENTA.pm') . '}'
             },
             CONTROLLER => do {
                 '{' . read_file('users/controller.pl') . '}'
