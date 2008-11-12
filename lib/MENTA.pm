@@ -35,18 +35,20 @@ sub run {
         {
             my $mode = $REQ->{mode} || 'index';
             my $meth = "do_$mode";
-            if (my $code = MENTA::Controller->can($meth)) {
+            if (my $code = main->can($meth)) {
                 $code->($REQ);
                 unless ($FINISHED) {
                     die "なにも出力してません";
                 }
             } else {
-                die "'$mode' というモードはしらないんだ";
+                die "'$mode' というモードは存在しません";
             }
         }
     };
     if (my $err = $@) {
         # TODO: 美麗な画面を出す
+        warn $err;
+
         print "Content-type: text/html; charset=utf-8\n";
         print "\n";
         if ($CONFIG->{menta}->{kcatch_mode}) {

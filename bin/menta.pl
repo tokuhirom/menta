@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use utf8;
 use lib 'vender/lib/', 'lib';
-use Config::Tiny;
 use Data::Dumper;
 use Mojo::Template;
 use MENTA::Util;
@@ -38,7 +37,10 @@ sub main {
         say "index.cgi をつくりあげる";
         $menta = replace($menta, {
             MAIN => do {
-                '{' . read_file('lib/MENTA.pm') . '}'
+                "{\n" . read_file('lib/MENTA.pm') . '}'
+            },
+            CONTROLLER_BASE => do {
+                '{' . read_file('lib/MENTA/Controller/Base.pm') . '}'
             },
             CONTROLLER => do {
                 '{' . read_file('users/controller.pl') . '}'
@@ -48,6 +50,7 @@ sub main {
                 "#!$perlpath";
             },
         });
+        $menta =~ s/use MENTA::Base;/package main;/g;
         say "index.cgi を出力しています";
         write_file("$OUTPUT_DIR/index.cgi" => $menta);
         say "chmod +x";
