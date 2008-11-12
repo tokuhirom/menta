@@ -58,7 +58,7 @@ sub generate_cgi {
             $shebang;
         },
     });
-    $menta =~ s/use MENTA::Base;/package main;/g;
+    $menta =~ s/use MENTA;/package main;/g;
     $menta =~ s/use lib 'lib';//;
     say "index.cgi を出力しています";
     write_file("$OUTPUT_DIR/index.cgi" => $menta);

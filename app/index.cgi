@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use lib 'lib';
-use MENTA::Base;
+use MENTA;
 # -- ここまではおまじない --
 
 require "plugins/mail.pl";
