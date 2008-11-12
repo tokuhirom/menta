@@ -5,8 +5,7 @@ use MENTA;
 
 require "plugins/mail.pl";
 
-# 設定
-config({
+run_menta({
     # MENTA 自体の設定
     menta => {
         # エラー出力するか？
@@ -21,8 +20,6 @@ config({
         title => "MENTA サンプルアプリ",
     },
 });
-
-run_menta();
 
 # あなたのプログラム
 sub do_index {

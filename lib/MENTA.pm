@@ -17,17 +17,15 @@ sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
 package main;
 
-sub config {
-    if (@_) {
-        my $config = @_ == 1 ? $_[0] : {@_};
+sub config { $MENTA::CONFIG }
+
+sub run_menta {
+    {
+        my $config = shift @_;
         $config->{menta}->{max_post_body} ||= MENTA::DEFAULT_MAX_POST_BODY;
         $MENTA::CONFIG = $config;
     }
 
-    $MENTA::CONFIG;
-}
-
-sub run_menta {
     eval {
         my $config = config();
         if (! $config) {
