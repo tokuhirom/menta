@@ -1,6 +1,7 @@
 #   mb_send_mail('to@example.jp', 'サブジェクト', '本文', 'From: from@example.jp');
 # という風にして、送るとよい。
 # TODO: ヘッダの処理とかが甘いので、なんとかする
+# iso-2022-jp に MIME encode する？
 
 use utf8;
 use Symbol ();
