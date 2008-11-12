@@ -8,7 +8,7 @@ our @METHODS = qw/render redirect/;
 # TODO: ディレクトリトラバーサル対策
 sub render {
     my ($tmpl, @params) = @_;
-    my $tmpldir = MENTA->config->{menta}->{tmpl_dir} or die "[menta] セクションに tmpl_dir が設定されていません";
+    my $tmpldir = MENTA::config->{menta}->{tmpl_dir} or die "[menta] セクションに tmpl_dir が設定されていません";
     my $tmplfname = "$tmpldir/$tmpl";
     die "$tmplfname という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
     my $tmplcode = do $tmplfname;
