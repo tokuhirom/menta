@@ -49,7 +49,7 @@ sub run {
         }
 
         my $static_file = $ENV{PATH_INFO} || '';
-        $static_file =~ s!^/*!app/!g;
+        $static_file =~ s!^/*!!g;
         if ($static_file !~ /index\.cgi/ && -f $static_file) {
             if (open my $fh, '<', $static_file) {
                 printf "Content-Type: %s\n\n", guess_mime_type($static_file);
