@@ -42,6 +42,6 @@ sub do_mail {
 sub do_users {
     my $REQ = shift;
     my @rows = dbi_select('DBI:CSV:f_dir=../app/data', 'select * from users');
-    render('users.html', \@rows, 3);
+    render('users.html', \@rows);
 }
 
