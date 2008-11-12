@@ -18,7 +18,7 @@ use HTTP::Response;
             system "$^X bin/menta.pl";
             chdir 'out';
             my $out = MENTA::BindSTDOUT->bind(sub {
-                do './index.cgi';
+                do './menta.cgi';
                 die $@ if $@;
             });
             my $res = HTTP::Response->parse("HTTP/1.0 200 OK\r\n$out");

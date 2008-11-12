@@ -54,20 +54,20 @@ sub generate_cgi {
     say "ソースファイルを読み込んでいます";
     my $menta = read_file('src/menta.pl');
 
-    say "index.cgi をつくりあげる";
+    say "menta.cgi をつくりあげる";
     $menta = replace($menta, {
         SHEBANG => do {
-            my ($shebang,) = split /\r\n|[\r\n]/, read_file('app/index.cgi');
+            my ($shebang,) = split /\r\n|[\r\n]/, read_file('app/menta.cgi');
             $shebang;
         },
     });
     $menta =~ s/use MENTA;/package main;/g;
     $menta =~ s/use lib 'lib';//;
-    say "index.cgi を出力しています";
-    write_file("$OUTPUT_DIR/index.cgi" => $menta);
+    say "menta.cgi を出力しています";
+    write_file("$OUTPUT_DIR/menta.cgi" => $menta);
     my $mode = 755; #TODO
     say "chmod $mode";
-    chmod oct($mode), "$OUTPUT_DIR/index.cgi";
+    chmod oct($mode), "$OUTPUT_DIR/menta.cgi";
 }
 
 sub generate_template_files {
