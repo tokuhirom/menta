@@ -70,9 +70,9 @@ sub run {
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 $err = escape_html($err);
-                qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n};
+                qq{<html><body><div style="color: red">500 Internal Server Error: $err</div></body></html>\n};
             } else {
-                qq{<html><body><div color="red">500 Internal Server Error</div></body></html>\n};
+                qq{<html><body><div style="color: red">500 Internal Server Error</div></body></html>\n};
             }
         };
         utf8::encode($body);
