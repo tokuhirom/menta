@@ -66,11 +66,15 @@ sub run {
         print "\n";
 
         my $config = config() || {};
-        if ($config->{menta}->{kcatch_mode}) {
-            print qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n};
-        } else {
-            print qq{<html><body><div color="red">500 Internal Server Error</div></body></html>\n};
-        }
+        my $body = do {
+            if ($config->{menta}->{kcatch_mode}) {
+                qq{<html><body><div color="red">500 Internal Server Error: $err</div></body></html>\n};
+            } else {
+                qq{<html><body><div color="red">500 Internal Server Error</div></body></html>\n};
+            }
+        };
+        utf8::encode($body);
+        print $body;
     }
 }
 
