@@ -4,7 +4,7 @@ use MENTA;
 # -- ここまではおまじない --
 
 require "../plugins/mail.pl";
-require "plugins/dbi_select.pl";
+require "../plugins/dbi_select.pl";
 
 run_menta({
     # MENTA 自体の設定
