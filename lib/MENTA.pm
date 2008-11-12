@@ -40,8 +40,10 @@ sub run {
 
         for ( split /&/, $input) {
             my ($key, $val) = split /=/, $_;
-            $val =~ tr/+/ /;
-            $val =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("H2", $1)/eg;
+            if ($val) {
+                $val =~ tr/+/ /;
+                $val =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("H2", $1)/eg;
+            }
             $REQ->{$key} = $val;
         }
 
