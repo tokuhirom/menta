@@ -24,7 +24,8 @@ sub read_source {
     my $src = _read_and_indent($fname, 1);
     $src =~ s{require\s+['"]([^'"]+)['"]\s*;}{
         my $fname = $1;
-        _read_and_indent($1, 2);
+        $fname =~ s!^\.\./*!!;
+        _read_and_indent($fname, 2);
     }ge;
     $src;
 }
@@ -68,7 +69,7 @@ sub generate_cgi {
 }
 
 sub generate_template_files {
-    mkdir "$OUTPUT_DIR/tmpl";
+    mkdir "$OUTPUT_DIR/tmpl_cache/";
     opendir my $dir, "$SOURCE_DIR/tmpl" or die "テンプレートファイル用ディレクトリを開けません: $!";
     while (my $file = readdir $dir) {
         my $fname = "$SOURCE_DIR/tmpl/$file";
@@ -78,7 +79,7 @@ sub generate_template_files {
         $mt->parse($src);
         $mt->build();
         my $code = $mt->code();
-        write_file("$OUTPUT_DIR/tmpl/$file", "package main; use utf8;\n$code");
+        write_file("$OUTPUT_DIR/tmpl_cache/$file", "package main; use utf8;\n$code");
     }
     closedir $dir;
 }

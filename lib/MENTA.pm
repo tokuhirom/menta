@@ -132,7 +132,7 @@ sub render {
     my $cachefname = "$cachedir/$tmpl";
     my $tmplfname = "$tmpldir/$tmpl";
     my $use_cache = sub {
-        my @orig = stat $tmplfname or return;
+        my @orig = stat $tmplfname or return 1;
         my @cached = stat $cachefname or return;
         return $orig[9] < $cached[9];
     }->();

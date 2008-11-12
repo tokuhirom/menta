@@ -15,7 +15,7 @@ sub say { print @_, "\n" };
 
 sub read_file {
     my $fname = shift;
-    open my $fh, '<:utf8', $fname or die $!;
+    open my $fh, '<:utf8', $fname or die "$fname を読めません: $!";
     my $s = do { local $/; join '', <$fh> };
     close $fh;
     $s;
