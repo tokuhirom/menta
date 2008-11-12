@@ -1,7 +1,9 @@
 #!/usr/bin/perl
 use lib 'lib';
 use MENTA::Base;
+# -- ここまではおまじない --
 
+# 設定
 $MENTA::CONFIG = {
     # MENTA 自体の設定
     menta => {
@@ -18,6 +20,7 @@ $MENTA::CONFIG = {
     },
 };
 
+# あなたのプログラム
 sub do_index {
     my $REQ = shift;
     render('index.html');
@@ -27,5 +30,6 @@ sub do_goto_wassr {
     redirect('http://wassr.jp/');
 }
 
+# おまじない
 MENTA->run;
 
