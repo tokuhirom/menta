@@ -1,6 +1,11 @@
 <!doctype html>
 <title><%= config()->{application}->{title} %></title>
 <link rel="stylesheet" type="text/css" href="/static/style-sites.css">
-
+<script type="text/javascript" src="/static/jquery-latest.js"></script>
+<script type="text/javascript">
+$(function() {
+    $('h1').css({background : 'orange'});
+});
+</script>
 <h1><%= config()->{application}->{title} %></h1>
 <p><%= localtime time %></p>
