@@ -8,7 +8,7 @@ use MENTA::Util;
 
 my $OUTPUT_DIR = 'out/';
 my $SOURCE_DIR = 'users/';
-my $CONTROLLER_FILE = 'users/controller.pl';
+my $CONTROLLER_FILE = 'users/index.cgi';
 
 sub replace {
     my ($src, $params) = @_;
