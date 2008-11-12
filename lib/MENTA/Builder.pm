@@ -7,8 +7,8 @@ use Mojo::Template;
 use MENTA::Util;
 
 my $OUTPUT_DIR = 'out/';
-my $SOURCE_DIR = 'users/';
-my $CONTROLLER_FILE = 'users/index.cgi';
+my $SOURCE_DIR = 'app/';
+my $CONTROLLER_FILE = "$SOURCE_DIR/index.cgi";
 
 sub replace {
     my ($src, $params) = @_;
