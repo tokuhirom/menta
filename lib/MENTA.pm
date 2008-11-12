@@ -109,10 +109,10 @@ sub guess_mime_type {
 
     # TODO should be moved to other.
     my $mime_map = {
-	    css => 'text/css',
-	    txt => 'text/plain',
-	};
-	$mime_map->{$ext} || 'application/octet-stream';
+        css => 'text/css',
+        txt => 'text/plain',
+    };
+    $mime_map->{$ext} || 'application/octet-stream';
 }
 
 1;
