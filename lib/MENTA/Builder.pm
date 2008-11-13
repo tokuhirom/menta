@@ -14,7 +14,7 @@ my $SOURCE_DIR = 'app';
 sub puts { print @_, "\n" };
 
 sub run {
-    puts "出力先ディレクトリを作成しています";
+    puts "出力先ディレクトリを作成します";
     mkdir $OUTPUT_DIR unless -d $OUTPUT_DIR;
 
     puts "メインソースをコンパイルします";
@@ -34,7 +34,7 @@ sub generate_cgi {
     $menta =~ s/use MENTA;/use strict;use warnings;use utf8;\n$menta_pm\npackage main;/;
     $menta =~ s!use lib '\..\/lib';!!;
 
-    puts "menta.cgi を出力しています";
+    puts "menta.cgi を出力します";
     write_file("$OUTPUT_DIR/menta.cgi" => $menta);
     my $mode = 755; #TODO
     puts "chmod $mode";
@@ -44,7 +44,7 @@ sub generate_cgi {
 sub generate_template_files {
     my $outputdir = "$OUTPUT_DIR/tmpl_cache/";
     unless (-d $outputdir) {
-        mkdir $outputdir or die "キャッシュディレクトリを作成できません： $!";
+        mkdir $outputdir or die "キャッシュディレクトリを作成できません: $!";
     }
     opendir my $dir, "$SOURCE_DIR/tmpl" or die "テンプレートファイル用ディレクトリを開けません: $!";
     while (my $file = readdir $dir) {
@@ -63,7 +63,7 @@ sub generate_template_files {
 sub copy_static_files {
     my $outputdir = "$OUTPUT_DIR/static/";
     unless (-d $outputdir) {
-        mkdir $outputdir or die "静的コンテンツ出力用ディレクトリを作成できません： $!";
+        mkdir $outputdir or die "静的コンテンツ出力用ディレクトリを作成できません: $!";
     }
     opendir my $dir, "$SOURCE_DIR/static/" or die "静的コンテンツ用ディレクトリを開けません: $!";
     while (my $file = readdir $dir) {

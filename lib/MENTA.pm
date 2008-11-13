@@ -45,18 +45,16 @@ sub run_menta {
             } else {
                 die "「${mode}」というモードは存在しません";
             }
-        } elsif (-f $path) {
+        } elsif ($path ne 'menta.cgi' && -f $path) {
             if (open my $fh, '<', $path) {
                 printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
                 print do { local $/; <$fh> };
                 close $fh;
-                return 1;
             } else {
                 die "ファイルが開きません";
             }
-        } else {
-            die "$path を処理する方法がわかりません";
         }
+        die "$path を処理する方法がわかりません";
     };
     if (my $err = $@) {
         # TODO: 美麗な画面を出す
@@ -69,7 +67,7 @@ sub run_menta {
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 $err = escape_html($err);
-                qq{<html><body style="background: red; color: white; font-weight: bold"><p><span style="font-size: xx-large; color: black">&#x2620;</span> 500 Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span>: $err</p></body></html>\n};
+                qq{<!doctype html><title>HACKED BY MENTA INTERNAL SERVER ERROR!!!</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">$err</span></p><p style="text-align: right; color: black"><strong>Regards, MENTA</strong></p>\n};
             } else {
                 qq{<html><body><p style="color: red">500 Internal Server Error</p></body></html>\n};
             }
@@ -164,7 +162,7 @@ sub finalize {
 
 sub read_file {
     my $fname = shift;
-    open my $fh, '<:utf8', $fname or die "${fname} を読み込みように開けません: $!";
+    open my $fh, '<:utf8', $fname or die "${fname} を読み込み用に開けません: $!";
     my $s = do { local $/; join '', <$fh> };
     close $fh;
     $s;
@@ -172,7 +170,7 @@ sub read_file {
 
 sub write_file {
     my ($fname, $stuff) = @_;
-    open my $fh, '>:utf8', $fname or die "${fname} を書き込み用に開けません： $!";
+    open my $fh, '>:utf8', $fname or die "${fname} を書き込み用に開けません: $!";
     print $fh $stuff;
     close $fh;
 }
