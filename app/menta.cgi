@@ -4,7 +4,6 @@ use MENTA;
 # -- ここまではおまじない --
 
 require "../plugins/mail.pl";
-require "../plugins/dbi_select.pl";
 
 run_menta({
     # MENTA 自体の設定
@@ -39,11 +38,6 @@ sub do_goto_wassr {
 sub do_mail {
     mail_send('info@example.com', 'this is subject', 'hi!');
     redirect('http://example.com');
-}
-
-sub do_users {
-    my @rows = dbi_select('DBI:CSV:f_dir=../app/data', 'select * from users');
-    render('users.html', \@rows);
 }
 
 sub do_form {
