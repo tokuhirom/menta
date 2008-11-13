@@ -49,3 +49,8 @@ sub do_users {
     render('users.html', \@rows);
 }
 
+sub do_form {
+    my $r = param('r') || '';
+    render('form.html', $r);
+}
+
