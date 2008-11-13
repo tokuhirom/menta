@@ -55,33 +55,31 @@ sub run_menta {
             $MENTA::REQ->{$key} = $val;
         }
 
-        if (my $path = $ENV{PATH_INFO}) {
-            $path =~ s!^/+!!g;
-            if ($path =~ /^[a-z0-9_]*$/) {
-                my $mode = $path || 'index';
-                my $meth = "do_$mode";
-                if (my $code = main->can($meth)) {
-                    $code->($MENTA::REQ);
-                    unless ($MENTA::FINISHED) {
-                        die "なにも出力してません";
-                    }
-                } else {
-                    die "「$mode」というモードは存在しません";
-                }
-            } elsif (-f $path) {
-                if (open my $fh, '<', $path) {
-                    printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
-                    print do { local $/; <$fh> };
-                    close $fh;
-                    return 1;
-                } else {
-                    die "ファイルが開きません";
+        my $path = $ENV{PATH_INFO} || '/';
+        $path =~ s!^/+!!g;
+        if ($path =~ /^[a-z0-9_]*$/) {
+            my $mode = $path || 'index';
+            my $meth = "do_$mode";
+            if (my $code = main->can($meth)) {
+                $code->($MENTA::REQ);
+                unless ($MENTA::FINISHED) {
+                    die "なにも出力してません";
                 }
             } else {
-                die "$path を処理する方法がわかりません";
+                die "「$mode」というモードは存在しません";
             }
+        } elsif (-f $path) {
+            if (open my $fh, '<', $path) {
+                printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
+                print do { local $/; <$fh> };
+                close $fh;
+                return 1;
+            } else {
+                die "ファイルが開きません";
+            }
+        } else {
+            die "$path を処理する方法がわかりません";
         }
-
     };
     if (my $err = $@) {
         # TODO: 美麗な画面を出す
