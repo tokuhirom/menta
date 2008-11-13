@@ -1,9 +1,6 @@
 % my $docroot = config()->{application}->{docroot}
-% my $title   = config()->{application}->{title} . ' users'
-<!doctype html>
-<title><%= $title %></title>
-<link rel="stylesheet" type="text/css" href="<%= $docroot %>static/style-sites.css">
-
+% my $title   = 'DBI'
+%=r render_partial('header.html', $title)
 <h1><%= $title %></h1>
 <table>
  <caption>Users</caption>

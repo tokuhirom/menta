@@ -112,6 +112,13 @@ sub parse {
             next;
         }
 
+        # Perl line with raw return value
+        if ($line =~ /^$line_start$raw_expr_mark\s+(.+)$/) {
+            push @{$self->{tree}}, ['raw_expr', $1];
+            $multiline_expression = 0;
+            next;
+        }
+
         # Comment line, dummy token needed for line count
         if ($line =~ /^$line_start$cmnt_mark\s+(.+)$/) {
             push @{$self->{tree}}, [];
@@ -142,15 +149,15 @@ sub parse {
         my @token;
         for my $token (split /
             (
-                $tag_start$raw_expr_mark   # Raw Expression
+                $tag_start$raw_expr_mark # Raw Expression
             |
-                $tag_start$expr_mark   # Expression
+                $tag_start$expr_mark     # Expression
             |
-                $tag_start$cmnt_mark   # Comment
+                $tag_start$cmnt_mark     # Comment
             |
-                $tag_start             # Code
+                $tag_start               # Code
             |
-                $tag_end               # End
+                $tag_end                 # End
             )
         /x, $line) {
 

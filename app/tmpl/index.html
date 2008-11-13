@@ -1,8 +1,6 @@
 % my $docroot = config()->{application}->{docroot}
 % my $title   = config()->{application}->{title}
-<!doctype html>
-<title><%= $title %></title>
-<link rel="stylesheet" type="text/css" href="<%= $docroot %>static/style-sites.css">
+%=r render_partial('header.html')
 <script type="text/javascript" src="<%= $docroot %>static/jquery.js"></script>
 <script type="text/javascript"><!--
 $(function() {
