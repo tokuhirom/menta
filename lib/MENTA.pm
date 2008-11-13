@@ -199,6 +199,7 @@ sub param {
             if ($val) {
                 $val =~ tr/+/ /;
                 $val =~ s/%([a-fA-F0-9]{2})/pack("H2", $1)/eg;
+                utf8::decode($val);
             }
             $MENTA::REQ->{$key} = $val;
         }
