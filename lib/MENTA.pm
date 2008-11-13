@@ -57,7 +57,7 @@ sub run_menta {
 
         if (my $path = $ENV{PATH_INFO}) {
             $path =~ s!^/+!!g;
-            if ($path =~ /^[a-z0-9_]+$/) {
+            if ($path =~ /^[a-z0-9_]*$/) {
                 my $mode = $path || 'index';
                 my $meth = "do_$mode";
                 if (my $code = main->can($meth)) {
