@@ -1,11 +1,6 @@
 % my $r = shift;
 % my $docroot = config()->{application}->{docroot}
-% my $title   = config()->{application}->{title}
-<!doctype html>
-<title>フォームを使った例 - <%= $title %></title>
-<link rel="stylesheet" type="text/css" href="<%= $docroot %>static/style-sites.css">
-<!--script type="text/javascript" src="<%= $docroot %>static/jquery.js"></script-->
-
+<%= render_partial('header.html', 'フォームを使った例') %>
 <h1>フォームを使った例</h1>
 <p>パラメータ: <%= $r %></p>
 

@@ -6,6 +6,8 @@ use utf8;
 our $FINISHED;
 our $REQ;
 our $CONFIG;
+our $REQUIRED;
+BEGIN { $REQUIRED = {} }
 
 sub import {
     strict->import;
@@ -121,7 +123,7 @@ sub guess_mime_type {
 }
 
 # TODO: ディレクトリトラバーサル対策
-sub render {
+sub render_partial {
     my ($tmpl, @params) = @_;
     my $tmpldir = config()->{menta}->{tmpl_dir} or die "[menta] セクションに tmpl_dir が設定されていません";
     my $cachedir = config()->{menta}->{tmpl_cache_dir} or die "[menta] セクションに tmpl_cache_dir が設定されていません";
@@ -140,7 +142,7 @@ sub render {
         $out = $tmplcode->(@params);
     } else {
         die "「${tmplfname}」という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
-        require MENTA::Template;
+        require_once('MENTA/Template.pm');
         my $tmplsrc = read_file($tmplfname);
         my $mt = MENTA::Template->new;
         $mt->parse($tmplsrc);
@@ -151,7 +153,12 @@ sub render {
         $out = $tmplcode->(@params);
         write_file($cachefname, "package main; use utf8;\n$src");
     }
+    $out;
+}
 
+sub render {
+    my ($tmpl, @params) = @_;
+    my $out = render_partial($tmpl, @params);
     utf8::encode($out);
     print "Content-Type: text/html; charset=utf-8\r\n";
     print "\r\n";
@@ -223,6 +230,13 @@ sub param {
     }
 
     return $MENTA::REQ->{$key};
+}
+
+sub require_once {
+    my $path = shift;
+    return if $MENTA::REQUIRED->{$path};
+    require $path;
+    $MENTA::REQUIRED->{$path} = 1;
 }
 
 1;
