@@ -56,7 +56,26 @@ sub run_menta {
                     die "なにも出力してません";
                 }
             } else {
-                die "「${mode}」というモードは存在しません";
+                if (my $cdir = config->{menta}->{controller_dir}) {
+                    my $controller = "${cdir}/${path}.pl";
+                    if (-f $controller) {
+                        package main;
+                        do $controller;
+                        die $@ if $@;
+                        if (my $code = main->can($meth)) {
+                            $code->();
+                            unless ($MENTA::FINISHED) {
+                                die "なにも出力してません";
+                            }
+                        } else {
+                            die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
+                        }
+                    } else {
+                        die "「${mode}」というモードは存在しません。別コントローラファイルもありません(${controller})";
+                    }
+                } else {
+                    die "「${mode}」というモードは存在しません。別コントローラ用ディレクトリは設定されていません";
+                }
             }
         } elsif ($path ne 'menta.cgi' && -f $path) {
             if (open my $fh, '<', $path) {

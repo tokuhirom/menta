@@ -13,6 +13,8 @@ run_menta({
         kcatch_mode => 1,
         # 最大表示文字数
         max_post_body => 1_024_000,
+        # コントローラーをいれるディレクトリ
+        controller_dir => 'controller/',
         # テンプレートファイルディレクトリへのパス
         tmpl_dir => 'tmpl/',
         # テンプレートファイルのキャッシュディレクトリへのパス
@@ -28,11 +30,6 @@ run_menta({
 # あなたのプログラム
 sub do_index {
     render('index.html');
-}
-
-sub do_param {
-    my $foo = param('foo');
-    finalize("PARAM foo: $foo");
 }
 
 sub do_goto_wassr {
