@@ -155,7 +155,7 @@ sub render {
         my $tmplcode = eval $src;
         die $@ if $@;
         $out = $tmplcode->(@params);
-        write_file($cachefname, $src);
+        write_file($cachefname, "package main; use utf8;\n$src");
     }
 
     utf8::encode($out);
