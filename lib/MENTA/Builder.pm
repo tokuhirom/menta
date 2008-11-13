@@ -27,7 +27,10 @@ sub run {
     generate_template_files();
 
     puts "静的ファイルをコピーします";
-    copy_static_files();
+    copy_dir('static', '静的ファイル');
+
+    puts "コントローラファイルをコピーします";
+    copy_dir('controller', 'コントローラ');
 }
 
 sub generate_cgi {
@@ -63,14 +66,15 @@ sub generate_template_files {
     closedir $dir;
 }
 
-sub copy_static_files {
-    my $outputdir = "$OUTPUT_DIR/static/";
+sub copy_dir {
+    my ($dirname, $type) = @_;
+    my $outputdir = "$OUTPUT_DIR/$dirname/";
     unless (-d $outputdir) {
-        mkdir $outputdir or die "静的コンテンツ出力用ディレクトリを作成できません: $!";
+        mkdir $outputdir or die "${type} 出力用ディレクトリを作成できません: $!";
     }
-    opendir my $dir, "$SOURCE_DIR/static/" or die "静的コンテンツ用ディレクトリを開けません: $!";
+    opendir my $dir, "$SOURCE_DIR/$dirname/" or die "${type} 用ディレクトリを開けません: $!";
     while (my $file = readdir $dir) {
-        my $fname = "$SOURCE_DIR/static/$file";
+        my $fname = "$SOURCE_DIR/$dirname/$file";
         next unless -f $fname;
         write_file("$outputdir/$file" => read_file($fname));
     }
