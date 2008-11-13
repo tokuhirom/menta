@@ -20,8 +20,13 @@ package main;
 sub config { $MENTA::CONFIG }
 
 sub run_menta {
+    my $config = shift @_;
+
+    local $MENTA::CONFIG;
+    local $MENTA::REQ = {};
+    local $MENTA::FINISHED = 0;
+
     {
-        my $config = shift @_;
         $config->{menta}->{max_post_body} ||= MENTA::DEFAULT_MAX_POST_BODY;
         $MENTA::CONFIG = $config;
     }
@@ -43,8 +48,6 @@ sub run_menta {
         } else {
             $input = $ENV{QUERY_STRING};
         }
-        local $MENTA::REQ = {};
-        local $MENTA::FINISHED = 0;
 
         for ( split /&/, $input) {
             my ($key, $val) = split /=/, $_;
