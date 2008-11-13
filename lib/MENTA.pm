@@ -148,7 +148,7 @@ sub render {
         die $@ if $@;
         $out = $tmplcode->(@params);
     } else {
-        die "「$tmplfname」という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
+        die "「${tmplfname}」という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
         require MENTA::Template;
         my $tmplsrc = read_file($tmplfname);
         my $mt = MENTA::Template->new;
