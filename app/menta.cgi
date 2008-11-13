@@ -27,8 +27,12 @@ run_menta({
 
 # あなたのプログラム
 sub do_index {
-    my $REQ = shift;
     render('index.html');
+}
+
+sub do_param {
+    my $foo = param('foo');
+    finalize("PARAM foo: $foo");
 }
 
 sub do_goto_wassr {
@@ -41,7 +45,6 @@ sub do_mail {
 }
 
 sub do_users {
-    my $REQ = shift;
     my @rows = dbi_select('DBI:CSV:f_dir=../app/data', 'select * from users');
     render('users.html', \@rows);
 }

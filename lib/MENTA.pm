@@ -23,7 +23,7 @@ sub run_menta {
     my $config = shift @_;
 
     local $MENTA::CONFIG;
-    local $MENTA::REQ = {};
+    local $MENTA::REQ;
     local $MENTA::FINISHED = 0;
 
     {
@@ -37,34 +37,13 @@ sub run_menta {
             die "config() でアプリケーション設定がされていません!";
         }
 
-        my $input;
-        if ($ENV{'REQUEST_METHOD'} eq "POST") {
-            my $max_post_body = $config->{menta}->{max_post_body};
-            if ($max_post_body > 0 && $ENV{CONTENT_LENGTH} > $max_post_body) {
-                die "投稿データが長すぎです";
-            } else {
-                read(STDIN, $input, $ENV{'CONTENT_LENGTH'});
-            }
-        } else {
-            $input = $ENV{QUERY_STRING};
-        }
-
-        for ( split /&/, $input) {
-            my ($key, $val) = split /=/, $_;
-            if ($val) {
-                $val =~ tr/+/ /;
-                $val =~ s/%([a-fA-F0-9]{2})/pack("H2", $1)/eg;
-            }
-            $MENTA::REQ->{$key} = $val;
-        }
-
         my $path = $ENV{PATH_INFO} || '/';
         $path =~ s!^/+!!g;
         if ($path =~ /^[a-z0-9_]*$/) {
             my $mode = $path || 'index';
             my $meth = "do_$mode";
             if (my $code = main->can($meth)) {
-                $code->($MENTA::REQ);
+                $code->();
                 unless ($MENTA::FINISHED) {
                     die "なにも出力してません";
                 }
@@ -202,6 +181,35 @@ sub write_file {
     open my $fh, '>:utf8', $fname or die "${fname} を書き込み用に開けません： $!";
     print $fh $stuff;
     close $fh;
+}
+
+sub param {
+    my $key = shift;
+
+    unless (defined $MENTA::REQ) {
+        my $input;
+        if ($ENV{'REQUEST_METHOD'} eq "POST") {
+            my $max_post_body = config()->{menta}->{max_post_body};
+            if ($max_post_body > 0 && $ENV{CONTENT_LENGTH} > $max_post_body) {
+                die "投稿データが長すぎです";
+            } else {
+                read(STDIN, $input, $ENV{'CONTENT_LENGTH'});
+            }
+        } else {
+            $input = $ENV{QUERY_STRING};
+        }
+
+        for ( split /&/, $input) {
+            my ($key, $val) = split /=/, $_;
+            if ($val) {
+                $val =~ tr/+/ /;
+                $val =~ s/%([a-fA-F0-9]{2})/pack("H2", $1)/eg;
+            }
+            $MENTA::REQ->{$key} = $val;
+        }
+    }
+
+    return $MENTA::REQ->{$key};
 }
 
 1;
