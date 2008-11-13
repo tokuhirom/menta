@@ -22,7 +22,7 @@ use HTTP::Response;
         ${$self->{buf}} .= shift;
     }
 
-    sub READ { croak "This handle is readonly" }
+    sub READ { croak "このハンドルは読み込み専用です" }
     sub CLOSE { }
 }
 
@@ -38,9 +38,11 @@ use HTTP::Response;
         $out;
     }
 
-    sub handle_request {
+    sub handler {
         my $pid = fork();
         if ($pid) {
+            close STDIN;
+            close STDOUT;
             waitpid($pid, POSIX::WNOHANG);
         } elsif ($pid == 0) {
             chdir 'app';
