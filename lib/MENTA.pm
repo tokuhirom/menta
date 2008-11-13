@@ -53,8 +53,9 @@ sub run_menta {
             } else {
                 die "ファイルが開きません";
             }
+        } else {
+            die "$path を処理する方法がわかりません";
         }
-        die "$path を処理する方法がわかりません";
     };
     if (my $err = $@) {
         # TODO: 美麗な画面を出す
