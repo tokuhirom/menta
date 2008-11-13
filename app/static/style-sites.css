@@ -1,2 +1,18 @@
-body { font-family: monospace; }
-h1 { padding: 0.5em; }
+body { font-family: monospace }
+h1   { padding: 0.5em }
+
+table {
+    border-style: solid;
+    border-width: 1px 0;
+}
+
+th {
+    border-style: solid;
+    border-width: 0 0 1px;
+}
+
+td {
+    padding: .5em;
+    border-style: solid;
+    border-width: 0 1px;
+}

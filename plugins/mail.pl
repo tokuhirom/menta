@@ -37,3 +37,4 @@ sub mail_send {
     close $pipe || die "閉じれません: $mailer, $!";
 }
 
+1;

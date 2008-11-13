@@ -53,6 +53,8 @@ sub run_menta {
             } else {
                 die "ファイルが開きません";
             }
+        } elsif ($path =~ /^(?:crossdomain\.xml|favicon\.ico|robots\.txt)$/) {
+            print "status: 404\r\ncontent-type: text/plain\r\n\r\n";
         } else {
             die "$path を処理する方法がわかりません";
         }
@@ -68,7 +70,7 @@ sub run_menta {
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 $err = escape_html($err);
-                qq{<!doctype html><title>HACKED BY MENTA INTERNAL SERVER ERROR!!!</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">$err</span></p><p style="text-align: right; color: black"><strong>Regards, MENTA</strong></p>\n};
+                qq{<!doctype html><title>INTERNAL SERVER ERROR!!! HACKED BY MENTA</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66" style="text-transform: uppercase"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">$err</span></p><p style="text-align: right; color: black"><strong>Regards,<br>MENTA</strong></p>\n};
             } else {
                 qq{<html><body><p style="color: red">500 Internal Server Error</p></body></html>\n};
             }
