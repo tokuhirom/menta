@@ -4,7 +4,7 @@
 package MENTA::Template;
 use strict;
 use warnings;
-use constant DEBUG => $ENV{MOJO_TEMPLATE_DEBUG} || 0;
+use constant DEBUG => $ENV{MENTA_TEMPLATE_DEBUG} || 0;
 
 use Carp 'croak';
 
@@ -47,7 +47,7 @@ sub build {
                 $value = quotemeta($value);
                 $value .= '\n' if $newline;
 
-                $lines[-1] .= "\$_MOJO .= \"" . $value . "\";";
+                $lines[-1] .= "\$_MENTA .= \"" . $value . "\";";
             }
 
             # Code
@@ -57,15 +57,15 @@ sub build {
 
             # Expression
             if ($type eq 'expr') {
-                $lines[-1] .= "\$_MOJO .= $value;";
+                $lines[-1] .= "\$_MENTA .= $value;";
             }
         }
     }
 
     # Wrap
     $lines[0] ||= '';
-    $lines[0]   = q/sub { my $_MOJO = '';/ . $lines[0];
-    $lines[-1] .= q/return $_MOJO; }/;
+    $lines[0]   = q/sub { my $_MENTA = '';/ . $lines[0];
+    $lines[-1] .= q/return $_MENTA; }/;
 
     $self->{code} = join "\n", @lines;
     return $self;
