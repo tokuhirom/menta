@@ -32,11 +32,6 @@ sub run_menta {
     }
 
     eval {
-        my $config = config();
-        if (! $config) {
-            die "config() でアプリケーション設定がされていません!";
-        }
-
         my $path = $ENV{PATH_INFO} || '/';
         $path =~ s!^/+!!g;
         if ($path =~ /^[a-z0-9_]*$/) {
@@ -71,7 +66,6 @@ sub run_menta {
         print "Content-type: text/html; charset=utf-8\r\n";
         print "\r\n";
 
-        my $config = config() || {};
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 $err = escape_html($err);
