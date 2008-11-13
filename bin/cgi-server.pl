@@ -13,16 +13,28 @@ use HTTP::Response;
     use Carp;
 
     sub TIEHANDLE {
-        my ($class, $bufref) = @_;
-        bless {buf => $bufref}, $class;
+        my ($class, $in, $outref) = @_;
+        bless {out => $outref, in => $in, pos => 0}, $class;
     }
 
     sub WRITE {
         my $self = shift;
-        ${$self->{buf}} .= shift;
+        ${$self->{out}} .= shift;
     }
 
-    sub READ { croak "このハンドルは読み込み専用です" }
+    # $self->READ(buf, len, offset);
+    # copy from IO::Scalar
+    sub READ {
+        my $self = $_[0];
+        my $n    = $_[2];
+        my $off  = $_[3] || 0;
+
+        my $read = substr( $self->{in}, $self->{pos}, $n );
+        $n = length($read);
+        $self->{pos} += $n;
+        ( $off ? substr( $_[1], $off ) : $_[1] ) = $read;
+        return $n;
+    }
     sub CLOSE { }
 }
 
@@ -32,7 +44,9 @@ use HTTP::Response;
 
     sub bind_stdout {
         my ($code, ) = @_;
-        tie *STDOUT, 'MENTA::BindSTDOUT::Tie', \my $out;
+        my $in;
+        read(STDIN, $in, $ENV{CONTENT_LENGTH});
+        tie *STDOUT, 'MENTA::BindSTDOUT::Tie', $in, \my $out;
         $code->();
         untie *STDOUT;
         $out;
@@ -41,8 +55,6 @@ use HTTP::Response;
     sub handler {
         my $pid = fork();
         if ($pid) {
-            close STDIN;
-            close STDOUT;
             waitpid($pid, POSIX::WNOHANG);
         } elsif ($pid == 0) {
             chdir 'app';
@@ -64,5 +76,6 @@ use HTTP::Response;
     }
 }
 
-MENTA::Server->new(5555)->run;
+my $server = MENTA::Server->new(5555);
+$server->run;
 
