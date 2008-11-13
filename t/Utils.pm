@@ -14,6 +14,8 @@ sub run_cgi {
     my %args = @_;
     $ENV{CONTENT_LENGTH} = $args{CONTENT_LENGTH} || 0;
     $ENV{PATH_INFO} = $args{PATH_INFO} || '/';
+    $ENV{QUERY_STRING} = $args{QUERY_STRING} || '';
+    $ENV{REQUEST_METHOD} = $args{REQUEST_METHOD} || 'GET';
 
     chdir 'app';
     my $out = bind_stdout(sub {
