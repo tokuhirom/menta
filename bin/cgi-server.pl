@@ -45,7 +45,7 @@ use HTTP::Response;
     sub bind_stdout {
         my ($code, ) = @_;
         my $in;
-        read(STDIN, $in, $ENV{CONTENT_LENGTH});
+        read(STDIN, $in, $ENV{CONTENT_LENGTH} || 0);
         tie *STDOUT, 'MENTA::BindSTDOUT::Tie', $in, \my $out;
         $code->();
         untie *STDOUT;
