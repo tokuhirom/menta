@@ -44,5 +44,4 @@ TODO
     HTML エスケープは自動でかける
     打倒NanoA:
         - controller を分割してても動くようにする
-        - template に include を実装する
 
