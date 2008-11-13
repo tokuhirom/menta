@@ -19,7 +19,7 @@ sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
 package main;
 
-sub config { $MENTA::CONFIG }
+sub config () { $MENTA::CONFIG }
 
 sub run_menta {
     my $config = shift @_;
