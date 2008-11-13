@@ -2,21 +2,15 @@
 % my $docroot = config()->{application}->{docroot}
 % my $title   = config()->{application}->{title}
 <!doctype html>
-<title><%= $title %></title>
+<title>フォームを使った例 - <%= $title %></title>
 <link rel="stylesheet" type="text/css" href="<%= $docroot %>static/style-sites.css">
-<script type="text/javascript" src="<%= $docroot %>static/jquery.js"></script>
-<script type="text/javascript"><!--
-$(function() {
-    var $this = $('h1');
-    $this.css({background : 'orange'}).text($this.text().replace('MENTA', 'めんた'));
-});
-//--></script>
+<!--script type="text/javascript" src="<%= $docroot %>static/jquery.js"></script-->
 
-<h1>フォームを使った例 - <%= $title %></h1>
+<h1>フォームを使った例</h1>
 <p>パラメータ: <%= $r %></p>
 
 <h2>GET</h2>
-<form method="get" action="<%= $docroot %>form"><input type="text" name="r" /><input type="submit" value="送信" /></form>
+<form method="get" action="<%= $docroot %>form"><input type="text" name="r"><input type="submit" value="送信"></form>
 <h2>POST</h2>
-<form method="post" action="<%= $docroot %>form"><input type="text" name="r" /><input type="submit" value="送信" /></form>
+<form method="post" action="<%= $docroot %>form"><input type="text" name="r"><input type="submit" value="送信"></form>
 
