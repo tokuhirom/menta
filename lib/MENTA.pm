@@ -31,6 +31,17 @@ sub run_menta {
         $MENTA::CONFIG = $config;
     }
 
+    local $SIG{__DIE__} = sub {
+        my $msg = shift;
+        my $i = 0;
+        my @trace;
+        while ( my ($package, $filename, $line,) = caller($i) ) {
+            push @trace, {level => $i, package => $package, filename => $filename, line => $line};
+            $i++;
+        }
+        die { message => $msg, trace => \@trace };
+    };
+
     eval {
         my $path = $ENV{PATH_INFO} || '/';
         $path =~ s!^/+!!g;
@@ -60,8 +71,9 @@ sub run_menta {
         }
     };
     if (my $err = $@) {
-        # TODO: 美麗な画面を出す
-        warn $err;
+        die "エラー処理失敗: $err" unless ref $err eq 'HASH';
+
+        warn $err->{message};
 
         print "Status: 500\r\n";
         print "Content-type: text/html; charset=utf-8\r\n";
@@ -69,8 +81,13 @@ sub run_menta {
 
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
-                $err = escape_html($err);
-                qq{<!doctype html><title>INTERNAL SERVER ERROR!!! HACKED BY MENTA</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66" style="text-transform: uppercase"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">$err</span></p><p style="text-align: right; color: black"><strong>Regards,<br>MENTA</strong></p>\n};
+                my $msg = escape_html($err->{message});
+                my $out = qq{<!doctype html><title>INTERNAL SERVER ERROR!!! HACKED BY MENTA</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66" style="text-transform: uppercase"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">$msg</span></p>};
+                for my $stack (@{$err->{trace}}) {
+                    $out .= escape_html(join(", ", $stack->{package}, $stack->{filename}, $stack->{line})) . "<br />";
+                }
+                $out .= qq{<p style="text-align: right; color: black"><strong>Regards,<br>MENTA</strong></p>\n};
+                $out;
             } else {
                 qq{<html><body><p style="color: red">500 Internal Server Error</p></body></html>\n};
             }

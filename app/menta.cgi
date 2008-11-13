@@ -54,3 +54,7 @@ sub do_form {
     render('form.html', $r);
 }
 
+sub do_die {
+    die "こういう風に死にます"
+}
+
