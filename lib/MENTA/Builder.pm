@@ -7,7 +7,7 @@ my $SOURCE_DIR = 'app';
 
 {
     no strict 'refs';
-    *{"MENTA::Builder::read_file"} = *{"main::read_file"};
+    *{"MENTA::Builder::read_file"}  = *{"main::read_file"};
     *{"MENTA::Builder::write_file"} = *{"main::write_file"};
 }
 
@@ -16,6 +16,9 @@ sub puts { print @_, "\n" };
 sub run {
     puts "出力先ディレクトリを作成します";
     mkdir $OUTPUT_DIR unless -d $OUTPUT_DIR;
+    my $mode = 755; #TODO
+    puts "chmod $mode";
+    chmod oct($mode), $OUTPUT_DIR;
 
     puts "メインソースをコンパイルします";
     generate_cgi();

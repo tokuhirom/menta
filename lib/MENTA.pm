@@ -82,11 +82,11 @@ sub run_menta {
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 my $msg = escape_html($err->{message});
-                my $out = qq{<!doctype html><title>INTERNAL SERVER ERROR!!! HACKED BY MENTA</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66" style="text-transform: uppercase"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">$msg</span></p>};
+                my $out = qq{<!doctype html><title>INTERNAL SERVER ERROR!!! HACKED BY MENTA</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66" style="text-transform: uppercase"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">$msg</span></p><ol>};
                 for my $stack (@{$err->{trace}}) {
-                    $out .= escape_html(join(", ", $stack->{package}, $stack->{filename}, $stack->{line})) . "<br />";
+                    $out .= '<li>' . escape_html(join(', ', $stack->{package}, $stack->{filename}, $stack->{line})) . '</li>';
                 }
-                $out .= qq{<p style="text-align: right; color: black"><strong>Regards,<br>MENTA</strong></p>\n};
+                $out .= qq{</ol><p style="text-align: right; color: black"><strong>Regards,<br>MENTA</strong></p>\n};
                 $out;
             } else {
                 qq{<html><body><p style="color: red">500 Internal Server Error</p></body></html>\n};
@@ -211,7 +211,7 @@ sub param {
             $input = $ENV{QUERY_STRING};
         }
 
-        for ( split /&/, $input) {
+        for (split /[&;]+/, $input) {
             my ($key, $val) = split /=/, $_;
             if ($val) {
                 $val =~ tr/+/ /;
