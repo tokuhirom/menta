@@ -69,7 +69,7 @@ sub run_menta {
                     die "なにも出力してません";
                 }
             } else {
-                die "「$mode」というモードは存在しません";
+                die "「${mode}」というモードは存在しません";
             }
         } elsif (-f $path) {
             if (open my $fh, '<', $path) {
@@ -191,7 +191,7 @@ sub finalize {
 
 sub read_file {
     my $fname = shift;
-    open my $fh, '<:utf8', $fname or die "$fname を読み込みように開けません: $!";
+    open my $fh, '<:utf8', $fname or die "${fname} を読み込みように開けません: $!";
     my $s = do { local $/; join '', <$fh> };
     close $fh;
     $s;
@@ -199,7 +199,7 @@ sub read_file {
 
 sub write_file {
     my ($fname, $stuff) = @_;
-    open my $fh, '>:utf8', $fname or die "$fname を書き込み用に開けません： $!";
+    open my $fh, '>:utf8', $fname or die "${fname} を書き込み用に開けません： $!";
     print $fh $stuff;
     close $fh;
 }
