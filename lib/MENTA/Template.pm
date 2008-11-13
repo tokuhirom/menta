@@ -65,7 +65,7 @@ sub build {
     # Wrap
     $lines[0] ||= '';
     $lines[0]   = q/sub { my $_MOJO = '';/ . $lines[0];
-    $lines[-1] .= q/return $_MOJO; };/;
+    $lines[-1] .= q/return $_MOJO; }/;
 
     $self->{code} = join "\n", @lines;
     return $self;
