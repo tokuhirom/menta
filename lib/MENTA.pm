@@ -38,6 +38,7 @@ sub run_menta {
         my $i = 0;
         my @trace;
         while ( my ($package, $filename, $line,) = caller($i) ) {
+            last if $filename eq 'bin/cgi-server.pl';
             push @trace, {level => $i, package => $package, filename => $filename, line => $line};
             $i++;
         }
