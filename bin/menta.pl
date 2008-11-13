@@ -7,5 +7,5 @@ use MENTA::Builder;
 
 binmode STDOUT, ':utf8';
 
-MENTA::Builder->run;
+MENTA::Builder->run( 'app' => 'out' );
 
