@@ -14,6 +14,7 @@ sub new {
         code => '',
         comment_mark => '#',
         expression_mark => '=',
+        raw_expression_mark => '=r',
         line_start => '%',
         template => '',
         tree => [],
@@ -57,6 +58,11 @@ sub build {
 
             # Expression
             if ($type eq 'expr') {
+                $lines[-1] .= "\$_MENTA .= escape_html(scalar $value);";
+            }
+
+            # Raw Expression
+            if ($type eq 'raw_expr') {
                 $lines[-1] .= "\$_MENTA .= $value;";
             }
         }
@@ -80,11 +86,12 @@ sub parse {
     delete $self->{tree};
 
     # Tags
-    my $line_start = quotemeta $self->{line_start};
-    my $tag_start  = quotemeta $self->{tag_start};
-    my $tag_end    = quotemeta $self->{tag_end};
-    my $cmnt_mark  = quotemeta $self->{comment_mark};
-    my $expr_mark  = quotemeta $self->{expression_mark};
+    my $line_start    = quotemeta $self->{line_start};
+    my $tag_start     = quotemeta $self->{tag_start};
+    my $tag_end       = quotemeta $self->{tag_end};
+    my $cmnt_mark     = quotemeta $self->{comment_mark};
+    my $expr_mark     = quotemeta $self->{expression_mark};
+    my $raw_expr_mark = quotemeta $self->{raw_expression_mark};
 
     # Tokenize
     my $state = 'text';
@@ -135,6 +142,8 @@ sub parse {
         my @token;
         for my $token (split /
             (
+                $tag_start$raw_expr_mark   # Raw Expression
+            |
                 $tag_start$expr_mark   # Expression
             |
                 $tag_start$cmnt_mark   # Comment
@@ -159,6 +168,11 @@ sub parse {
 
             # Comment
             elsif ($token =~ /^$tag_start$cmnt_mark$/) { $state = 'cmnt' }
+
+            # Raw Expression
+            elsif ($token =~ /^$tag_start$raw_expr_mark$/) {
+                $state = 'raw_expr';
+            }
 
             # Expression
             elsif ($token =~ /^$tag_start$expr_mark$/) {
