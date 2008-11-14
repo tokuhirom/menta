@@ -23,6 +23,7 @@ run_menta({
     application => {
         docroot => '',
         title => 'MENTA サンプルアプリ',
+        sqlitefile => 'data/data.sqlite',
     },
 });
 

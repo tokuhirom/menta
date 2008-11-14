@@ -333,4 +333,14 @@ sub load_plugin {
     require_once("../plugins/$plugin.pl");
 }
 
+sub is_post_request () {
+    my $method = $ENV{REQUEST_METHOD};
+    return $method eq 'POST' ? 1 : 0;
+}
+
+# TODO: CGI にはこのための環境変数ってなかったっけ?
+sub docroot () {
+    config()->{application}->{docroot}
+}
+
 1;
