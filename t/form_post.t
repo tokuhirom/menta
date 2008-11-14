@@ -8,5 +8,5 @@ my $out = run_cgi(
     REQUEST_METHOD => 'GET',
     QUERY_STRING   => 'r=foo'
 );
-like $out, qr/パラメータ: foo/;
+like $out, qr/\br\s*:\s*"foo"/;
 

@@ -67,19 +67,21 @@ sub run_menta {
                     open my $fh, '<:utf8', $file or die "エラー画面表示用に ${file} を開こうとしたのに開けません: $!";
                     my $cur_line = 0;
                     while ( my $line = <$fh> ) {
+                        chomp $line;
                         ++$cur_line;
                         last if $cur_line > $end;
                         next if $cur_line < $start;
                         my @tag =
                             $cur_line == $linenum
-                            ? (q{<strong>}, '</strong>')
+                            ? ( '<strong>', '</strong>' )
                             : ( '', '' );
-                        $code .= sprintf( '%s%5d: %s%s',
+                        $code .= sprintf( "%s%5d: %s%s\n",
                             $tag[0], $cur_line,
                             escape_html($line),
                             $tag[1], );
                     }
                     close $file;
+                    chomp $code;
                 }
                 return $code;
             }->($filename, $line);
@@ -152,7 +154,8 @@ sub run_menta {
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 my $msg = escape_html($err->{message});
-                my $out = qq{<!doctype html><title>INTERNAL SERVER ERROR!!! HACKED BY MENTA</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66" style="text-transform: uppercase"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">${msg}</span></p><ol>};
+                chomp $msg;
+                my $out = qq{<!doctype html><head><title>500 Internal Server Error</title><style type="text/css">body { margin: 0; padding: 0; background: rgb(230, 230, 230); color: rgb(44, 44, 44); } h1 { margin: 0 0 .5em; padding: .25em .5em .1em 1.5em; border-bottom: thick solid rgb(0, 0, 15); background: rgb(63, 63, 63); color: rgb(239, 239, 239); font-size: x-large; } p { margin: .5em 1em; } li { font-size: small; } pre { background: rgb(255, 239, 239); color: rgb(47, 47, 47); font-size: medium; } pre code strong { color: rgb(0, 0, 0); background: rgb(255, 143, 143); } p.f { text-align: right; font-size: xx-small; } p.f span { font-size: medium; }</style></head><h1>500 Internal Server Error</h1><p>${msg}</p><ol>};
                 for my $stack (@{$err->{trace}}) {
                     $out .= '<li>' . escape_html(join(', ', $stack->{package}, $stack->{filename}, $stack->{line}))
                          . qq(<pre><code>$stack->{context}</code></pre></li>);

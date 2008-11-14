@@ -1,11 +1,11 @@
-% my $r = shift;
+% my $r = shift
 %=r render_partial('header.html', 'フォームを使った例')
 <h1>フォームを使った例</h1>
-<p>パラメータ: <%= $r %></p>
+<p>パラメータ r: "<%= $r %>"</p>
 
 <h2>GET</h2>
 <form method="get" action="<%= docroot %>form"><input type="text" name="r"><input type="submit" value="送信"></form>
+
 <h2>POST</h2>
 <form method="post" action="<%= docroot %>form"><input type="text" name="r"><input type="submit" value="送信"></form>
-
 %=r render_partial('footer.html')
