@@ -128,11 +128,11 @@ sub run_menta {
         } elsif ($path =~ /^(?:crossdomain\.xml|favicon\.ico|robots\.txt)$/) {
             print "status: 404\r\ncontent-type: text/plain\r\n\r\n";
         } else {
-            die "$path を処理する方法がわかりません";
+            die "${path} を処理する方法がわかりません";
         }
     };
     if (my $err = $@) {
-        die "エラー処理失敗: $err" unless ref $err eq 'HASH';
+        die "エラー処理失敗: ${err}" unless ref $err eq 'HASH';
         return if $err->{finished};
 
         warn $err->{message};
@@ -144,7 +144,7 @@ sub run_menta {
         my $body = do {
             if ($config->{menta}->{kcatch_mode}) {
                 my $msg = escape_html($err->{message});
-                my $out = qq{<!doctype html><head><title>500 Internal Server Error</title><style type="text/css">body { margin: 0; padding: 0; background: rgb(230, 230, 230); color: rgb(44, 44, 44); } h1 { margin: 0 0 .5em; padding: .25em; border: 0 none; border-bottom: medium solid rgb(0, 0, 15); background: rgb(63, 63, 63); color: rgb(239, 239, 239); font-size: x-large; } p { margin: .5em 1em; } li { font-size: small; } pre { background: rgb(255, 239, 239); color: rgb(47, 47, 47); font-size: medium; } pre code strong { color: rgb(0, 0, 0); background: rgb(255, 143, 143); } p.f { text-align: right; font-size: xx-small; } p.f span { font-size: medium; }</style></head><h1>500 Internal Server Error</h1><p>$msg</p><ol>};
+                my $out = qq{<!doctype html><title>INTERNAL SERVER ERROR!!! HACKED BY MENTA</title><body style="background: red; color: white; font-weight: bold"><marquee behavior="alternate" scrolldelay="66" style="text-transform: uppercase"><span style="font-size: xx-large; color: black">&#x2620;</span> <span style="color: green">500</span> Internal Server Error <span style="font-size: xx-large; color: black">&#x2620;</span></marquee><p><span style="color: blue">${msg}</span></p><ol>};
                 for my $stack (@{$err->{trace}}) {
                     $out .= '<li>' . escape_html(join(', ', $stack->{package}, $stack->{filename}, $stack->{line}))
                          . qq(<pre><code>$stack->{context}</code></pre></li>);
