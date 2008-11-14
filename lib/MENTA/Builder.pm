@@ -30,6 +30,9 @@ sub run {
 
     puts "コントローラファイルをコピーします";
     copy_dir($srcdir => $outdir, 'controller');
+
+    puts "プラグインディレクトリをコピーします";
+    copy_dir_raw("plugins" => "$outdir/plugins");
 }
 
 sub generate_cgi {

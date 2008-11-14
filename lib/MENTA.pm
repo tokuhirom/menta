@@ -338,7 +338,7 @@ sub mobile_carrier_longname {
 
 sub load_plugin {
     my $plugin = shift;
-    require_once("../plugins/$plugin.pl");
+    require_once($MENTA::BUILT ? "plugins/${plugin}.pl" : "../plugins/${plugin}.pl");
 }
 
 sub is_post_request () {
