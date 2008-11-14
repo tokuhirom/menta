@@ -24,6 +24,7 @@ run_menta({
         docroot => '',
         title => 'MENTA サンプルアプリ',
         sqlitefile => 'data/data.sqlite',
+        counterfile => 'data/counter.txt',
     },
 });
 

@@ -51,4 +51,6 @@ TODO
     フックとかつける?
     redirect/render とかは発行したら detach するべき
     uri_with っぽいのもほしい。
+    documentation する
+    controller を分割ファイル形式にしている場合に、use strict とかオンになってる?
 
