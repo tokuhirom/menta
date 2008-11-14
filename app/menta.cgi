@@ -3,8 +3,6 @@ use lib '../lib';
 use MENTA;
 # -- ここまではおまじない --
 
-load_plugin("mail");
-
 run_menta({
     # MENTA 自体の設定
     menta => {
@@ -36,11 +34,6 @@ sub do_index {
 
 sub do_goto_wassr {
     redirect('http://wassr.jp/');
-}
-
-sub do_mail {
-    mail_send('info@example.com', 'this is subject', 'hi!');
-    redirect('http://example.com');
 }
 
 sub do_form {
