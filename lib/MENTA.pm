@@ -7,7 +7,23 @@ our $FINISHED;
 our $REQ;
 our $CONFIG;
 our $REQUIRED;
-BEGIN { $REQUIRED = {} }
+our $MOBILEAGENTRE;
+BEGIN {
+    $REQUIRED = {};
+
+    {
+        # copied from HTTP::MobileAgent
+        my $DoCoMoRE = '^DoCoMo/\d\.\d[ /]';
+        my $JPhoneRE = '^(?i:J-PHONE/\d\.\d)';
+        my $VodafoneRE = '^Vodafone/\d\.\d';
+        my $VodafoneMotRE = '^MOT-';
+        my $SoftBankRE = '^SoftBank/\d\.\d';
+        my $SoftBankCrawlerRE = '^Nokia[^/]+/\d\.\d';
+        my $EZwebRE  = '^(?:KDDI-[A-Z]+\d+[A-Z]? )?UP\.Browser\/';
+        my $AirHRE = '^Mozilla/3\.0\((?:WILLCOM|DDIPOCKET)\;';
+        $MOBILEAGENTRE = qr/(?:($DoCoMoRE)|($JPhoneRE|$VodafoneRE|$VodafoneMotRE|$SoftBankRE|$SoftBankCrawlerRE)|($EZwebRE)|($AirHRE))/;
+    }
+}
 
 sub import {
     strict->import;
@@ -147,13 +163,14 @@ sub run_menta {
 }
 
 sub escape_html {
-    my $str = shift;
-    $str =~ s/&/&amp;/g;
-    $str =~ s/>/&gt;/g;
-    $str =~ s/</&lt;/g;
-    $str =~ s/"/&quot;/g;
-    $str =~ s/'/&#39;/g;
-    return $str;
+    local $_ = shift;
+    return $_ unless $_;
+    s/&/&amp;/g;
+    s/>/&gt;/g;
+    s/</&lt;/g;
+    s/"/&quot;/g;
+    s/'/&#39;/g;
+    return $_;
 }
 
 sub guess_mime_type {
@@ -284,6 +301,27 @@ sub require_once {
     return if $MENTA::REQUIRED->{$path};
     require $path;
     $MENTA::REQUIRED->{$path} = 1;
+}
+
+# これが返す文字は HTTP::MobileAgent と互換性がある
+# TODO: cache
+sub mobile_carrier () {
+    my $ua = $ENV{HTTP_USER_AGENT} || '';
+    my $ret = 'N';
+    if ($ua =~ /$MENTA::MOBILEAGENTRE/) {
+        $ret = $1 ? 'I' : $2 ? 'V' : $3 ? 'E' :  'H';
+    }
+    $ret;
+}
+
+sub mobile_carrier_longname {
+    {
+        N => 'NonMobile',
+        I => 'DoCoMo',
+        E => 'EZweb',
+        V => 'Softbank',
+        H => 'AirH',
+    }->{ mobile_carrier() }
 }
 
 1;

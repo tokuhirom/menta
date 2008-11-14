@@ -49,3 +49,6 @@ sub do_die {
     die "こういう風に死にます"
 }
 
+sub do_mobile {
+    render('mobile.html');
+}
