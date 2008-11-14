@@ -30,6 +30,7 @@ run_menta({
 # あなたのプログラム
 sub do_index {
     render('index.html');
+    die "DON'T REACH HERE";
 }
 
 sub do_goto_wassr {
@@ -53,3 +54,4 @@ sub do_die {
 sub do_mobile {
     render('mobile.html');
 }
+

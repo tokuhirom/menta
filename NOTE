@@ -50,4 +50,5 @@ TODO
     uri_for みたいなのがほしい?
     フックとかつける?
     redirect/render とかは発行したら detach するべき
+    uri_with っぽいのもほしい。
 

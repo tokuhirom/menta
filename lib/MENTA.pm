@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use utf8;
 
-our $FINISHED;
 our $REQ;
 our $CONFIG;
 our $REQUIRED;
@@ -43,7 +42,6 @@ sub run_menta {
 
     local $MENTA::CONFIG;
     local $MENTA::REQ;
-    local $MENTA::FINISHED = 0;
     local $MENTA::CARRIER;
 
     {
@@ -53,6 +51,7 @@ sub run_menta {
 
     local $SIG{__DIE__} = sub {
         my $msg = shift;
+        return $msg if ref $msg && ref $msg eq 'HASH' && $msg->{finished};
         my $i = 0;
         my @trace;
         while ( my ($package, $filename, $line,) = caller($i) ) {
@@ -97,9 +96,7 @@ sub run_menta {
             my $meth = "do_$mode";
             if (my $code = main->can($meth)) {
                 $code->();
-                unless ($MENTA::FINISHED) {
-                    die "なにも出力してません";
-                }
+                die "なにも出力してません";
             } else {
                 if (my $cdir = config->{menta}->{controller_dir}) {
                     my $controller = "${cdir}/${path}.pl";
@@ -109,9 +106,7 @@ sub run_menta {
                         die $@ if $@;
                         if (my $code = main->can($meth)) {
                             $code->();
-                            unless ($MENTA::FINISHED) {
-                                die "なにも出力してません";
-                            }
+                            die "なにも出力してません";
                         } else {
                             die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
                         }
@@ -138,6 +133,7 @@ sub run_menta {
     };
     if (my $err = $@) {
         die "エラー処理失敗: $err" unless ref $err eq 'HASH';
+        return if $err->{finished};
 
         warn $err->{message};
 
@@ -222,6 +218,10 @@ sub render_partial {
     $out;
 }
 
+sub finish() {
+    die {finished => 1};
+}
+
 sub render {
     my ($tmpl, @params) = @_;
     my $out = render_partial($tmpl, @params);
@@ -230,7 +230,7 @@ sub render {
     print "\r\n";
     print $out;
 
-    $MENTA::FINISHED++;
+    finish;
 }
 
 sub redirect {
@@ -239,7 +239,7 @@ sub redirect {
     print "Location: $location\r\n";
     print "\r\n";
 
-    $MENTA::FINISHED++;
+    finish;
 }
 
 sub finalize {
@@ -250,7 +250,7 @@ sub finalize {
     print "\r\n";
     print $str;
 
-    $MENTA::FINISHED++;
+    finish;
 }
 
 sub read_file {
@@ -341,6 +341,16 @@ sub is_post_request () {
 # TODO: CGI にはこのための環境変数ってなかったっけ?
 sub docroot () {
     config()->{application}->{docroot}
+}
+
+sub uri_for {
+    my ($path, $query) = @_;
+    my @q;
+    while (my ($key, $val) = each %$query) {
+        $val = join '', map { '%' . unpack("H2", $_) } split //, $val;
+        push @q, "$key=$val";
+    }
+    docroot . $path . join('&', @q);
 }
 
 1;

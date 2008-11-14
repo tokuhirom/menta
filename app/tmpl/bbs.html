@@ -2,7 +2,7 @@
 % my $title = 'SQLite をつかった一行掲示板'
 %=r render_partial('header.html', $title)
 <h1><%= $title %></h1>
-<form method="post" action="<%= docroot %>bbs_sqlite">
+<form method="post" action="<%= uri_for('bbs_sqlite') %>">
 <input type="text" name="body" />
 <input type="submit" value="送信" />
 </form>
