@@ -1,0 +1,13 @@
+% my $pager = shift;
+% if ($pager->{page} == 1) {
+prev
+% } else {
+<a href="<%= docroot %>bbs_sqlite?page=<%= $pager->{page}-1 %>">prev</a>
+% }
+|
+% if ($pager->{has_next}) {
+<a href="<%= docroot %>bbs_sqlite?page=<%= $pager->{page}+1 %>">next</a>
+% } else {
+next
+% }
+(current: <%= $pager->{page} %>)

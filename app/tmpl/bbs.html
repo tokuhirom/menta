@@ -1,4 +1,4 @@
-% my $entries = shift;
+% my ($entries, $pager) = @_;
 % my $title = 'SQLite をつかった一行掲示板'
 %=r render_partial('header.html', $title)
 <h1><%= $title %></h1>
@@ -12,3 +12,6 @@
 <li><%= $entry->{id} %> <%= $entry->{body} %></li>
 % }
 </ul>
+
+<%=r render_partial('pager.html', $pager) %>
+
