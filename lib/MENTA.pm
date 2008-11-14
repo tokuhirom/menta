@@ -103,6 +103,13 @@ sub run_menta {
                     if (-f $controller) {
                         package main;
                         do $controller;
+                        if (my $e = $@) {
+                            if (ref $e) {
+                                die $e->{message};
+                            } else {
+                                die $e;
+                            }
+                        }
                         die $@ if $@;
                         if (my $code = main->can($meth)) {
                             $code->();
