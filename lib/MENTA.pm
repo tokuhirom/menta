@@ -8,6 +8,7 @@ our $REQ;
 our $CONFIG;
 our $REQUIRED;
 our $MOBILEAGENTRE;
+our $CARRIER;
 BEGIN {
     $REQUIRED = {};
 
@@ -43,6 +44,7 @@ sub run_menta {
     local $MENTA::CONFIG;
     local $MENTA::REQ;
     local $MENTA::FINISHED = 0;
+    local $MENTA::CARRIER;
 
     {
         $config->{menta}->{max_post_body} ||= MENTA::DEFAULT_MAX_POST_BODY;
@@ -304,13 +306,15 @@ sub require_once {
 }
 
 # これが返す文字は HTTP::MobileAgent と互換性がある
-# TODO: cache
 sub mobile_carrier () {
+    if ($MENTA::CARRIER) { return $MENTA::CARRIER }
+
     my $ua = $ENV{HTTP_USER_AGENT} || '';
     my $ret = 'N';
     if ($ua =~ /$MENTA::MOBILEAGENTRE/) {
         $ret = $1 ? 'I' : $2 ? 'V' : $3 ? 'E' :  'H';
     }
+    $MENTA::CARRIER = $ret;
     $ret;
 }
 
