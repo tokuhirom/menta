@@ -328,4 +328,9 @@ sub mobile_carrier_longname {
     }->{ mobile_carrier() }
 }
 
+sub load_plugin {
+    my $plugin = shift;
+    require_once("../plugins/$plugin.pl");
+}
+
 1;

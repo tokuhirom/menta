@@ -3,7 +3,7 @@ use lib '../lib';
 use MENTA;
 # -- ここまではおまじない --
 
-require "../plugins/mail.pl";
+load_plugin("mail");
 
 run_menta({
     # MENTA 自体の設定
