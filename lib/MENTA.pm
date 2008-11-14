@@ -218,7 +218,7 @@ sub render_partial {
     $out;
 }
 
-sub finish() {
+sub detach() {
     die {finished => 1};
 }
 
@@ -230,7 +230,7 @@ sub render {
     print "\r\n";
     print $out;
 
-    finish;
+    detach;
 }
 
 sub redirect {
@@ -239,7 +239,7 @@ sub redirect {
     print "Location: $location\r\n";
     print "\r\n";
 
-    finish;
+    detach;
 }
 
 sub finalize {
@@ -250,7 +250,7 @@ sub finalize {
     print "\r\n";
     print $str;
 
-    finish;
+    detach;
 }
 
 sub read_file {
