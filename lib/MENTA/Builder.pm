@@ -1,6 +1,7 @@
 package MENTA::Builder;
 use MENTA;
 use MENTA::Template;
+use File::Copy;
 
 {
     no strict 'refs';
@@ -30,6 +31,9 @@ sub run {
 
     puts "コントローラファイルをコピーします";
     copy_dir($srcdir => $outdir, 'controller');
+
+    puts "データをコピーします";
+    copy_dir($srcdir => $outdir, 'data');
 
     puts "プラグインディレクトリをコピーします";
     copy_dir_raw("plugins" => "$outdir/plugins");
@@ -86,7 +90,7 @@ sub copy_dir_raw {
     while (my $file = readdir $dir) {
         my $fname = "$src/$file";
         next unless -f $fname;
-        write_file("$dst/$file" => read_file($fname));
+        copy($fname, "$dst/$file");
     }
     closedir $dir;
 }
