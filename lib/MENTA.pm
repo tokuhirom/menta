@@ -8,6 +8,7 @@ our $CONFIG;
 our $REQUIRED;
 our $MOBILEAGENTRE;
 our $CARRIER;
+our $BUILT = 0;
 BEGIN {
     $REQUIRED = {};
 

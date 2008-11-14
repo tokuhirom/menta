@@ -26,10 +26,10 @@ sub run {
     generate_template_files($srcdir => $outdir);
 
     puts "静的ファイルをコピーします";
-    copy_dir($srcdir => $outdir, 'static', '静的ファイル');
+    copy_dir($srcdir => $outdir, 'static');
 
     puts "コントローラファイルをコピーします";
-    copy_dir($srcdir => $outdir, 'controller', 'コントローラ');
+    copy_dir($srcdir => $outdir, 'controller');
 }
 
 sub generate_cgi {
@@ -38,7 +38,7 @@ sub generate_cgi {
     puts "menta.cgi をつくりあげる";
     my $menta = read_file("${srcdir}/menta.cgi");
     my $menta_pm = read_file('lib/MENTA.pm');
-    $menta =~ s/use MENTA;/use strict;use warnings;use utf8;\n$menta_pm\npackage main;/;
+    $menta =~ s/use MENTA;/use strict;use warnings;use utf8;\n$menta_pm\n\$MENTA::BUILT++;\npackage main;/;
     $menta =~ s!use lib '\..\/lib';!!;
 
     puts "menta.cgi を出力します";
@@ -70,16 +70,20 @@ sub generate_template_files {
 }
 
 sub copy_dir {
-    my ($srcdir, $outdir, $dirname, $type) = @_;
-    my $outputdir = "$outdir/$dirname/";
-    unless (-d $outputdir) {
-        mkdir $outputdir or die "${type} 出力用ディレクトリを作成できません: $!";
+    my ($srcdir, $outdir, $dirname) = @_;
+    copy_dir_raw("$srcdir/$dirname" => "$outdir/$dirname");
+}
+
+sub copy_dir_raw {
+    my ($src, $dst) = @_;
+    unless (-d $dst) {
+        mkdir $dst or die "出力用ディレクトリ ${dst} を作成できません: $!";
     }
-    opendir my $dir, "$srcdir/$dirname/" or die "${type} 用ディレクトリを開けません: $!";
+    opendir my $dir, $src or die "入力用ディレクトリ ${src} を開けません: $!";
     while (my $file = readdir $dir) {
-        my $fname = "$srcdir/$dirname/$file";
+        my $fname = "$src/$file";
         next unless -f $fname;
-        write_file("$outputdir/$file" => read_file($fname));
+        write_file("$dst/$file" => read_file($fname));
     }
     closedir $dir;
 }
