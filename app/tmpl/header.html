@@ -1,5 +1,4 @@
 % my $title = shift;
-% my $docroot = config()->{application}->{docroot}
 <!doctype html>
 <title><% if ($title) { %><%= "$title - " %><% } %>MENTA</title>
-<link rel="stylesheet" type="text/css" href="<%= $docroot %>static/style-sites.css">
+<link rel="stylesheet" type="text/css" href="<%= docroot %>static/style-sites.css">

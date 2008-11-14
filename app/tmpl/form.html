@@ -1,11 +1,10 @@
 % my $r = shift;
-% my $docroot = config()->{application}->{docroot}
 %=r render_partial('header.html', 'フォームを使った例')
 <h1>フォームを使った例</h1>
 <p>パラメータ: <%= $r %></p>
 
 <h2>GET</h2>
-<form method="get" action="<%= $docroot %>form"><input type="text" name="r"><input type="submit" value="送信"></form>
+<form method="get" action="<%= docroot %>form"><input type="text" name="r"><input type="submit" value="送信"></form>
 <h2>POST</h2>
-<form method="post" action="<%= $docroot %>form"><input type="text" name="r"><input type="submit" value="送信"></form>
+<form method="post" action="<%= docroot %>form"><input type="text" name="r"><input type="submit" value="送信"></form>
 
