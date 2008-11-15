@@ -1,7 +1,8 @@
-load_plugin("dbi_select");
+load_plugin("sql");
 
 sub do_users {
-    my @rows = dbi_select('DBI:CSV:f_dir=../app/data', 'select * from users');
-    render('users.html', \@rows);
+    sql_dbh('DBI:CSV:f_dir=../app/data');
+    my $rows = sql_select_all('select * from users');
+    render('users.html', $rows);
 }
 

@@ -1,4 +1,4 @@
-# AUTHOR: tokuhirom
+# AUTHOR: tokuhirom, mattn
 
 use strict;
 use warnings;
@@ -6,12 +6,23 @@ use utf8;
 use DBI;
 
 sub sql_dbh {
-    $MENTA::STASH->{sql_dbh} ||= do {
-        my $dsn = config->{application}->{sql}->{dsn} or die "設定に application.sql.dsn がありません";
-        my $dbh = DBI->connect($dsn) or die "DBに接続できません: $DBI::errstr";
-        $dbh->{unicode}++;
+    if (@_) {
+        my @args = @_;
+        if ($MENTA::STASH->{sql_dbh}) {
+            $MENTA::STASH->{sql_dbh}->disconnect;
+            undef $MENTA::STASH->{sql_dbh};
+        }
+        my $dbh = DBI->connect(@args) or die "DBに接続できません: $DBI::errstr";
+        $MENTA::STASH->{sql_dbh} = $dbh;
         $dbh;
-    };
+    } else {
+        $MENTA::STASH->{sql_dbh} ||= do {
+            my $dsn = config->{application}->{sql}->{dsn} or die "設定に application.sql.dsn がありません";
+            my $dbh = DBI->connect($dsn) or die "DBに接続できません: $DBI::errstr";
+            $dbh->{unicode}++;
+            $dbh;
+        };
+    }
 }
 
 sub sql_prepare_exec {
@@ -21,6 +32,22 @@ sub sql_prepare_exec {
     $sth->execute(@params) or die "exec できません: " . $dbh->errstr;
     $sth->finish();
     undef $sth;
+}
+
+sub sql_select_all {
+    my ($sql, @params) = @_;
+
+    my $dbh = sql_dbh();
+    my $sth = $dbh->prepare($sql) or die $dbh->errstr;
+    $sth->execute(@params);
+    my @res;
+    while (my $row = $sth->fetchrow_hashref) {
+        push @res, $row;
+    }
+    $sth->finish;
+    undef $sth;
+
+    return \@res;
 }
 
 sub sql_select_paginate {
