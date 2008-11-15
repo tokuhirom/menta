@@ -213,8 +213,9 @@ sub guess_mime_type {
 # TODO: ディレクトリトラバーサル対策
 sub render_partial {
     my ($tmpl, @params) = @_;
-    my $tmpldir = config()->{menta}->{tmpl_dir} or die "[menta] セクションに tmpl_dir が設定されていません";
-    my $cachedir = config()->{menta}->{tmpl_cache_dir} or die "[menta] セクションに tmpl_cache_dir が設定されていません";
+    my $conf = config()->{menta};
+    my $tmpldir = $conf->{tmpl_dir} or die "[menta] セクションに tmpl_dir が設定されていません";
+    my $cachedir = $conf->{tmpl_cache_dir} or die "[menta] セクションに tmpl_cache_dir が設定されていません";
     mkdir $cachedir unless $MENTA::BUILT || -d $cachedir;
     my $cachefname = "$cachedir/$tmpl";
     my $tmplfname = "$tmpldir/$tmpl";
