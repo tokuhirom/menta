@@ -215,14 +215,14 @@ sub render_partial {
     my ($tmpl, @params) = @_;
     my $tmpldir = config()->{menta}->{tmpl_dir} or die "[menta] セクションに tmpl_dir が設定されていません";
     my $cachedir = config()->{menta}->{tmpl_cache_dir} or die "[menta] セクションに tmpl_cache_dir が設定されていません";
-    mkdir $cachedir unless -d $cachedir;
+    mkdir $cachedir unless $MENTA::BUILT || -d $cachedir;
     my $cachefname = "$cachedir/$tmpl";
     my $tmplfname = "$tmpldir/$tmpl";
-    my $use_cache = do {
+    my $use_cache = $MENTA::BUILT || sub {
         my @orig = stat $tmplfname or return 1;
         my @cached = stat $cachefname or return;
-        $orig[9] < $cached[9];
-    };
+        return $orig[9] < $cached[9];
+    }->();
     my $out;
     if ($use_cache) {
         my $tmplcode = do $cachefname;
