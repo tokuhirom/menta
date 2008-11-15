@@ -36,7 +36,6 @@ sub import {
 sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
 package main;
-use Fcntl ':flock';
 
 sub config () { $MENTA::CONFIG }
 
