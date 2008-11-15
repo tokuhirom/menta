@@ -55,7 +55,7 @@ sub run_menta {
 
     local $SIG{__DIE__} = sub {
         my $msg = shift;
-        warn $msg;
+        warn $msg unless ref $msg;
         return $msg if ref $msg && ref $msg eq 'HASH' && $msg->{finished};
         my $i = 0;
         my @trace;
