@@ -218,11 +218,11 @@ sub render_partial {
     mkdir $cachedir unless -d $cachedir;
     my $cachefname = "$cachedir/$tmpl";
     my $tmplfname = "$tmpldir/$tmpl";
-    my $use_cache = sub {
+    my $use_cache = do {
         my @orig = stat $tmplfname or return 1;
         my @cached = stat $cachefname or return;
-        return $orig[9] < $cached[9];
-    }->();
+        $orig[9] < $cached[9];
+    };
     my $out;
     if ($use_cache) {
         my $tmplcode = do $cachefname;
