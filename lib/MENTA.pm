@@ -35,6 +35,7 @@ sub import {
 sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
 package main;
+use Fcntl ':flock';
 
 sub config () { $MENTA::CONFIG }
 
@@ -52,6 +53,7 @@ sub run_menta {
 
     local $SIG{__DIE__} = sub {
         my $msg = shift;
+        warn $msg;
         return $msg if ref $msg && ref $msg eq 'HASH' && $msg->{finished};
         my $i = 0;
         my @trace;
@@ -179,6 +181,17 @@ sub escape_html {
     s/</&lt;/g;
     s/"/&quot;/g;
     s/'/&#39;/g;
+    return $_;
+}
+
+sub unescape_html {
+    local $_ = shift;
+    return $_ unless $_;
+    s/>/&gt;/g;
+    s/</&lt;/g;
+    s/"/&quot;/g;
+    s/'/&#39;/g;
+    s/&/&amp;/g;
     return $_;
 }
 
