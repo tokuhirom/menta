@@ -8,6 +8,7 @@ our $CONFIG;
 our $REQUIRED;
 our $MOBILEAGENTRE;
 our $CARRIER;
+our $STASH;
 our $BUILT = 0;
 BEGIN {
     $REQUIRED = {};
@@ -45,6 +46,7 @@ sub run_menta {
     local $MENTA::CONFIG;
     local $MENTA::REQ;
     local $MENTA::CARRIER;
+    local $MENTA::STASH;
 
     {
         $config->{menta}->{max_post_body} ||= MENTA::DEFAULT_MAX_POST_BODY;
