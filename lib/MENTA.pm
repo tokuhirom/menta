@@ -188,11 +188,11 @@ sub escape_html {
 sub unescape_html {
     local $_ = shift;
     return $_ unless $_;
-    s/>/&gt;/g;
-    s/</&lt;/g;
-    s/"/&quot;/g;
-    s/'/&#39;/g;
-    s/&/&amp;/g;
+    s/&gt;/>/g;
+    s/&lt;/</g;
+    s/&quot;/"/g;
+    s/&#39;/'/g;
+    s/&amp;/&/g;
     return $_;
 }
 
