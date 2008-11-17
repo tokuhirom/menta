@@ -1,14 +1,15 @@
 ? my $pager = shift
 ? my $action = shift
+? my $page_n = $pager->{page}
 ? if ($pager->{page} == 1) {
-prev
+前
 ? } else {
-<a href="<?= docroot ?><?= $action ?>?page=<?= $pager->{page}-1 ?>" rel="prev">prev</a>
+<a href="<?= uri_for($action, { page => $page_n - 1 }) ?>" rel="prev">前</a>
 ? }
 |
 ? if ($pager->{has_next}) {
-<a href="<?= docroot ?><?= $action ?>?page=<?= $pager->{page}+1 ?>" rel="next">next</a>
+<a href="<?= uri_for($action, { page => $page_n + 1 }) ?>" rel="next">次</a>
 ? } else {
-next
+次
 ? }
-(current: <?= $pager->{page} ?>)
+(現在: <?= $page_n ?>)

@@ -13,7 +13,6 @@ $(function() {
 <p><?= localtime time ?></p>
 
 <h2>MENTA ってなに?</h2>
-
 <p>MENTA は CGI で気軽につかえるウェブアプリケーションフレームワークです</p>
 <ul>
     <li>CGI でも高速に動作</li>
@@ -24,13 +23,13 @@ $(function() {
 
 <h2>デモ</h2>
 <ul>
-    <li><a href="<?= docroot ?>form">フォーム</a></li>
-    <li><a href="<?= docroot ?>goto_wassr">リダイレクト(Wassr にとびます)</a></li>
-    <li><a href="<?= docroot ?>users">DBI(DBI および DBD::CSV がないとエラーになります)</a></li>
-    <li><a href="<?= docroot ?>die">エラー画面</a></li>
-    <li><a href="<?= docroot ?>mobile">モバイル</a></li>
-    <li><a href="<?= docroot ?>bbs_sqlite">SQLite をつかった掲示板(DBD::SQLite が必要です)</a></li>
-    <li><a href="<?= docroot ?>counter">簡単なカウンター</a></li>
-    <li><a href="<?= docroot ?>hello?user=kazuhooku">PHP っぽくそのままテンプレート表示しちゃう</a></li>
+    <li><a href="<?= uri_for('form') ?>">フォーム</a></li>
+    <li><a href="<?= uri_for('goto_wassr') ?>">リダイレクト(Wassr にとびます)</a></li>
+    <li><a href="<?= uri_for('users') ?>">DBI(DBI および DBD::CSV がないとエラーになります)</a></li>
+    <li><a href="<?= uri_for('die') ?>">エラー画面</a></li>
+    <li><a href="<?= uri_for('mobile') ?>">モバイル</a></li>
+    <li><a href="<?= uri_for('bbs_sqlite') ?>">SQLite をつかった掲示板(DBD::SQLite が必要です)</a></li>
+    <li><a href="<?= uri_for('counter') ?>">簡単なカウンター</a></li>
+    <li><a href="<?= uri_for('hello', { user => 'kazuhooku' }) ?>">PHP っぽくそのままテンプレート表示しちゃう</a></li>
 </ul>
 ?=r render_partial('footer.html')

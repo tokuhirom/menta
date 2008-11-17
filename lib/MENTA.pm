@@ -21,7 +21,7 @@ BEGIN {
         my $VodafoneMotRE = '^MOT-';
         my $SoftBankRE = '^SoftBank/\d\.\d';
         my $SoftBankCrawlerRE = '^Nokia[^/]+/\d\.\d';
-        my $EZwebRE  = '^(?:KDDI-[A-Z]+\d+[A-Z]? )?UP\.Browser\/';
+        my $EZwebRE = '^(?:KDDI-[A-Z]+\d+[A-Z]? )?UP\.Browser\/';
         my $AirHRE = '^Mozilla/3\.0\((?:WILLCOM|DDIPOCKET)\;';
         $MOBILEAGENTRE = qr/(?:($DoCoMoRE)|($JPhoneRE|$VodafoneRE|$VodafoneMotRE|$SoftBankRE|$SoftBankCrawlerRE)|($EZwebRE)|($AirHRE))/;
     }
@@ -232,7 +232,7 @@ sub render_partial {
     if ($use_cache) {
         my $tmplcode = do $cachefname;
         die $@ if $@;
-        die "テンプレートキャッシュを読み込めませんでした: $tmplfname" unless $tmplcode;
+        die "テンプレートキャッシュを読み込めませんでした: ${tmplfname}" unless $tmplcode;
         $out = $tmplcode->(@params);
     } else {
         die "「${tmplfname}」という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
@@ -245,7 +245,7 @@ sub render_partial {
         my $tmplcode = eval $src;
         die $@ if $@;
         $out = $tmplcode->(@params);
-        write_file($cachefname, "package main; use utf8;\n$src");
+        write_file($cachefname, "package main; use utf8;\n${src}");
     }
     $out;
 }
@@ -324,8 +324,8 @@ sub parse_multipart {
             return 1;
         } elsif ($step eq 2) {
             $val .= "\n" if $val;
-            $val .= "$line";
-        } elsif ($sline =~ /^Content\-Disposition: form\-data; name=\"([^\"]*)\".*/ && $step eq 1) {
+            $val .= $line;
+        } elsif ($sline =~ /^(?i:Content-Disposition): *form-data; *name="((?:\\"|[^"])*)/ && $step eq 1) {
             $key = $1;
         } elsif ($sline eq '' && $step eq 1) {
             $step = 2;
@@ -339,7 +339,7 @@ sub param {
 
     unless (defined $MENTA::REQ) {
         my $input;
-        if ($ENV{'REQUEST_METHOD'} eq "POST") {
+        if ($ENV{'REQUEST_METHOD'} eq 'POST') {
             my $max_post_body = config()->{menta}->{max_post_body};
             if ($max_post_body > 0 && $ENV{CONTENT_LENGTH} > $max_post_body) {
                 die "投稿データが長すぎです";
@@ -351,14 +351,14 @@ sub param {
         }
 
         my $type = $ENV{'CONTENT_TYPE'};
-        if ($type && $type =~ /^multipart\/form\-data; boundary=/) {
+        if ($type && $type =~ m{^multipart/form-data; *boundary=}) {
             parse_multipart $input, '--'.substr($type, 30);
         } else {
             for (split /[&;]+/, $input) {
                 my ($key, $val) = split /=/, $_;
                 if ($val) {
                     $val =~ tr/+/ /;
-                    $val =~ s/%([a-fA-F0-9]{2})/pack("H2", $1)/eg;
+                    $val =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack('H2', $1)/eg;
                     utf8::decode($val);
                 }
                 $MENTA::REQ->{$key} = $val;
@@ -383,7 +383,7 @@ sub mobile_carrier () {
     my $ua = $ENV{HTTP_USER_AGENT} || '';
     my $ret = 'N';
     if ($ua =~ /$MENTA::MOBILEAGENTRE/) {
-        $ret = $1 ? 'I' : $2 ? 'V' : $3 ? 'E' :  'H';
+        $ret = $1 ? 'I' : $2 ? 'V' : $3 ? 'E' : 'H';
     }
     $MENTA::CARRIER = $ret;
     $ret;
@@ -406,7 +406,7 @@ sub load_plugin {
 
 sub is_post_request () {
     my $method = $ENV{REQUEST_METHOD};
-    return $method eq 'POST' ? 1 : 0;
+    return $method eq 'POST';
 }
 
 # TODO: CGI にはこのための環境変数ってなかったっけ?
@@ -418,10 +418,10 @@ sub uri_for {
     my ($path, $query) = @_;
     my @q;
     while (my ($key, $val) = each %$query) {
-        $val = join '', map { '%' . unpack("H2", $_) } split //, $val;
-        push @q, "$key=$val";
+        $val = join '', map { /^[a-zA-Z0-9_.!~*'()-]$/ ? $_ : '%' . uc(unpack('H2', $_)) } split //, $val;
+        push @q, "${key}=${val}";
     }
-    docroot . $path . join('&', @q);
+    docroot . $path . (scalar @q ? '?' . join('&', @q) : '');
 }
 
 1;
