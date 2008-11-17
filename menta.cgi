@@ -10,8 +10,6 @@ run_menta({
         kcatch_mode => 1,
         # 最大表示文字数
         max_post_body => 1_024_000,
-        # テンプレートファイルディレクトリへのパス
-        controller_dir => 'app/controller/',
     },
     # あなたのアプリの設定
     application => {

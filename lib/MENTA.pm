@@ -100,35 +100,32 @@ sub run_menta {
         if ($path =~ /^[a-z0-9_]*$/) {
             my $mode = $path || 'index';
             my $meth = "do_$mode";
-            if (my $cdir = config->{menta}->{controller_dir}) {
-                my $controller = "${cdir}/${path}.pl";
-                if (-f $controller) {
-                    package main;
-                    do $controller;
-                    if (my $e = $@) {
-                        if (ref $e) {
-                            die $e->{message};
-                        } else {
-                            die $e;
-                        }
-                    }
-                    die $@ if $@;
-                    if (my $code = main->can($meth)) {
-                        $code->();
-                        die "なにも出力してません";
+            my $cdir = controller_dir();
+            my $controller = "${cdir}/${path}.pl";
+            if (-f $controller) {
+                package main;
+                do $controller;
+                if (my $e = $@) {
+                    if (ref $e) {
+                        die $e->{message};
                     } else {
-                        die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
-                    }
-                } else {
-                    my $tmplfname = ($MENTA::BUILT ? cache_dir() : tmpl_dir()) . "/${mode}.mt";
-                    if (-f $tmplfname) {
-                        render("${mode}.mt");
-                    } else {
-                        die "「${mode}」というモードは存在しません。別コントローラファイルもありません(${controller})。テンプレートファイルもありません(${tmplfname})";
+                        die $e;
                     }
                 }
+                die $@ if $@;
+                if (my $code = main->can($meth)) {
+                    $code->();
+                    die "なにも出力してません";
+                } else {
+                    die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
+                }
             } else {
-                die "「${mode}」というモードは存在しません。別コントローラ用ディレクトリは設定されていません";
+                my $tmplfname = ($MENTA::BUILT ? cache_dir() : tmpl_dir()) . "/${mode}.mt";
+                if (-f $tmplfname) {
+                    render("${mode}.mt");
+                } else {
+                    die "「${mode}」というモードは存在しません。別コントローラファイルもありません(${controller})。テンプレートファイルもありません(${tmplfname})";
+                }
             }
         } elsif ($path ne 'menta.cgi' && -f "app/$path") {
             $path = "app/$path";
