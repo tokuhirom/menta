@@ -1,15 +1,15 @@
-% my $title = 'DBI'
-%=r render_partial('header.html', $title)
-<h1><%= $title %></h1>
+? my $title = 'DBI'
+?=r render_partial('header.html', $title)
+<h1><?= $title ?></h1>
 <table>
  <caption>Users</caption>
  <thead>
   <tr><th>ID</th><th>name</th></tr>
  </thead>
  <tbody>
-% for my $c (@{$_[0]}) {
-  <tr><td><%= $c->{id} %></td><td><%= $c->{name} %></td></tr>
-% }
+? for my $c (@{$_[0]}) {
+  <tr><td><?= $c->{id} ?></td><td><?= $c->{name} ?></td></tr>
+? }
  <tbody>
 </table>
-%=r render_partial('footer.html')
+?=r render_partial('footer.html')

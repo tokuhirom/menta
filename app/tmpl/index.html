@@ -1,6 +1,6 @@
-% my $title = config()->{application}->{title}
-%=r render_partial('header.html')
-<script type="text/javascript" src="<%= docroot %>static/jquery.js"></script>
+? my $title = config()->{application}->{title}
+?=r render_partial('header.html')
+<script type="text/javascript" src="<?= docroot ?>static/jquery.js"></script>
 <script type="text/javascript"><!--
 $(function() {
     var $this = $('h1');
@@ -9,8 +9,8 @@ $(function() {
 });
 //--></script>
 
-<h1><%= $title %></h1>
-<p><%= localtime time %></p>
+<h1><?= $title ?></h1>
+<p><?= localtime time ?></p>
 
 <h2>MENTA ってなに?</h2>
 
@@ -24,13 +24,13 @@ $(function() {
 
 <h2>デモ</h2>
 <ul>
-    <li><a href="<%= docroot %>form">フォーム</a></li>
-    <li><a href="<%= docroot %>goto_wassr">リダイレクト(Wassr にとびます)</a></li>
-    <li><a href="<%= docroot %>users">DBI(DBI および DBD::CSV がないとエラーになります)</a></li>
-    <li><a href="<%= docroot %>die">エラー画面</a></li>
-    <li><a href="<%= docroot %>mobile">モバイル</a></li>
-    <li><a href="<%= docroot %>bbs_sqlite">SQLite をつかった掲示板(DBD::SQLite が必要です)</a></li>
-    <li><a href="<%= docroot %>counter">簡単なカウンター</a></li>
-    <li><a href="<%= docroot %>hello?user=kazuhooku">PHP っぽくそのままテンプレート表示しちゃう</a></li>
+    <li><a href="<?= docroot ?>form">フォーム</a></li>
+    <li><a href="<?= docroot ?>goto_wassr">リダイレクト(Wassr にとびます)</a></li>
+    <li><a href="<?= docroot ?>users">DBI(DBI および DBD::CSV がないとエラーになります)</a></li>
+    <li><a href="<?= docroot ?>die">エラー画面</a></li>
+    <li><a href="<?= docroot ?>mobile">モバイル</a></li>
+    <li><a href="<?= docroot ?>bbs_sqlite">SQLite をつかった掲示板(DBD::SQLite が必要です)</a></li>
+    <li><a href="<?= docroot ?>counter">簡単なカウンター</a></li>
+    <li><a href="<?= docroot ?>hello?user=kazuhooku">PHP っぽくそのままテンプレート表示しちゃう</a></li>
 </ul>
-%=r render_partial('footer.html')
+?=r render_partial('footer.html')

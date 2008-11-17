@@ -1,14 +1,14 @@
-% my $pager = shift
-% my $action = shift
-% if ($pager->{page} == 1) {
+? my $pager = shift
+? my $action = shift
+? if ($pager->{page} == 1) {
 prev
-% } else {
-<a href="<%= docroot %><%= $action %>?page=<%= $pager->{page}-1 %>" rel="prev">prev</a>
-% }
+? } else {
+<a href="<?= docroot ?><?= $action ?>?page=<?= $pager->{page}-1 ?>" rel="prev">prev</a>
+? }
 |
-% if ($pager->{has_next}) {
-<a href="<%= docroot %><%= $action %>?page=<%= $pager->{page}+1 %>" rel="next">next</a>
-% } else {
+? if ($pager->{has_next}) {
+<a href="<?= docroot ?><?= $action ?>?page=<?= $pager->{page}+1 ?>" rel="next">next</a>
+? } else {
 next
-% }
-(current: <%= $pager->{page} %>)
+? }
+(current: <?= $pager->{page} ?>)
