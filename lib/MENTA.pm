@@ -303,14 +303,12 @@ sub write_file {
 sub parse_multipart {
     my ($data, $boundary) = @_;
 
-    $data =~ s/\r\n\n/\n/g;
-    $data =~ s/\r\n/\n/g;
-    $data =~ s/\r/\n/g;
     my @lines = split(/\n/, $data);
-
     my ($val, $key, $step) = ('', '', 0);
     for my $line (@lines) {
-        if ($boundary eq $line) {
+        my $sline = $line;
+        $sline =~ s![\r\n]+!!msg;
+        if ($boundary eq $sline) {
             if($step eq 2 && $key ne '') {
                 chop($val);
                 $MENTA::REQ->{$key} = $val;
@@ -318,17 +316,18 @@ sub parse_multipart {
             $step = 1;
             $key = '';
             $val = '';
-        } elsif ($boundary."--" eq $line) {
+        } elsif ("${boundary}--" eq $sline) {
             if ($step eq 2 && $key ne '') {
                 chop($val);
                 $MENTA::REQ->{$key} = $val;
             }
             return 1;
         } elsif ($step eq 2) {
-            $val .= "$line\n";
-        } elsif ($line =~ /^Content\-Disposition: form\-data; name=\"([^\"]*)\".*/ && $step eq 1) {
+            $val .= "\n" if $val;
+            $val .= "$line";
+        } elsif ($sline =~ /^Content\-Disposition: form\-data; name=\"([^\"]*)\".*/ && $step eq 1) {
             $key = $1;
-        } elsif ($line eq '' && $step eq 1) {
+        } elsif ($sline eq '' && $step eq 1) {
             $step = 2;
         }
     }
