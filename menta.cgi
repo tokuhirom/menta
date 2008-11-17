@@ -11,10 +11,7 @@ run_menta({
         # 最大表示文字数
         max_post_body => 1_024_000,
         # テンプレートファイルディレクトリへのパス
-        tmpl_dir => 'app/tmpl/',
         controller_dir => 'app/controller/',
-        # テンプレートファイルのキャッシュディレクトリへのパス
-        tmpl_cache_dir => 'app/tmpl_cache/',
     },
     # あなたのアプリの設定
     application => {

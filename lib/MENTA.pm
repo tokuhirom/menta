@@ -120,7 +120,7 @@ sub run_menta {
                         die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
                     }
                 } else {
-                    my $tmplfname = ($MENTA::BUILT ? config->{menta}->{tmpl_cache_dir} : config->{menta}->{tmpl_dir}) . "/${mode}.mt";
+                    my $tmplfname = ($MENTA::BUILT ? cache_dir() : tmpl_dir()) . "/${mode}.mt";
                     if (-f $tmplfname) {
                         render("${mode}.mt");
                     } else {
@@ -210,12 +210,24 @@ sub guess_mime_type {
     $mime_map->{$ext} || 'application/octet-stream';
 }
 
+sub cache_dir {
+    config->{menta}->{cache_dir} || 'cache'
+}
+
+sub tmpl_dir {
+    config->{menta}->{cache_dir} || 'app/tmpl/'
+}
+
+sub controller_dir {
+    config->{menta}->{controller_dir} || 'app/controller/'
+}
+
 # TODO: ディレクトリトラバーサル対策
 sub render_partial {
     my ($tmpl, @params) = @_;
     my $conf = config()->{menta};
-    my $tmpldir = $conf->{tmpl_dir} or die "[menta] セクションに tmpl_dir が設定されていません";
-    my $cachedir = $conf->{tmpl_cache_dir} or die "[menta] セクションに tmpl_cache_dir が設定されていません";
+    my $tmpldir = tmpl_dir();
+    my $cachedir = cache_dir();
     mkdir $cachedir unless $MENTA::BUILT || -d $cachedir;
     my $cachefname = "$cachedir/$tmpl";
     my $tmplfname = "$tmpldir/$tmpl";
@@ -397,7 +409,7 @@ sub mobile_carrier_longname {
 
 sub load_plugin {
     my $plugin = shift;
-    require_once($MENTA::BUILT ? "plugins/${plugin}.pl" : "../plugins/${plugin}.pl");
+    require_once($MENTA::BUILT ? "plugins/${plugin}.pl" : "plugins/${plugin}.pl");
 }
 
 sub is_post_request () {
