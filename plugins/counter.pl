@@ -1,8 +1,11 @@
+use MENTA;
 use Fcntl ':flock';
-use utf8;
 
-sub do_counter {
-    my $fname = config->{application}->{counterfile} or die "データファイル名が設定されていません";
+sub counter_increment {
+    my $fname = shift;
+    unless ($fname) {
+        $fname = config->{application}->{counter}->{file} or die "config.application.counter.file にデータファイル名が設定されていません";
+    }
     my $mode = (-f $fname) ? '+<' : '+>';
     open my $fh, $mode, $fname or die "$fname を開けません: $!";
     flock $fh, LOCK_EX;
@@ -12,6 +15,7 @@ sub do_counter {
     print $fh $cnt or die "$fname にかきこめません: $!";
     flock $fh, LOCK_UN;
     close $fh or die "$fname を閉じることができません: $!";
-    finalize($cnt);
+    $cnt;
 }
 
+1;

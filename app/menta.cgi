@@ -22,9 +22,11 @@ run_menta({
         docroot => '',
         title => 'MENTA サンプルアプリ',
         sqlitefile => 'data/data.sqlite',
-        counterfile => 'data/counter.txt',
         sql => {
             dsn => 'dbi:SQLite:data/data.sqlite',
+        },
+        counter => {
+            file => 'data/counter.txt'
         },
     },
 });
