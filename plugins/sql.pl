@@ -39,7 +39,7 @@ sub sql_select_all {
 
     my $dbh = sql_dbh();
     my $sth = $dbh->prepare($sql) or die $dbh->errstr;
-    $sth->execute(@params);
+    $sth->execute(@params) or die $dbh->errstr;
     my @res;
     while (my $row = $sth->fetchrow_hashref) {
         push @res, $row;
