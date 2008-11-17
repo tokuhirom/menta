@@ -1,7 +1,5 @@
 load_plugin('sql');
 
-# DBI ってやっぱりわかりにくいよねえ。もうちょいすっきりこれを書けるプラグインが欲しい。
-
 sub do_bbs_sqlite {
     sql_prepare_exec(q{CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY, body VARCHAR(255))});
 
