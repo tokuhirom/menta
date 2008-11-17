@@ -31,26 +31,3 @@ run_menta({
     },
 });
 
-# あなたのプログラム
-sub do_index {
-    render('index.html');
-    die "DON'T REACH HERE";
-}
-
-sub do_goto_wassr {
-    redirect('http://wassr.jp/');
-}
-
-sub do_form {
-    my $r = param('r') || '';
-    render('form.html', $r);
-}
-
-sub do_die {
-    die "こういう風に死にます"
-}
-
-sub do_mobile {
-    render('mobile.html');
-}
-
