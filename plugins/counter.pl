@@ -11,7 +11,7 @@ sub counter_increment {
     flock $fh, LOCK_EX;
     my $cnt = <$fh>;
     $cnt++;
-    seek($fh, 0, 0);
+    seek($fh, 0, SEEK_SET);
     print $fh $cnt or die "$fname にかきこめません: $!";
     flock $fh, LOCK_UN;
     close $fh or die "$fname を閉じることができません: $!";
