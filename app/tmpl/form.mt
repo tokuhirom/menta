@@ -1,4 +1,4 @@
-?=r render_partial('header.html', 'フォームを使った例')
+?=r render_partial('header.mt', 'フォームを使った例')
 ? my $r = param('r') || ''
 <h1>フォームを使った例</h1>
 <p>パラメータ r: "<?= $r ?>"</p>
@@ -8,4 +8,4 @@
 
 <h2>POST</h2>
 <form method="post" action="<?= uri_for('form') ?>"><input type="text" name="r"><input type="submit" value="送信"></form>
-?=r render_partial('footer.html')
+?=r render_partial('footer.mt')

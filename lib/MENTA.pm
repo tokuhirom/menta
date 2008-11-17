@@ -120,9 +120,9 @@ sub run_menta {
                         die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
                     }
                 } else {
-                    my $tmplfname = ($MENTA::BUILT ? config->{menta}->{tmpl_cache_dir} : config->{menta}->{tmpl_dir}) . "/${mode}.html";
+                    my $tmplfname = ($MENTA::BUILT ? config->{menta}->{tmpl_cache_dir} : config->{menta}->{tmpl_dir}) . "/${mode}.mt";
                     if (-f $tmplfname) {
-                        render("${mode}.html");
+                        render("${mode}.mt");
                     } else {
                         die "「${mode}」というモードは存在しません。別コントローラファイルもありません(${controller})。テンプレートファイルもありません(${tmplfname})";
                     }
@@ -130,7 +130,8 @@ sub run_menta {
             } else {
                 die "「${mode}」というモードは存在しません。別コントローラ用ディレクトリは設定されていません";
             }
-        } elsif ($path ne 'menta.cgi' && -f $path) {
+        } elsif ($path ne 'menta.cgi' && -f "app/$path") {
+            $path = "app/$path";
             if (open my $fh, '<', $path) {
                 printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
                 print do { local $/; <$fh> };

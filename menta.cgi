@@ -10,23 +10,22 @@ run_menta({
         kcatch_mode => 1,
         # 最大表示文字数
         max_post_body => 1_024_000,
-        # コントローラーをいれるディレクトリ
-        controller_dir => 'controller/',
         # テンプレートファイルディレクトリへのパス
-        tmpl_dir => 'tmpl/',
+        tmpl_dir => 'app/tmpl/',
+        controller_dir => 'app/controller/',
         # テンプレートファイルのキャッシュディレクトリへのパス
-        tmpl_cache_dir => 'tmpl_cache/',
+        tmpl_cache_dir => 'app/tmpl_cache/',
     },
     # あなたのアプリの設定
     application => {
         docroot => '',
         title => 'MENTA サンプルアプリ',
-        sqlitefile => 'data/data.sqlite',
+        sqlitefile => 'app/data/data.sqlite',
         sql => {
-            dsn => 'dbi:SQLite:data/data.sqlite',
+            dsn => 'dbi:SQLite:app/data/data.sqlite',
         },
         counter => {
-            file => 'data/counter.txt'
+            file => 'app/data/counter.txt'
         },
     },
 });

@@ -57,7 +57,6 @@ use HTTP::Response;
         if ($pid) {
             waitpid($pid, POSIX::WNOHANG);
         } elsif ($pid == 0) {
-            chdir 'app';
             my $out = bind_stdout(sub {
                 package main;
                 do './menta.cgi';

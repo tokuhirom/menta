@@ -1,5 +1,5 @@
 ? my $title = 'DBI'
-?=r render_partial('header.html', $title)
+?=r render_partial('header.mt', $title)
 <h1><?= $title ?></h1>
 <table>
  <caption>ユーザ</caption>
@@ -12,4 +12,4 @@
 ? }
  <tbody>
 </table>
-?=r render_partial('footer.html')
+?=r render_partial('footer.mt')

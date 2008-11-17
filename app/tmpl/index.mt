@@ -1,5 +1,5 @@
 ? my $title = config()->{application}->{title}
-?=r render_partial('header.html')
+?=r render_partial('header.mt')
 <script type="text/javascript" src="<?= docroot ?>static/jquery.js"></script>
 <script type="text/javascript"><!--
 $(function() {
@@ -32,4 +32,4 @@ $(function() {
     <li><a href="<?= uri_for('counter') ?>">簡単なカウンター</a></li>
     <li><a href="<?= uri_for('hello', { user => 'kazuhooku' }) ?>">PHP っぽくそのままテンプレート表示しちゃう</a></li>
 </ul>
-?=r render_partial('footer.html')
+?=r render_partial('footer.mt')
