@@ -294,6 +294,41 @@ sub write_file {
     close $fh;
 }
 
+sub parse_multipart {
+    my ($data, $boundary) = @_;
+
+    $data =~ s/\r\n\n/\n/g;
+    $data =~ s/\r\n/\n/g;
+    $data =~ s/\r/\n/g;
+    my @lines = split(/\n/, $data);
+
+    my ($val, $key, $step) = ('', '', 0);
+    for my $line (@lines) {
+        if ($boundary eq $line) {
+            if($step eq 2 && $key ne '') {
+                chop($val);
+                $MENTA::REQ->{$key} = $val;
+            }
+            $step = 1;
+            $key = '';
+            $val = '';
+        } elsif ($boundary."--" eq $line) {
+            if ($step eq 2 && $key ne '') {
+                chop($val);
+                $MENTA::REQ->{$key} = $val;
+            }
+            return 1;
+        } elsif ($step eq 2) {
+            $val .= "$line\n";
+        } elsif ($line =~ /^Content\-Disposition: form\-data; name=\"([^\"]*)\".*/ && $step eq 1) {
+            $key = $1;
+        } elsif ($line eq '' && $step eq 1) {
+            $step = 2;
+        }
+    }
+    return 1;
+}
+
 sub param {
     my $key = shift;
 
@@ -310,14 +345,19 @@ sub param {
             $input = $ENV{QUERY_STRING};
         }
 
-        for (split /[&;]+/, $input) {
-            my ($key, $val) = split /=/, $_;
-            if ($val) {
-                $val =~ tr/+/ /;
-                $val =~ s/%([a-fA-F0-9]{2})/pack("H2", $1)/eg;
-                utf8::decode($val);
+        my $type = $ENV{'CONTENT_TYPE'};
+        if ($type && $type =~ /^multipart\/form\-data; boundary=/) {
+            parse_multipart $input, '--'.substr($type, 30);
+        } else {
+            for (split /[&;]+/, $input) {
+                my ($key, $val) = split /=/, $_;
+                if ($val) {
+                    $val =~ tr/+/ /;
+                    $val =~ s/%([a-fA-F0-9]{2})/pack("H2", $1)/eg;
+                    utf8::decode($val);
+                }
+                $MENTA::REQ->{$key} = $val;
             }
-            $MENTA::REQ->{$key} = $val;
         }
     }
 
