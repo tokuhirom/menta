@@ -124,7 +124,12 @@ sub run_menta {
                             die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
                         }
                     } else {
-                        die "「${mode}」というモードは存在しません。別コントローラファイルもありません(${controller})";
+                        my $tmplfname = config->{menta}->{tmpl_dir} . "/${mode}.html";
+                        if (-f $tmplfname) {
+                            render("${mode}.html");
+                        } else {
+                            die "「${mode}」というモードは存在しません。別コントローラファイルもありません(${controller})。テンプレートファイルもありません(${tmplfname})";
+                        }
                     }
                 } else {
                     die "「${mode}」というモードは存在しません。別コントローラ用ディレクトリは設定されていません";
@@ -227,6 +232,7 @@ sub render_partial {
     if ($use_cache) {
         my $tmplcode = do $cachefname;
         die $@ if $@;
+        die "テンプレートキャッシュを読み込めませんでした: $tmplfname" unless $tmplcode;
         $out = $tmplcode->(@params);
     } else {
         die "「${tmplfname}」という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
