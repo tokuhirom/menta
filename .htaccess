@@ -1,0 +1,5 @@
+DirectoryIndex menta.cgi
+<FilesMatch "(\.(pm|mt|conf|pl)|~)$">
+    Deny from All
+    Order deny,allow
+</FilesMatch>
