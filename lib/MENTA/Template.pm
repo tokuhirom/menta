@@ -18,8 +18,8 @@ sub new {
         line_start => '%',
         template => '',
         tree => [],
-        tag_start => '<%',
-        tag_end => '%>',
+        tag_start => '<?',
+        tag_end => '?>',
     }, $class;
 }
 
