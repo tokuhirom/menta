@@ -1,11 +1,11 @@
 use MENTA;
 use Fcntl ':flock';
+use Carp;
 
 sub counter_increment {
     my $fname = shift;
-    unless ($fname) {
-        $fname = config->{application}->{counter}->{file} or die "config.application.counter.file にデータファイル名が設定されていません";
-    }
+    croak "ファイル名の指定がありません" unless $fname;
+    $fname = data_dir() . '/' . $fname;
     my $mode = (-f $fname) ? '+<' : '+>';
     open my $fh, $mode, $fname or die "$fname を開けません: $!";
     flock $fh, LOCK_EX;

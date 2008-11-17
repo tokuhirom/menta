@@ -219,6 +219,10 @@ sub controller_dir {
     config->{menta}->{controller_dir} || 'app/controller/'
 }
 
+sub data_dir {
+    config->{menta}->{data_dir} || 'app/data/'
+}
+
 # TODO: ディレクトリトラバーサル対策
 sub render_partial {
     my ($tmpl, @params) = @_;
