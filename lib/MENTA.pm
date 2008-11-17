@@ -124,7 +124,7 @@ sub run_menta {
                             die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
                         }
                     } else {
-                        my $tmplfname = config->{menta}->{tmpl_dir} . "/${mode}.html";
+                        my $tmplfname = ($MENTA::BUILT ? config->{menta}->{tmpl_cache_dir} : config->{menta}->{tmpl_dir}) . "/${mode}.html";
                         if (-f $tmplfname) {
                             render("${mode}.html");
                         } else {
