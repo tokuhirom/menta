@@ -1,0 +1,1 @@
+? redirect('http://wassr.jp/')
