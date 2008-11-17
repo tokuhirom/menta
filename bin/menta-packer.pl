@@ -3,9 +3,9 @@ use strict;
 use warnings;
 use utf8;
 use lib 'vendor/lib', 'lib';
-use MENTA::Builder;
+use MENTA::Packer;
 
 binmode STDOUT, ':utf8';
 
-MENTA::Builder->run( 'app' => 'out' );
+MENTA::Packer->run( 'app' => 'out' );
 

@@ -1,12 +1,12 @@
-package MENTA::Builder;
+package MENTA::Packer;
 use MENTA;
 use MENTA::Template;
 use File::Copy;
 
 {
     no strict 'refs';
-    *{"MENTA::Builder::read_file"}  = *{"main::read_file"};
-    *{"MENTA::Builder::write_file"} = *{"main::write_file"};
+    *{"MENTA::Packer::read_file"}  = *{"main::read_file"};
+    *{"MENTA::Packer::write_file"} = *{"main::write_file"};
 }
 
 sub puts { print @_, "\n" };
