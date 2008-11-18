@@ -16,10 +16,12 @@ $(function() {
 <p>MENTA は CGI で気軽につかえるウェブアプリケーションフレームワークです</p>
 <ul>
     <li>CGI でも高速に動作</li>
-    <li>レンタルサーバーでもつかえます</li>
+    <li>レンタルサーバーでもつかえます(ロリポとかXREAとか)</li>
     <li>Object 指向がわからなくてもつかえます</li>
     <li>正しいプログラミングスタイルが自然と身につきます</li>
 </ul>
+
+<p><a href="<?= uri_for('tutorial') ?>">取り扱い説明書</a></p>
 
 <h2>デモ</h2>
 <ul>
@@ -32,4 +34,8 @@ $(function() {
     <li><a href="<?= uri_for('counter') ?>">簡単なカウンター</a></li>
     <li><a href="<?= uri_for('hello', { user => 'kazuhooku' }) ?>">PHP っぽくそのままテンプレート表示しちゃう</a></li>
 </ul>
+
+<h2>LICENSE</h2>
+<p>MENTA は Perl License のもとで配布されます。具体的にいうと、なんでも好きなようにしてよい、ということです。</p>
+
 ?=r render_partial('footer.mt')

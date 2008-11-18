@@ -1,3 +1,3 @@
-?=r render_partial('header.mt', "PHP style")
+<!doctype html>
 Hello to <?= param('user') ?>
-?=r render_partial('footer.mt')
+</html>
