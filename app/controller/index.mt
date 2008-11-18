@@ -3,13 +3,17 @@
 <script type="text/javascript" src="<?= docroot ?>static/jquery.js"></script>
 <script type="text/javascript"><!--
 $(function() {
-    $('.animatedTitle').css('text-decoration', 'underline').slideDown();
+    $('.animatedTitle').slideDown('slow');
 });
 //--></script>
 
 <p><?= localtime time ?></p>
 
-<h2 class="animatedTitle" style="display: none;">Web Application Framework - MENTA</h2>
+<div class="animatedTitle" style="display: none;">
+<h2 style="text-decoration: underline;">Web Application Framework - MENTA</h2>
+<blockquote><p>MENTA is lightweight web application framework</p></blockquote>
+</div>
+
 <h2>MENTA ってなに?</h2>
 <p>MENTA は CGI で気軽につかえるウェブアプリケーションフレームワークです</p>
 <ul>
