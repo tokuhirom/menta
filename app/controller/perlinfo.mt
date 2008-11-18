@@ -6,6 +6,7 @@
 th { background-color: #CCCCFF }
 td { background-color: #CCCCCC }
 h2 { text-align: center; }
+table { text-align: left; }
 </style>
 <div class="container">
     <h1>MENTA <?= $MENTA::VERSION ?></h1>
