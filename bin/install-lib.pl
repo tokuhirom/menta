@@ -21,6 +21,7 @@ my $target_version = '5.008001';
 my $outdir;
 my $dstdir;
 my $pkg;
+my $overwrite = 0;
 my $cwd = getcwd();
 
 &main; exit;
@@ -31,7 +32,8 @@ sub Path::Class::Dir::basename { shift->dir_list(-1, 1) }
 sub main {
     # process args
     GetOptions(
-        "version=f", \$target_version,
+        "version=f" => \$target_version,
+        "overwrite" => \$overwrite,
     );
     unless (@ARGV == 2) {
         die "Usage: $0 Acme::Hello extlib/";
@@ -72,7 +74,7 @@ sub install_pkg {
         print "skip $pkg(build util?)\n";
         return;
     }
-    {
+    unless ($overwrite) {
         my $path = $pkg;
         $path =~ s{::}{/}g;
         $path = catfile($cwd, $dstdir, "${path}.pm");
