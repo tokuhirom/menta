@@ -37,13 +37,30 @@ MENTA 設計メモ
     % prove t/*.t
     でテストが実行できるので、コミッタはテストを通すようにするとよい。
 
-標準添付モジュール
-------------------
+MENTA 標準添付モジュール
+------------------------
 
     DateTime(Locale, Timezone の不要な部分を削ってある)
     CGI::Simple
     Scalar::Util
     List::MoreUtils
+    Path::Class
+
+    以下予定
+    HTTP::Session
+
+標準添付しようかとおもったら Perl5 標準添付だったもの
+-----------------------------------------------------
+
+    Digest::MD5
+    File::Spec
+    File::stat
+
+XS しかなくてあきらめているもの
+-------------------------------
+
+    Digest::SHA1
+    Net::OpenID::Consumer(なくても動くけどしぬほど遅いかも)
 
 TODO
 ----
