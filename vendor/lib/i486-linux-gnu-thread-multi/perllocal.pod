@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 20:31:01 2008: C<Module> L<Carp::Clan|Carp::Clan>
+=head2 Tue Nov 18 20:35:03 2008: C<Module> L<Email::MIME::Encodings|Email::MIME::Encodings>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
+C<installed into: /tmp/iDIIdb9qAA/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 6.00>
+C<VERSION: 1.311>
 
 =item *
 
@@ -20,13 +20,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:31:03 2008: C<Module> L<Class::Data::Inheritable|Class::Data::Inheritable>
+=head2 Tue Nov 18 20:35:04 2008: C<Module> L<Email::MIME::ContentType|Email::MIME::ContentType>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
+C<installed into: /tmp/iDIIdb9qAA/outputdir/lib/perl5>
 
 =item *
 
@@ -34,7 +34,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.08>
+C<VERSION: 1.014>
 
 =item *
 
@@ -42,13 +42,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:31:08 2008: C<Module> L<Class::Inspector|Class::Inspector>
+=head2 Tue Nov 18 20:35:11 2008: C<Module> L<MIME::Types|MIME::Types>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
+C<installed into: /tmp/iDIIdb9qAA/outputdir/lib/perl5>
 
 =item *
 
@@ -56,7 +56,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.23>
+C<VERSION: 1.24>
 
 =item *
 
@@ -64,13 +64,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:31:10 2008: C<Module> L<UNIVERSAL::require|UNIVERSAL::require>
+=head2 Tue Nov 18 20:35:12 2008: C<Module> L<Email::MIME|Email::MIME>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
+C<installed into: /tmp/iDIIdb9qAA/outputdir/lib/perl5>
 
 =item *
 
@@ -78,51 +78,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.11>
-
-=item *
-
-C<EXE_FILES: >
-
-=back
-
-=head2 Tue Nov 18 20:31:12 2008: C<Module> L<Class::Component|Class::Component>
-
-=over 4
-
-=item *
-
-C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
-
-=item *
-
-C<LINKTYPE: dynamic>
-
-=item *
-
-C<VERSION: 0.17>
-
-=item *
-
-C<EXE_FILES: >
-
-=back
-
-=head2 Tue Nov 18 20:31:17 2008: C<Module> L<HTTP::MobileAttribute|HTTP::MobileAttribute>
-
-=over 4
-
-=item *
-
-C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
-
-=item *
-
-C<LINKTYPE: dynamic>
-
-=item *
-
-C<VERSION: 0.11>
+C<VERSION: 1.861>
 
 =item *
 
