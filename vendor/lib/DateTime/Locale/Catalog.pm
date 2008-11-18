@@ -67,7 +67,6 @@ sub Aliases { return %Aliases }
     POSIX => "en_US_POSIX",
     eng => "en",
     eng_US => "en_US",
-    eng_US_Dsrt => "en_Dsrt_US",
     eng_US_POSIX => "en_US_POSIX",
     jpn => "ja",
     jpn_JP => "ja_JP",
