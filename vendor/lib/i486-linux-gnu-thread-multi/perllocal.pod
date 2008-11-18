@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 20:13:11 2008: C<Module> L<YAML|YAML>
+=head2 Tue Nov 18 20:18:12 2008: C<Module> L<Class::ErrorHandler|Class::ErrorHandler>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/JH9IS0TYvg/outputdir/lib/perl5>
+C<installed into: /tmp/XKNwGnb8iT/outputdir/lib/perl5>
 
 =item *
 
@@ -12,11 +12,33 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.66>
+C<VERSION: 0.01>
 
 =item *
 
-C<EXE_FILES: ysh>
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Nov 18 20:18:13 2008: C<Module> L<Hatena::API::Auth|Hatena::API::Auth>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/XKNwGnb8iT/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.05>
+
+=item *
+
+C<EXE_FILES: >
 
 =back
 
