@@ -430,7 +430,7 @@ sub load_plugin {
     my $path = "plugins/${plugin}.pl";
     require $path;
     $MENTA::PLUGIN_LOADED->{$plugin}++;
-    my $package = __menta_extract_package($path);
+    my $package = __menta_extract_package($path) || '';
     no strict 'refs';
     for (
         grep { /$plugin/o }
