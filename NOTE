@@ -37,6 +37,14 @@ MENTA 設計メモ
     % prove t/*.t
     でテストが実行できるので、コミッタはテストを通すようにするとよい。
 
+標準添付モジュール
+------------------
+
+    DateTime(Locale, Timezone の不要な部分を削ってある)
+    CGI::Simple
+    Scalar::Util
+    List::MoreUtils
+
 TODO
 ----
 
