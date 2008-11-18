@@ -102,6 +102,7 @@ sub run_menta {
             my $meth = "do_$mode";
             my $cdir = controller_dir();
             my $controller = "${cdir}/${path}.pl";
+            my $controller_mt = ($MENTA::BUILT ? cache_dir() : controller_dir()) . "/${mode}.mt";
             if (-f $controller) {
                 package main;
                 do $controller;
@@ -119,13 +120,14 @@ sub run_menta {
                 } else {
                     die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
                 }
+            } elsif (-f $controller_mt) {
+                my $out = __render_partial("${mode}.mt", controller_dir());
+                utf8::encode($out);
+                print "Content-Type: text/html; charset=utf-8\r\n";
+                print "\r\n";
+                print $out;
             } else {
-                my $tmplfname = ($MENTA::BUILT ? cache_dir() : tmpl_dir()) . "/${mode}.mt";
-                if (-f $tmplfname) {
-                    render("${mode}.mt");
-                } else {
-                    die "「${mode}」というモードは存在しません。別コントローラファイルもありません(${controller})。テンプレートファイルもありません(${tmplfname})";
-                }
+                die "「${mode}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
             }
         } elsif ($path ne 'menta.cgi' && -f "app/$path") {
             $path = "app/$path";
@@ -224,16 +226,15 @@ sub data_dir {
 }
 
 # TODO: ディレクトリトラバーサル対策
-sub render_partial {
-    my ($tmpl, @params) = @_;
+sub __render_partial {
+    my ($tmpl, $tmpldir, @params) = @_;
     my $conf = config()->{menta};
-    my $tmpldir = tmpl_dir();
     my $cachedir = cache_dir();
     mkdir $cachedir unless $MENTA::BUILT || -d $cachedir;
     my $cachefname = "$cachedir/$tmpl";
     my $tmplfname = "$tmpldir/$tmpl";
     my $use_cache = $MENTA::BUILT || sub {
-        my @orig = stat $tmplfname or return 1;
+        my @orig = stat $tmplfname or return;
         my @cached = stat $cachefname or return;
         return $orig[9] < $cached[9];
     }->();
@@ -257,6 +258,10 @@ sub render_partial {
         write_file($cachefname, "package main; use utf8;\n${src}");
     }
     $out;
+}
+sub render_partial {
+    my ($tmpl, @params) = @_;
+    __render_partial($tmpl, tmpl_dir(), @params);
 }
 
 sub detach() {
