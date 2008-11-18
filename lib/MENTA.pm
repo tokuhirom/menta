@@ -133,6 +133,7 @@ sub run_menta {
         } elsif ($path ne 'menta.cgi' && -f "app/$path") {
             $path = "app/$path";
             if (open my $fh, '<', $path) {
+                binmode STDOUT;
                 printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
                 print do { local $/; <$fh> };
                 close $fh;
