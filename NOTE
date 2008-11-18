@@ -44,4 +44,5 @@ TODO
     controller を分割ファイル形式にしている場合に、use strict とかオンになってる?
     ファイルアップロードまわり
     http://d.hatena.ne.jp/kazuhooku/20081117/1226936533
+    CGI::Simple つかう?
 

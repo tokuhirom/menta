@@ -18,12 +18,14 @@ MENTA 標準添付モジュール
         Text::CSV
         YAML
         Email::Send
+        Email::MIME
         HTTP::MobileAttribute
         HTML::TreeBuilder::XPath
         Carp::Always
         Params::Validate
         HTML::StickyQuery::DoCoMoGUID
         HTTP::Server::Simple
+        UNIVERSAL::require
 
     以下予定
         HTTP::Session(Moose を取り外して軽量化して導入する)
