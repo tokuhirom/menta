@@ -28,13 +28,15 @@ MENTA 標準添付モジュール
     以下予定
         HTTP::Session(Moose を取り外して軽量化して導入する)
 
-    入れようか迷ってるもの。ウェブ関係ないし。
+    入れようか迷ってるもの。
         IO::Prompt
         Perl::Critic
         POE
         POE::Component::IRC
         Spreadsheet::WriteExcel
         CLI::Dispatch
+        String::CamelCase
+        Class::Trigger
 
     CGI では速度的に使い物にならないので却下しているもの
         Moose
@@ -51,6 +53,7 @@ TPFJ が要求する 10 のモジュール認定シールに入るだろうと�
         HTML::TagSet
     IO::Socket
     Digest::SHA1
+    DBD::SQLite
 
     以下は、あったらいいなーとおもうけど、高望みだろうか
         XML::LibXML
@@ -60,6 +63,7 @@ TPFJ が要求する 10 のモジュール認定シールに入るだろうと�
         JSON::XS
         YAML::Syck
         Text::CSV_XS
+        Net::OpenID::Consumer(PurePerl でも動くけどしぬほど遅いかも)
 
 標準添付しようかとおもったら Perl5 標準添付だったもの
 -----------------------------------------------------
@@ -71,10 +75,4 @@ TPFJ が要求する 10 のモジュール認定シールに入るだろうと�
     File::stat
     IO::Socket
     Net::FTP
-
-XS しかなくてあきらめているもの
--------------------------------
-
-    Digest::SHA1
-    Net::OpenID::Consumer(なくても動くけどしぬほど遅いかも)
 

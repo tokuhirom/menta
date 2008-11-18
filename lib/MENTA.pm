@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use utf8;
 
+our $VERSION = 0.02;
 our $REQ;
 our $CONFIG;
 our $REQUIRED;

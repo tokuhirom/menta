@@ -1,5 +1,5 @@
 ? use English
-? use Data::Dumper
+? use Module::CoreList
 <!doctype html>
 <style>
 .container { margin: auto; width: 400px }
@@ -8,7 +8,7 @@ td { background-color: #CCCCCC }
 h2 { text-align: center; }
 </style>
 <div class="container">
-    <h1>perl の情報</h1>
+    <h1>MENTA <?= $MENTA::VERSION ?></h1>
     <h2>諸情報</h2>
     <table>
     <tr><th>OS</th><td><?= $OSNAME ?></td></tr>
@@ -20,6 +20,13 @@ h2 { text-align: center; }
     <h2>環境変数</h2>
     <table>
 ? while (my ($key, $val) = each %ENV) {
+    <tr><th><?= $key ?></th><td><?= $val ?></td>
+? }
+    </table>
+    <h2>標準添付モジュール</h2>
+    <table>
+? my $modules = $Module::CoreList::version{$]}
+? while (my ($key, $val) = each %$modules) {
     <tr><th><?= $key ?></th><td><?= $val ?></td>
 ? }
     </table>
