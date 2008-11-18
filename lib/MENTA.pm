@@ -98,12 +98,12 @@ sub run_menta {
         my $path = $ENV{PATH_INFO} || '/';
         $path =~ s!^/+!!g;
         if ($path =~ /^[a-z0-9_]*$/) {
-            my $mode = $path || 'index';
+            $path ||= 'index';
             my $cdir = controller_dir();
             my $controller = "${cdir}/${path}.pl";
-            my $controller_mt = ($MENTA::BUILT ? cache_dir() : controller_dir()) . "/${mode}.mt";
+            my $controller_mt = ($MENTA::BUILT ? cache_dir() : controller_dir()) . "/${path}.mt";
             if (-f $controller) {
-                my $meth = "do_$mode";
+                my $meth = "do_$path";
                 package main;
                 do $controller;
                 if (my $e = $@) {
@@ -118,16 +118,16 @@ sub run_menta {
                     $code->();
                     die "なにも出力してません";
                 } else {
-                    die "「${mode}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
+                    die "「${path}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
                 }
             } elsif (-f $controller_mt) {
-                my $out = __render_partial("${mode}.mt", controller_dir());
+                my $out = __render_partial("${path}.mt", controller_dir());
                 utf8::encode($out);
                 print "Content-Type: text/html; charset=utf-8\r\n";
                 print "\r\n";
                 print $out;
             } else {
-                die "「${mode}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
+                die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
             }
         } elsif ($path ne 'menta.cgi' && -f "app/$path") {
             $path = "app/$path";
