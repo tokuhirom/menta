@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 20:11:16 2008: C<Module> L<Text::CSV|Text::CSV>
+=head2 Tue Nov 18 20:13:11 2008: C<Module> L<YAML|YAML>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/mqw2_1Nwyd/outputdir/lib/perl5>
+C<installed into: /tmp/JH9IS0TYvg/outputdir/lib/perl5>
 
 =item *
 
@@ -12,11 +12,11 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.10>
+C<VERSION: 0.66>
 
 =item *
 
-C<EXE_FILES: >
+C<EXE_FILES: ysh>
 
 =back
 
