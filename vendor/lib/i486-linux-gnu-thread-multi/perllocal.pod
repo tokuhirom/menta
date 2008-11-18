@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 20:29:51 2008: C<Module> L<Module::Pluggable|Module::Pluggable>
+=head2 Tue Nov 18 20:31:01 2008: C<Module> L<Carp::Clan|Carp::Clan>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
+C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 3.8>
+C<VERSION: 6.00>
 
 =item *
 
@@ -20,13 +20,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:29:53 2008: C<Module> L<Return::Value|Return::Value>
+=head2 Tue Nov 18 20:31:03 2008: C<Module> L<Class::Data::Inheritable|Class::Data::Inheritable>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
+C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
 
 =item *
 
@@ -34,7 +34,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.302>
+C<VERSION: 0.08>
 
 =item *
 
@@ -42,13 +42,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:29:56 2008: C<Module> L<Email::Simple|Email::Simple>
+=head2 Tue Nov 18 20:31:08 2008: C<Module> L<Class::Inspector|Class::Inspector>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
+C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
 
 =item *
 
@@ -56,7 +56,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 2.004>
+C<VERSION: 1.23>
 
 =item *
 
@@ -64,13 +64,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:29:58 2008: C<Module> L<Email::Address|Email::Address>
+=head2 Tue Nov 18 20:31:10 2008: C<Module> L<UNIVERSAL::require|UNIVERSAL::require>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
+C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
 
 =item *
 
@@ -78,7 +78,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.889>
+C<VERSION: 0.11>
 
 =item *
 
@@ -86,13 +86,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:30:00 2008: C<Module> L<Email::Send|Email::Send>
+=head2 Tue Nov 18 20:31:12 2008: C<Module> L<Class::Component|Class::Component>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
+C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
 
 =item *
 
@@ -100,7 +100,29 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 2.192>
+C<VERSION: 0.17>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Nov 18 20:31:17 2008: C<Module> L<HTTP::MobileAttribute|HTTP::MobileAttribute>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/Ydha0Z0tEm/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.11>
 
 =item *
 
