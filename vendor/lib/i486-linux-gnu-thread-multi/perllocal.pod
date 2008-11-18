@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 15:31:21 2008: C<Module> L<List::MoreUtils|List::MoreUtils>
+=head2 Tue Nov 18 15:33:33 2008: C<Module> L<Perl6::Say|Perl6::Say>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/yt_npMXWo9/outputdir/lib/perl5>
+C<installed into: /tmp/m7b3pNGB_Z/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.22>
+C<VERSION: 0.12>
 
 =item *
 

@@ -43,6 +43,11 @@ sub main {
     # install
     install_pkg($pkg);
 
+    unless (%installed) {
+        warn "no modules for install";
+        return;
+    }
+
     chdir $cwd;
 
     # copy to dst dir
@@ -55,7 +60,10 @@ sub install_pkg {
     my $pkg = shift;
     return if $installed{$pkg};
     $installed{$pkg}++;
-    return if $Module::CoreList::version{$target_version}{$pkg};
+    if ($Module::CoreList::version{$target_version}{$pkg}) {
+        print "skip $pkg\n";
+        return;
+    }
 
     local $CPAN::Config->{histfile}   = tempfile(CLEANUP => 1);
     local $CPAN::Config->{makepl_arg} = "INSTALL_BASE=$outdir " . ($optional_args{$pkg} ? $optional_args{$pkg} : '');
