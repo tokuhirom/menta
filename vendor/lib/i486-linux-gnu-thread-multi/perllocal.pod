@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 17:41:01 2008: C<Module> L<Class::Singleton|Class::Singleton>
+=head2 Tue Nov 18 17:52:14 2008: C<Module> L<DateTime|DateTime>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/roB_WLn5C7/outputdir/lib/perl5>
+C<installed into: /tmp/oBSdEcGbe3/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.4>
+C<VERSION: 0.45>
 
 =item *
 
