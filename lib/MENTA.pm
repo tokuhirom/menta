@@ -99,11 +99,11 @@ sub run_menta {
         $path =~ s!^/+!!g;
         if ($path =~ /^[a-z0-9_]*$/) {
             my $mode = $path || 'index';
-            my $meth = "do_$mode";
             my $cdir = controller_dir();
             my $controller = "${cdir}/${path}.pl";
             my $controller_mt = ($MENTA::BUILT ? cache_dir() : controller_dir()) . "/${mode}.mt";
             if (-f $controller) {
+                my $meth = "do_$mode";
                 package main;
                 do $controller;
                 if (my $e = $@) {
