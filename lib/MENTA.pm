@@ -323,7 +323,7 @@ sub write_file {
     close $fh;
 }
 
-sub parse_multipart {
+sub __parse_multipart {
     my ($data, $boundary) = @_;
 
     my @lines = split(/\n/, $data);
@@ -334,6 +334,7 @@ sub parse_multipart {
         utf8::decode($line) if $type eq '' or $type =~ /^text\//;
         if ($boundary eq $sline) {
             if($step eq 2 && $key ne '') {
+                chop $val if $type eq '' or $type =~ /^text\//;
                 $MENTA::REQ->{$key} = $val;
             }
             $key = '';
@@ -342,6 +343,7 @@ sub parse_multipart {
             $step = 1;
         } elsif ("${boundary}--" eq $sline) {
             if ($step eq 2 && $key ne '') {
+                chop $val if $type eq '' or $type =~ /^text\//;
                 $MENTA::REQ->{$key} = $val;
             }
             return 1;
@@ -377,7 +379,7 @@ sub param {
 
         my $type = $ENV{'CONTENT_TYPE'};
         if ($type && $type =~ m{^multipart/form-data; *boundary=}) {
-            parse_multipart $input, '--'.substr($type, 30);
+            __parse_multipart $input, '--'.substr($type, 30);
         } else {
             for (split /[&;]+/, $input) {
                 my ($key, $val) = split /=/, $_;
