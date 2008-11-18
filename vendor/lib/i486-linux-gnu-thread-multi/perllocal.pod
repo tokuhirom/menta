@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 19:52:37 2008: C<Module> L<Text::Hatena|Text::Hatena>
+=head2 Tue Nov 18 20:00:42 2008: C<Module> L<Data::Page|Data::Page>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/8FdixEX8Yx/outputdir/lib/perl5>
+C<installed into: /tmp/92Fv6yGEg9/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.20>
+C<VERSION: 2.01>
 
 =item *
 
