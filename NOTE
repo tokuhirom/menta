@@ -45,33 +45,41 @@ MENTA 標準添付モジュール
 
 日本の perl mongers が普段つかってるモジュールの中から選んでいる予定。
 
-    DateTime(Locale, Timezone の不要な部分を削ってある)
-    CGI::Simple
-    Scalar::Util
-    List::MoreUtils
-    Path::Class
-    URI
-    Class::Accessor
-    HTML::FillInForm
-    Text::Hatena
-    Data::Page
-    HTML::TreeBuilder
-    Text::CSV
-    YAML
-    Email::Send
-    HTTP::MobileAttribute
-    HTML::TreeBuilder::XPath
+    入れたもの
+        DateTime(Locale, Timezone の不要な部分を削ってある。が、もっと軽量で筋がいいのがあればそっちがいい)
+        CGI::Simple
+        Scalar::Util
+        List::MoreUtils
+        Path::Class
+        URI
+        Class::Accessor
+        HTML::FillInForm
+        Text::Hatena
+        Data::Page
+        HTML::TreeBuilder
+        Text::CSV
+        YAML
+        Email::Send
+        HTTP::MobileAttribute
+        HTML::TreeBuilder::XPath
+        Carp::Always
+        Params::Validate
+        HTML::StickyQuery::DoCoMoGUID
 
     以下予定
-    HTTP::Session
+        HTTP::Session(Moose を取り外して軽量化して導入する)
 
     入れようか迷ってるもの。ウェブ関係ないし。
-    IO::Prompt
-    Perl::Critic
-    POE
-    POE::Component::IRC
-    Spreadsheet::WriteExcel
-    CLI::Dispatch
+        IO::Prompt
+        Perl::Critic
+        POE
+        POE::Component::IRC
+        Spreadsheet::WriteExcel
+        CLI::Dispatch
+
+    CGI では速度的に使い物にならないので却下しているもの
+        Moose
+        DBIx::Class
 
 TPFJ が要求する 10 のモジュール認定シールに入るだろうと仮定して同梱しないもの
 -----------------------------------------------------------------------------
@@ -85,8 +93,14 @@ TPFJ が要求する 10 のモジュール認定シールに入るだろうと�
     IO::Socket
     Digest::SHA1
 
-    以下は、あったらいいなーとおもうけど、案外はいってないかもね
-        Crypt::DH
+    以下は、あったらいいなーとおもうけど、高望みだろうか
+        XML::LibXML
+        Imager
+        Net::OpenID::Consumer
+        Encode::JP::Mobile
+        JSON::XS
+        YAML::Syck
+        Text::CSV_XS
 
 標準添付しようかとおもったら Perl5 標準添付だったもの
 -----------------------------------------------------
