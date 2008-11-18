@@ -18,7 +18,6 @@ sub run_cgi {
     $ENV{HTTP_USER_AGENT} = $args{HTTP_USER_AGENT} || 'test';
     $ENV{REQUEST_METHOD} = $args{REQUEST_METHOD} || 'GET';
 
-    chdir 'app';
     my $out = bind_stdout(sub {
         package main;
         do './menta.cgi';
