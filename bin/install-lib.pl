@@ -12,6 +12,7 @@ use Getopt::Long;
 my %installed;
 my %optional_args = (
     'version' => '--perl_only',
+    'List::MoreUtils' => '-pm',
 );
 my $target_version = '5.008001';
 my $outdir;
@@ -62,7 +63,7 @@ sub install_pkg {
 
     my $mod = CPAN::Shell->expand("Module", $pkg) or die "cannot find $pkg";
     my $dist = $mod->distribution;
-    $mod->distribution->make;
+    $dist->make;
     if (my $requires = $dist->prereq_pm) {
         for my $req (keys %{$requires->{requires}}) {
             install_pkg($req);
