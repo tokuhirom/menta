@@ -3,14 +3,13 @@
 <script type="text/javascript" src="<?= docroot ?>static/jquery.js"></script>
 <script type="text/javascript"><!--
 $(function() {
-    var $this = $('h1');
-    $this.css({background : 'orange'})
-         .text($this.text().replace('MENTA', 'めんた'));
+    $('.animatedTitle').css('text-decoration', 'underline').slideDown();
 });
 //--></script>
 
 <p><?= localtime time ?></p>
 
+<h2 class="animatedTitle" style="display: none;">Web Application Framework - MENTA</h2>
 <h2>MENTA ってなに?</h2>
 <p>MENTA は CGI で気軽につかえるウェブアプリケーションフレームワークです</p>
 <ul>
