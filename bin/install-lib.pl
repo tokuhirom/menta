@@ -8,6 +8,7 @@ use Cwd;
 use Data::Dumper;
 use Module::CoreList;
 use Getopt::Long;
+use IO::Prompt;
 
 my %installed;
 my %optional_args = (
@@ -16,7 +17,13 @@ my %optional_args = (
     'Params::Validate' => '--pm',
     'DateTime'         => '--pm',
 );
-my %skip_packages = map { $_ => 1 } qw/Module::Build/;
+my %skip_packages = map { $_ => 1 } (
+    'Module::Build',  # only for bullding
+    'LWP::UserAgent', # maybe you have this.
+    'Net::FTP',       # ditto
+    'HTML::Parser',   # ditto
+    'HTML::Tagset',   # ditto
+);
 my $target_version = '5.008001';
 my $outdir;
 my $dstdir;
@@ -72,6 +79,10 @@ sub install_pkg {
     }
     if ($skip_packages{$pkg}) {
         print "skip $pkg(build util?)\n";
+        return;
+    }
+    if ($pkg =~ /^Test::/) {
+        print "skip $pkg(test libs)\n";
         return;
     }
     unless ($overwrite) {
