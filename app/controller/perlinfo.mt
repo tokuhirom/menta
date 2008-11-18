@@ -24,11 +24,20 @@ table { text-align: left; }
     <tr><th><?= $key ?></th><td><?= $val ?></td>
 ? }
     </table>
-    <h2>標準添付モジュール(perl <?= $] ?>)</h2>
+    <h2>Perl標準添付モジュール(perl <?= $] ?>)</h2>
     <table>
 ? my $modules = $Module::CoreList::version{$]}
 ? for my $key (sort keys %$modules) {
     <tr><th><?= $key ?></th><td><?= $modules->{$key} ?></td>
+? }
+    </table>
+    <h2>MENTA標準添付モジュール</h2>
+    <table>
+? no strict 'refs'
+? use UNIVERSAL::require
+? for my $mod (sort { $a cmp $b } qw/DateTime CGI::Simple Scalar::Util List::MoreUtils Path::Class URI Class::Accessor HTML::FillInForm Text::Hatena Data::Page HTML::TreeBuilder Text::CSV YAML Email::Send Email::MIME HTTP::MobileAttribute HTML::TreeBuilder::XPath  Carp::Always Params::Validate HTML::StickyQuery::DoCoMoGUID HTTP::Server::Simple UNIVERSAL::require/) {
+?   $mod->require or die $@
+    <tr><th><?= $mod ?></th><td><?= ${"${mod}::VERSION"} ?></td>
 ? }
     </table>
 </div>
