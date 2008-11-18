@@ -19,6 +19,9 @@ my %optional_args = (
 my %skip_packages = map { $_ => 1 } qw/Module::Build/;
 my $target_version = '5.008001';
 my $outdir;
+my $dstdir;
+my $pkg;
+my $cwd = getcwd();
 
 &main; exit;
 
@@ -33,10 +36,9 @@ sub main {
     unless (@ARGV == 2) {
         die "Usage: $0 Acme::Hello extlib/";
     }
-    my ($pkg, $dstdir) = @ARGV;
+    ($pkg, $dstdir) = @ARGV;
 
     # init
-    my $cwd = getcwd();
     my $tmpdir = tempdir(CLENAUP => 1);
     $outdir = catfile($tmpdir, "outputdir");
     mkdir -d $outdir;
@@ -62,7 +64,6 @@ sub main {
 sub install_pkg {
     my $pkg = shift;
     return if $installed{$pkg};
-    $installed{$pkg}++;
     if ($Module::CoreList::version{$target_version}{$pkg}) {
         print "skip $pkg(standard lib)\n";
         return;
@@ -71,7 +72,18 @@ sub install_pkg {
         print "skip $pkg(build util?)\n";
         return;
     }
+    {
+        my $path = $pkg;
+        $path =~ s{::}{/}g;
+        $path = catfile($cwd, $dstdir, "${path}.pm");
+        warn $path;
+        if (-f $path) {
+            print "skip $pkg(already installed)\n";
+            return;
+        }
+    }
 
+    $installed{$pkg}++;
     local $CPAN::Config->{histfile}   = tempfile(CLEANUP => 1);
     local $CPAN::Config->{makepl_arg} = "INSTALL_BASE=$outdir " . ($optional_args{$pkg} ? $optional_args{$pkg} : '');
     local $CPAN::Config->{mbuildpl_arg} = "--install_base=$outdir";
