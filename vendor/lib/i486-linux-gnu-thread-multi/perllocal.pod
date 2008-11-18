@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 20:35:03 2008: C<Module> L<Email::MIME::Encodings|Email::MIME::Encodings>
+=head2 Tue Nov 18 20:37:52 2008: C<Module> L<XML::XPathEngine|XML::XPathEngine>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/iDIIdb9qAA/outputdir/lib/perl5>
+C<installed into: /tmp/5vTD7Xfarh/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.311>
+C<VERSION: 0.11>
 
 =item *
 
@@ -20,13 +20,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:35:04 2008: C<Module> L<Email::MIME::ContentType|Email::MIME::ContentType>
+=head2 Tue Nov 18 20:37:53 2008: C<Module> L<HTML::TreeBuilder::XPath|HTML::TreeBuilder::XPath>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/iDIIdb9qAA/outputdir/lib/perl5>
+C<installed into: /tmp/5vTD7Xfarh/outputdir/lib/perl5>
 
 =item *
 
@@ -34,51 +34,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.014>
-
-=item *
-
-C<EXE_FILES: >
-
-=back
-
-=head2 Tue Nov 18 20:35:11 2008: C<Module> L<MIME::Types|MIME::Types>
-
-=over 4
-
-=item *
-
-C<installed into: /tmp/iDIIdb9qAA/outputdir/lib/perl5>
-
-=item *
-
-C<LINKTYPE: dynamic>
-
-=item *
-
-C<VERSION: 1.24>
-
-=item *
-
-C<EXE_FILES: >
-
-=back
-
-=head2 Tue Nov 18 20:35:12 2008: C<Module> L<Email::MIME|Email::MIME>
-
-=over 4
-
-=item *
-
-C<installed into: /tmp/iDIIdb9qAA/outputdir/lib/perl5>
-
-=item *
-
-C<LINKTYPE: dynamic>
-
-=item *
-
-C<VERSION: 1.861>
+C<VERSION: 0.09>
 
 =item *
 
