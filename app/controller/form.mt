@@ -1,6 +1,5 @@
 ?=r render_partial('header.mt', 'フォームを使った例')
 ? my $r = param('r') || ''
-<h1>フォームを使った例</h1>
 <p>パラメータ r: "<?= $r ?>"</p>
 
 <h2>GET</h2>
