@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 17:58:00 2008: C<Module> L<Path::Class|Path::Class>
+=head2 Tue Nov 18 19:20:09 2008: C<Module> L<URI|URI>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/tOfRk1b8Fp/outputdir/lib/perl5>
+C<installed into: /tmp/zpWd9moMwU/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.16>
+C<VERSION: 1.37>
 
 =item *
 
