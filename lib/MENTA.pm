@@ -205,6 +205,9 @@ sub guess_mime_type {
     my $mime_map = {
         css => 'text/css',
         js  => 'application/javascript',
+        jpg => 'image/jpeg',
+        gif => 'image/gif',
+        png => 'image/png',
         txt => 'text/plain',
     };
     $mime_map->{$ext} || 'application/octet-stream';
