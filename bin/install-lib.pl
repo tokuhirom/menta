@@ -14,7 +14,9 @@ my %optional_args = (
     'version'          => '--perl_only',
     'List::MoreUtils'  => '-pm',
     'Params::Validate' => '--pm',
+    'DateTime'         => '--pm',
 );
+my %skip_packages = map { $_ => 1 } qw/Module::Build/;
 my $target_version = '5.008001';
 my $outdir;
 
@@ -62,7 +64,11 @@ sub install_pkg {
     return if $installed{$pkg};
     $installed{$pkg}++;
     if ($Module::CoreList::version{$target_version}{$pkg}) {
-        print "skip $pkg\n";
+        print "skip $pkg(standard lib)\n";
+        return;
+    }
+    if ($skip_packages{$pkg}) {
+        print "skip $pkg(build util?)\n";
         return;
     }
 
