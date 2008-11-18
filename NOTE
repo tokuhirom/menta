@@ -4,6 +4,9 @@ MENTA 設計メモ
 ----
 
     Perl 5.8.0 以後をサポート対象とする
+    LWP は入ってる前提で。LWP を入れるためには XS なモジュールが必要なので無理だ。
+        HTML::Parser
+        Compress::Zlib
     CGI 環境でも高速である
     use strict を強制して悪い習慣を身につけさせない
     Windows でも動く
@@ -40,21 +43,61 @@ MENTA 設計メモ
 MENTA 標準添付モジュール
 ------------------------
 
+日本の perl mongers が普段つかってるモジュールの中から選んでいる予定。
+
     DateTime(Locale, Timezone の不要な部分を削ってある)
     CGI::Simple
     Scalar::Util
     List::MoreUtils
     Path::Class
+    URI
+    Class::Accessor
+    HTML::FillInForm
+    Text::Hatena
+    Data::Page
+    HTML::TreeBuilder
+    Text::CSV
+    YAML
+    Email::Send
+    HTTP::MobileAttribute
+    HTML::TreeBuilder::XPath
 
     以下予定
     HTTP::Session
 
+    入れようか迷ってるもの。ウェブ関係ないし。
+    IO::Prompt
+    Perl::Critic
+    POE
+    POE::Component::IRC
+    Spreadsheet::WriteExcel
+    CLI::Dispatch
+
+TPFJ が要求する 10 のモジュール認定シールに入るだろうと仮定して同梱しないもの
+-----------------------------------------------------------------------------
+
+というか、XS だから同梱できないのね。
+
+    DBI
+    LWP
+        HTML::Parser
+        HTML::TagSet
+    IO::Socket
+    Digest::SHA1
+
+    以下は、あったらいいなーとおもうけど、案外はいってないかもね
+        Crypt::DH
+
 標準添付しようかとおもったら Perl5 標準添付だったもの
 -----------------------------------------------------
 
+    Encode
+    MIME::Base64
     Digest::MD5
     File::Spec
     File::stat
+    IO::Socket
+    Net::FTP
 
 XS しかなくてあきらめているもの
 -------------------------------

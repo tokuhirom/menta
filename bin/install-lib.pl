@@ -20,9 +20,9 @@ my %optional_args = (
 my %skip_packages = map { $_ => 1 } (
     'Module::Build',  # only for bullding
     'LWP::UserAgent', # maybe you have this.
-    'Net::FTP',       # ditto
     'HTML::Parser',   # ditto
     'HTML::Tagset',   # ditto
+    'DBI',            # maybe you have this.
 );
 my $target_version = '5.008001';
 my $outdir;
