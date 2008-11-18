@@ -327,21 +327,21 @@ sub parse_multipart {
     my ($data, $boundary) = @_;
 
     my @lines = split(/\n/, $data);
-    my ($val, $key, $step) = ('', '', 0);
+    my ($key, $val, $type, $step) = ('', '', '', 0);
     for my $line (@lines) {
         my $sline = $line;
         $sline =~ s![\r\n]+!!msg;
+        utf8::decode($line) if $type eq '' or $type =~ /^text\//;
         if ($boundary eq $sline) {
             if($step eq 2 && $key ne '') {
-                chop($val);
                 $MENTA::REQ->{$key} = $val;
             }
-            $step = 1;
             $key = '';
             $val = '';
+            $type = '';
+            $step = 1;
         } elsif ("${boundary}--" eq $sline) {
             if ($step eq 2 && $key ne '') {
-                chop($val);
                 $MENTA::REQ->{$key} = $val;
             }
             return 1;
@@ -350,6 +350,8 @@ sub parse_multipart {
             $val .= $line;
         } elsif ($sline =~ /^(?i:Content-Disposition): *form-data; *name="((?:\\"|[^"])*)/ && $step eq 1) {
             $key = $1;
+        } elsif ($sline =~ /^(?i:Content-Type): *(.+)/ && $step eq 1) {
+            $type = $1;
         } elsif ($sline eq '' && $step eq 1) {
             $step = 2;
         }
