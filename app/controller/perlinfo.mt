@@ -5,6 +5,7 @@
 .container { margin: auto; width: 400px }
 th { background-color: #CCCCFF }
 td { background-color: #CCCCCC }
+h2 { text-align: center; }
 </style>
 <div class="container">
     <h1>perl の情報</h1>
