@@ -1,4 +1,5 @@
-use MENTA;
+package MENTA::Plugin::Counter;
+use MENTA::Plugin;
 use Fcntl ':flock';
 use Carp;
 

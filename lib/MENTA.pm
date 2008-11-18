@@ -9,6 +9,7 @@ our $REQUIRED;
 our $MOBILEAGENTRE;
 our $CARRIER;
 our $STASH;
+our $PLUGIN_LOADED;
 our $BUILT = 0;
 BEGIN {
     $REQUIRED = {};
@@ -415,7 +416,34 @@ sub mobile_carrier_longname {
 
 sub load_plugin {
     my $plugin = shift;
-    require_once($MENTA::BUILT ? "plugins/${plugin}.pl" : "plugins/${plugin}.pl");
+    return if $MENTA::PLUGIN_LOADED->{$plugin};
+    my $path = "plugins/${plugin}.pl";
+    require $path;
+    $MENTA::PLUGIN_LOADED->{$plugin}++;
+    my $package = __menta_extract_package($path);
+    no strict 'refs';
+    for (
+        grep { /$plugin/o }
+        grep { defined &{"${package}::$_"} }
+        keys %{"${package}::"}
+    ) {
+        *{"main::$_"} = *{"${package}::$_"}
+    }
+}
+
+sub __menta_extract_package {
+    my $modulefile = shift;
+    open my $fh, '<', $modulefile or die "$modulefile を開けません: $!";
+    my $in_pod = 0;
+    while (<$fh>) {
+        $in_pod = 1 if m/^=\w/;
+        $in_pod = 0 if /^=cut/;
+        next if ( $in_pod || /^=cut/ );    # skip pod text
+        next if /^\s*\#/;
+
+        /^\s*package\s+(.*?)\s*;/ and return $1;
+    }
+    return;
 }
 
 sub is_post_request () {

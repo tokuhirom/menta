@@ -1,5 +1,7 @@
-body { font-family: monospace }
-h1   { padding: 0.5em }
+body { font-family: monospace; }
+.container { width: 640px; margin: auto;padding: 0 0 0 0; }
+h1   { padding: 0.5em;  margin-top: 0; margin-bottom: 0; }
+.bodyContainer { background-color: white; padding-left: 4px; padding-right: 4px; }
 
 table {
     border-style: solid;

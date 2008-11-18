@@ -1,8 +1,6 @@
 ? my $title = "MENTA 取り扱い説明書"
 ?=r render_partial('header.mt', $title)
 
-<h1><?= $title ?></h1>
-
 <h2>ダウンロードする</h2>
 
 現状では svn export しか用意されていません。。。あとでなんとかします。
@@ -45,5 +43,9 @@ load_plugin('counter') と書くと、counter プラグインが読み込まれ�
 counter_increment の返却値として、１増えた結果がかえってきますのでそのまま表示するだけでカウンターになります。
 
 <p><a href="<?= uri_for('counter') ?>">実際にうごいている様子</a></p>
+
+<h2>プラグインの作り方</h2>
+
+あとでかく。
 
 ?=r render_partial('footer.mt')

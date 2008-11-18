@@ -9,7 +9,6 @@ $(function() {
 });
 //--></script>
 
-<h1><?= $title ?></h1>
 <p><?= localtime time ?></p>
 
 <h2>MENTA ってなに?</h2>

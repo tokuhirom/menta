@@ -1,8 +1,5 @@
-# AUTHOR: tokuhirom, mattn
-
-use strict;
-use warnings;
-use utf8;
+package MENTA::Plugin::SQL;
+use MENTA::Plugin;
 use DBI;
 
 sub sql_dbh {
@@ -75,3 +72,4 @@ sub sql_select_paginate {
 }
 
 1;
+# AUTHOR: tokuhirom, mattn
