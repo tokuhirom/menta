@@ -24,7 +24,7 @@ table { text-align: left; }
     <tr><th><?= $key ?></th><td><?= $val ?></td>
 ? }
     </table>
-    <h2>標準添付モジュール</h2>
+    <h2>標準添付モジュール(perl <?= $] ?>)</h2>
     <table>
 ? my $modules = $Module::CoreList::version{$]}
 ? for my $key (sort keys %$modules) {
