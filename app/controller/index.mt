@@ -1,4 +1,3 @@
-? my $title = config()->{application}->{title}
 ?=r render_partial('header.mt')
 <script type="text/javascript" src="<?= docroot ?>static/jquery.js"></script>
 <script type="text/javascript"><!--
@@ -23,7 +22,11 @@ $(function() {
     <li>正しいプログラミングスタイルが自然と身につきます</li>
 </ul>
 
-<p><a href="<?= uri_for('tutorial') ?>">取り扱い説明書</a></p>
+<h2>マニュアル</h2>
+<ul>
+<ul><a href="<?= uri_for('tutorial') ?>">取り扱い説明書</a></ul>
+<ul><a href="<?= uri_for('modules') ?>">添付モジュールについて</a></ul>
+</ul>
 
 <h2>デモ</h2>
 <ul>
@@ -40,5 +43,8 @@ $(function() {
 
 <h2>LICENSE</h2>
 <p>MENTA は Perl License のもとで配布されます。具体的にいうと、なんでも好きなようにしてよい、ということです。</p>
+
+<h2>開発者</h2>
+<ol><?=r join "\n", map { '<li>' . escape_html($_) . '</li>' } split /\n/, read_file('AUTHORS') ?></ol>
 
 ?=r render_partial('footer.mt')
