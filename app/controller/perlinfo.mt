@@ -27,8 +27,8 @@ table { text-align: left; }
     <h2>標準添付モジュール</h2>
     <table>
 ? my $modules = $Module::CoreList::version{$]}
-? while (my ($key, $val) = each %$modules) {
-    <tr><th><?= $key ?></th><td><?= $val ?></td>
+? for my $key (sort keys %$modules) {
+    <tr><th><?= $key ?></th><td><?= $modules->{$key} ?></td>
 ? }
     </table>
 </div>
