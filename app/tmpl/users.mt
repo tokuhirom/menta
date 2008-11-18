@@ -1,6 +1,4 @@
-? my $title = 'DBI'
-?=r render_partial('header.mt', $title)
-<h1><?= $title ?></h1>
+?=r render_partial('header.mt', 'DBI')
 <table>
  <caption>ユーザ</caption>
  <thead>

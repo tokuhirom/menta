@@ -1,7 +1,6 @@
 ? my ($entries, $pager) = @_
 ? my $title = 'SQLite をつかった一行掲示板'
-?=r render_partial('header.mt', $title)
-<h1><?= $title ?></h1>
+?=r render_partial('header.mt', 'SQLite をつかった一行掲示板')
 <form method="post" action="<?= uri_for('bbs_sqlite') ?>">
  <input type="text" name="body">
  <input type="submit" value="送信">
