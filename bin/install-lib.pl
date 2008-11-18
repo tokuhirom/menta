@@ -11,8 +11,9 @@ use Getopt::Long;
 
 my %installed;
 my %optional_args = (
-    'version' => '--perl_only',
-    'List::MoreUtils' => '-pm',
+    'version'          => '--perl_only',
+    'List::MoreUtils'  => '-pm',
+    'Params::Validate' => '--pm',
 );
 my $target_version = '5.008001';
 my $outdir;
