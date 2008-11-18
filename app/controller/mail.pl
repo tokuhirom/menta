@@ -1,3 +1,5 @@
+use MENTA;
+
 load_plugin("mail");
 
 sub do_mail {

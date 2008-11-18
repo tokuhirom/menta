@@ -1,3 +1,5 @@
+use MENTA;
+
 load_plugin("sql");
 
 sub do_users {
