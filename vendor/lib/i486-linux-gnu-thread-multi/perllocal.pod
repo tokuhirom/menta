@@ -1,0 +1,44 @@
+=head2 Tue Nov 18 14:50:06 2008: C<Module> L<version|version>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/rfwil5YNDO/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.76>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Nov 18 14:50:18 2008: C<Module> L<CGI::Simple|CGI::Simple>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/rfwil5YNDO/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.106>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
