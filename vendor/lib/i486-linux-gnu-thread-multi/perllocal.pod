@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 20:10:08 2008: C<Module> L<HTML-Tree|HTML-Tree>
+=head2 Tue Nov 18 20:11:16 2008: C<Module> L<Text::CSV|Text::CSV>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/NN6OyhFCt5/outputdir/lib/perl5>
+C<installed into: /tmp/mqw2_1Nwyd/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 3.23>
+C<VERSION: 1.10>
 
 =item *
 
