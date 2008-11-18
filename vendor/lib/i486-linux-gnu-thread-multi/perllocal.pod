@@ -1,0 +1,22 @@
+=head2 Wed Nov 19 00:46:38 2008: C<Module> L<Module::CoreList|Module::CoreList>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/o_1At8YH41/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.15>
+
+=item *
+
+C<EXE_FILES: corelist>
+
+=back
+
