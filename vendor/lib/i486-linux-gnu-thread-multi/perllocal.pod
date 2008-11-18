@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 16:56:14 2008: C<Module> L<Params::Validate|Params::Validate>
+=head2 Tue Nov 18 17:41:01 2008: C<Module> L<Class::Singleton|Class::Singleton>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/Z6boMOd1is/outputdir/lib/perl5>
+C<installed into: /tmp/roB_WLn5C7/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.91>
+C<VERSION: 1.4>
 
 =item *
 
