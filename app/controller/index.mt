@@ -32,6 +32,7 @@ $(function() {
     <li><a href="<?= uri_for('bbs_sqlite') ?>">SQLite をつかった掲示板(DBD::SQLite が必要です)</a></li>
     <li><a href="<?= uri_for('counter') ?>">簡単なカウンター</a></li>
     <li><a href="<?= uri_for('hello', { user => 'kazuhooku' }) ?>">PHP っぽくそのままテンプレート表示しちゃう</a></li>
+    <li><a href="<?= uri_for('perlinfo') ?>">perlinfo()</a></li>
 </ul>
 
 <h2>LICENSE</h2>
