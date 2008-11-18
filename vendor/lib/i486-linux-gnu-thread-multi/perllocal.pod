@@ -1,10 +1,10 @@
-=head2 Tue Nov 18 20:18:12 2008: C<Module> L<Class::ErrorHandler|Class::ErrorHandler>
+=head2 Tue Nov 18 20:29:51 2008: C<Module> L<Module::Pluggable|Module::Pluggable>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/XKNwGnb8iT/outputdir/lib/perl5>
+C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.01>
+C<VERSION: 3.8>
 
 =item *
 
@@ -20,13 +20,13 @@ C<EXE_FILES: >
 
 =back
 
-=head2 Tue Nov 18 20:18:13 2008: C<Module> L<Hatena::API::Auth|Hatena::API::Auth>
+=head2 Tue Nov 18 20:29:53 2008: C<Module> L<Return::Value|Return::Value>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/XKNwGnb8iT/outputdir/lib/perl5>
+C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
 
 =item *
 
@@ -34,7 +34,73 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.05>
+C<VERSION: 1.302>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Nov 18 20:29:56 2008: C<Module> L<Email::Simple|Email::Simple>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.004>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Nov 18 20:29:58 2008: C<Module> L<Email::Address|Email::Address>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.889>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Nov 18 20:30:00 2008: C<Module> L<Email::Send|Email::Send>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/Jyvuv04pBW/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.192>
 
 =item *
 
