@@ -226,6 +226,10 @@ sub data_dir {
     config->{menta}->{data_dir} || 'app/data/'
 }
 
+sub static_dir {
+    config->{menta}->{static_dir} || 'app/static/'
+}
+
 # TODO: ディレクトリトラバーサル対策
 sub __render_partial {
     my ($tmpl, $tmpldir, @params) = @_;
