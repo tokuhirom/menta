@@ -35,6 +35,8 @@ use HTTP::Response;
         ( $off ? substr( $_[1], $off ) : $_[1] ) = $read;
         return $n;
     }
+
+    sub BINMODE { }
     sub CLOSE { }
 }
 
