@@ -1,16 +1,9 @@
 ?=r render_partial('header.mt')
 <script type="text/javascript" src="<?= docroot ?>static/jquery.js"></script>
-<script type="text/javascript"><!--
-$(function() {
-    setTimeout(function() {
-        $('.animatedTitle').slideDown(2000);
-    }, 1000);
-});
-//--></script>
 
 <p align="right"><?= localtime time ?></p>
 
-<div class="animatedTitle" style="display: none; padding: 1em;">
+<div class="animatedTitle" style="padding: 1em;">
 <h2 style="text-decoration: underline;">Web Application Framework - MENTA</h2>
 <div class="blocked-content"><p>MENTA is lightweight web application framework</p></div>
 </div>
