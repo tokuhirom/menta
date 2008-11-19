@@ -1,5 +1,6 @@
 ?=r render_partial('header.mt', 'ケータイ対応')
+? use HTTP::MobileAgent
 <div class="blocked-content">
-<p>あなたのブラウザは <?= mobile_carrier_longname ?> です</p>
+<p>あなたのブラウザは <?= HTTP::MobileAgent->new->carrier_longname ?> です</p>
 </div>
 ?=r render_partial('footer.mt')
