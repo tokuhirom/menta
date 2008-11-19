@@ -26,7 +26,8 @@ $(function() {
 
 <h2 class="subtitle">マニュアル</h2>
 <ul>
-<ul><a href="<?= uri_for('tutorial') ?>">取り扱い説明書</a></ul>
+<ul><a href="<?= uri_for('tutorial') ?>">チュートリアル</a></ul>
+<ul><a href="<?= uri_for('install') ?>">インストール方法</a></ul>
 <ul><a href="<?= uri_for('modules') ?>">添付モジュールについて</a></ul>
 </ul>
 
