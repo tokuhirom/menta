@@ -55,6 +55,7 @@ sub run_cgi {
         return $n;
     }
     sub CLOSE { }
+    sub BINMODE { }
 }
 
 sub bind_stdout {
