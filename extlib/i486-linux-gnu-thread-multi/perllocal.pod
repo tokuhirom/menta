@@ -1,10 +1,10 @@
-=head2 Wed Nov 19 13:58:36 2008: C<Module> L<HTML::StripScripts|HTML::StripScripts>
+=head2 Wed Nov 19 15:42:51 2008: C<Module> L<Filter::SQL|Filter::SQL>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/B_ZSvu_xKW/outputdir/lib/perl5>
+C<installed into: /tmp/puLCh6Bos7/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.04>
+C<VERSION: 0.10>
 
 =item *
 
