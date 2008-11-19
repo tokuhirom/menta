@@ -35,7 +35,7 @@ table { text-align: left; }
     <table>
 ? no strict 'refs'
 ? use UNIVERSAL::require
-? for my $mod (sort { $a cmp $b } qw/DateTime CGI::Simple Scalar::Util List::MoreUtils Path::Class URI Class::Accessor HTML::FillInForm Text::Hatena Data::Page HTML::TreeBuilder Text::CSV YAML Email::Send Email::MIME HTTP::MobileAttribute HTML::TreeBuilder::XPath  Carp::Always Params::Validate HTML::StickyQuery::DoCoMoGUID HTTP::Server::Simple UNIVERSAL::require Class::Trigger Text::Markdown/) {
+? for my $mod (sort { $a cmp $b } qw/DateTime CGI::Simple Scalar::Util List::MoreUtils Path::Class URI Class::Accessor HTML::FillInForm Text::Hatena Data::Page HTML::TreeBuilder Text::CSV YAML Email::Send Email::MIME HTTP::MobileAttribute HTML::TreeBuilder::XPath  Carp::Always Params::Validate HTML::StickyQuery::DoCoMoGUID HTTP::Server::Simple UNIVERSAL::require Class::Trigger Text::Markdown HTTP::Session/) {
 ?   $mod->require or die $@
     <tr><th><?= $mod ?></th><td><?= ${"${mod}::VERSION"} ?></td>
 ? }

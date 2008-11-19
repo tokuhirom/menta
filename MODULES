@@ -3,42 +3,9 @@ MENTA 標準添付モジュール
 
 日本の perl mongers が普段つかってるモジュールの中から選んでいる予定。
 
-    入れたもの
-        DateTime(Locale, Timezone の不要な部分を削ってある。が、もっと軽量で筋がいいのがあればそっちがいい)
-        CGI::Simple
-        Scalar::Util
-        List::MoreUtils
-        Path::Class
-        URI
-        Class::Accessor
-        HTML::FillInForm
-        Text::Hatena
-        Data::Page
-        HTML::TreeBuilder
-        Text::CSV
-        YAML
-        Email::Send
-        Email::MIME
-        HTTP::MobileAttribute
-        HTML::TreeBuilder::XPath
-        Carp::Always
-        Params::Validate
-        HTML::StickyQuery::DoCoMoGUID
-        HTTP::Server::Simple
-        UNIVERSAL::require
-
-    以下予定
-        HTTP::Session(Moose を取り外して軽量化して導入する)
-
     入れようか迷ってるもの。
-        IO::Prompt
-        Perl::Critic
-        POE
-        POE::Component::IRC
         Spreadsheet::WriteExcel
-        CLI::Dispatch
         String::CamelCase
-        Class::Trigger
 
     CGI では速度的に使い物にならないので却下しているもの
         Moose
