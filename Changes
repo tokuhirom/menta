@@ -1,5 +1,16 @@
 Revision history for Perl extension MENTA
 
+0.04
+
+    - CGI::Simple 使うようになった
+    -- max_post_body 等を廃止
+    - コアからモバイル関連を除去
+    - HTTP::MobileAttribute から H::MobileAgent にさしかえ
+    -- Class::Component が邪魔なので
+    - Digest::SHA::PurePerl を追加(suggested by kazuhooku++)
+    - added more docs
+    - Filter::SQL を追加
+
 0.03
 
     - ひととおりできあがってきたので、ここらでリリース。
