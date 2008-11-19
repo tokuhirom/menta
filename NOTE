@@ -30,3 +30,36 @@ MENTA 設計メモ
     % prove t/*.t
     でテストが実行できるので、コミッタはテストを通すようにするとよい。
 
+TPFJ が要求する 10 のモジュール認定シールに入るだろうと仮定して同梱しないもの
+-----------------------------------------------------------------------------
+
+というか、XS だから同梱できないのね。
+
+    DBI
+    LWP
+        HTML::Parser
+        HTML::TagSet
+    IO::Socket
+    Digest::SHA1
+    DBD::SQLite
+
+    以下は、あったらいいなーとおもうけど、高望みだろうか
+        XML::LibXML
+        Imager
+        Net::OpenID::Consumer
+        Encode::JP::Mobile
+        JSON::XS
+        YAML::Syck
+        Text::CSV_XS
+        Net::OpenID::Consumer(PurePerl でも動くけどしぬほど遅いかも)
+
+標準添付しようかとおもったら Perl5 標準添付だったもの
+-----------------------------------------------------
+
+    Encode
+    MIME::Base64
+    Digest::MD5
+    File::Spec
+    File::stat
+    IO::Socket
+    Net::FTP
