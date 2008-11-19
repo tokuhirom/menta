@@ -71,8 +71,8 @@ HTML::TreeBuilder, HTML::TreeBuilder::XPath
 
 スクレイピングするときに便利です。
 
-HTTP::MobileAttribute
----------------------
+HTTP::MobileAgent
+-----------------
 
 ケータイ端末の情報を取り出すのに使います。
 
