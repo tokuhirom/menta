@@ -1,6 +1,6 @@
-? my $title = "MENTA標準添付モジュールについて"
-?=r render_partial('header.mt', $title)
+?=r render_partial('header.mt', "MENTA標準添付モジュールについて")
+? use Text::Markdown ()
 
-<pre><?= read_file('MODULES') ?></pre>
+<pre><?=r Text::Markdown::markdown(read_file('MODULES')) ?></pre>
 
-?=r render_partial('footer.mt', $title)
+?=r render_partial('footer.mt')
