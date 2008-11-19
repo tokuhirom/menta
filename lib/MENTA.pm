@@ -312,17 +312,19 @@ sub param {
     my $key = shift;
 
     unless (defined $MENTA::REQ) {
-        $MENTA::REQ = CGI::Simple->new;
+        require_once('CGI/Simple.pm');
+        $CGI::Simple::PARAM_UTF8++;
+        $MENTA::REQ = CGI::Simple->new();
     }
 
-    my $val = $MENTA::REQ->param($key);
-    utf8::decode($val);
-    return $val;
+    $MENTA::REQ->param($key);
 }
 
 sub upload {
     unless (defined $MENTA::REQ) {
-        $MENTA::REQ = CGI::Simple->new;
+        require_once('CGI/Simple.pm');
+        $CGI::Simple::PARAM_UTF8++;
+        $MENTA::REQ = CGI::Simple->new();
     }
     $MENTA::REQ->upload(@_);
 }
