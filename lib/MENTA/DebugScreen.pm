@@ -28,7 +28,6 @@ sub build {
 sub build_context {
     my ( $file, $linenum ) = @_;
     my $code;
-    warn "HOGE: $file";
     if ( -f $file ) {
         my $start = $linenum - 3;
         my $end   = $linenum + 3;
@@ -51,7 +50,6 @@ sub build_context {
         }
         close $file;
     }
-    warn "END $file";
     return $code;
 }
 
