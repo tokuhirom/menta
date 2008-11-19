@@ -29,6 +29,7 @@ my $outdir;
 my $dstdir;
 my $pkg;
 my $overwrite = 0;
+my $force;
 my $cwd = getcwd();
 
 &main; exit;
@@ -41,6 +42,7 @@ sub main {
     GetOptions(
         "version=f" => \$target_version,
         "overwrite" => \$overwrite,
+        "force=s"   => \$force,
     );
     unless (@ARGV == 2) {
         die "Usage: $0 Acme::Hello extlib/";
@@ -73,29 +75,7 @@ sub main {
 sub install_pkg {
     my $pkg = shift;
     return if $installed{$pkg};
-    if ($Module::CoreList::version{$target_version}{$pkg}) {
-        print "skip $pkg(standard lib)\n";
-        return;
-    }
-    if ($skip_packages{$pkg}) {
-        print "skip $pkg(build util?)\n";
-        return;
-    }
-    if ($pkg =~ /^Test::/) {
-        print "skip $pkg(test libs)\n";
-        return;
-    }
-    unless ($overwrite) {
-        my $path = $pkg;
-        $path =~ s{::}{/}g;
-        $path = catfile($cwd, $dstdir, "${path}.pm");
-        warn $path;
-        if (-f $path) {
-            print "skip $pkg(already installed)\n";
-            return;
-        }
-    }
-
+    return unless should_install($pkg);
     $installed{$pkg}++;
     local $CPAN::Config->{histfile}   = tempfile(CLEANUP => 1);
     local $CPAN::Config->{makepl_arg} = "INSTALL_BASE=$outdir " . ($optional_args{$pkg} ? $optional_args{$pkg} : '');
@@ -112,3 +92,33 @@ sub install_pkg {
     $dist->install();
 }
 
+sub should_install {
+    my $pkg = shift;
+
+    if ($force && $force eq $pkg) {
+        print "force install $pkg\n";
+        return 1;
+    }
+    if ($Module::CoreList::version{$target_version}{$pkg}) {
+        print "skip $pkg(standard lib)\n";
+        return 0;
+    }
+    if ($skip_packages{$pkg}) {
+        print "skip $pkg(build util?)\n";
+        return 0;
+    }
+    if ($pkg =~ /^Test::/) {
+        print "skip $pkg(test libs)\n";
+        return 0;
+    }
+    unless ($overwrite) {
+        my $path = $pkg;
+        $path =~ s{::}{/}g;
+        $path = catfile($cwd, $dstdir, "${path}.pm");
+        if (-f $path) {
+            print "skip $pkg(already installed)\n";
+            return 0;
+        }
+    }
+    return 1;
+}
