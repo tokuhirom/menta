@@ -2,6 +2,7 @@ package MENTA;
 use strict;
 use warnings;
 use utf8;
+use MENTA::DebugScreen;
 
 our $VERSION = '0.03';
 our $REQ;
@@ -31,138 +32,82 @@ sub run_menta {
 
     local $MENTA::CONFIG = $config;
     local $MENTA::REQ;
-    local $MENTA::CARRIER;
     local $MENTA::STASH;
 
-    # エラー発生時にスタックトレースを出すための処理
-    my $errinfo;
-    local $SIG{__DIE__} = sub {
-        my ($msg, ) = @_;
-        warn $msg unless ref $msg;
-        return $msg if ref $msg && ref $msg eq 'HASH' && $msg->{finished};
-        my $i = 0;
-        my @trace;
-        while ( my ($package, $filename, $line,) = caller($i) ) {
-            last if $filename eq 'bin/cgi-server.pl';
-            my $context = sub {
-                my ( $file, $linenum ) = @_;
-                my $code;
-                if ( -f $file ) {
-                    my $start = $linenum - 3;
-                    my $end   = $linenum + 3;
-                    $start = $start < 1 ? 1 : $start;
-                    open my $fh, '<:utf8', $file or die "エラー画面表示用に ${file} を開こうとしたのに開けません: $!";
-                    my $cur_line = 0;
-                    while ( my $line = <$fh> ) {
-                        chomp $line;
-                        ++$cur_line;
-                        last if $cur_line > $end;
-                        next if $cur_line < $start;
-                        my @tag =
-                            $cur_line == $linenum
-                            ? ( '<strong>', '</strong>' )
-                            : ( '', '' );
-                        $code .= sprintf( "%s%5d: %s%s\n",
-                            $tag[0], $cur_line,
-                            escape_html($line),
-                            $tag[1], );
-                    }
-                    close $file;
-                    chomp $code;
-                }
-                return $code;
-            }->($filename, $line);
-            push @trace, +{ level => $i, package => $package, filename => $filename, line => $line, context => $context };
-            $i++;
-        }
-        $errinfo = { message => $msg, trace => \@trace };
-        die @_;
-    };
-
-    # 例外をまっこうからうけとめる
-    local $@;
-    eval {
-        my $path = $ENV{PATH_INFO} || '/';
-        $path =~ s!^/+!!g;
-        if ($path =~ /^[a-z0-9_]*$/) {
-            $path ||= 'index';
-            my $cdir = controller_dir();
-            my $controller = "${cdir}/${path}.pl";
-            my $controller_mt = controller_dir() . "/${path}.mt";
-            if (-f $controller) {
-                my $meth = "do_$path";
-                package main;
-                do $controller;
-                if (my $e = $@) {
-                    if (ref $e) {
-                        die $e->{message};
-                    } else {
-                        die $e;
-                    }
-                }
-                die $@ if $@;
-                if (my $code = main->can($meth)) {
-                    $code->();
-                    die "なにも出力してません";
-                } else {
-                    die "「${path}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
-                }
-            } elsif (-f $controller_mt) {
-                my $out = __render_partial("${path}.mt", controller_dir());
-                utf8::encode($out);
-                print "Content-Type: text/html; charset=utf-8\r\n";
-                print "\r\n";
-                print $out;
+    do {
+        my $err_info;
+        local $SIG{__DIE__} = sub {
+            my ($msg) = @_;
+            if (ref($msg) eq 'HASH' && $msg->{finished}) {
+                undef $err_info;
+                die;
             } else {
-                die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
-            }
-        } elsif ($path ne 'menta.cgi' && -f "app/$path") {
-            $path = "app/$path";
-            if (open my $fh, '<', $path) {
-                binmode $fh;
-                binmode STDOUT;
-                printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
-                print do { local $/; <$fh> };
-                close $fh;
-            } else {
-                die "ファイルが開きません";
-            }
-        } elsif ($path =~ /^(?:crossdomain\.xml|favicon\.ico|robots\.txt)$/) {
-            print "status: 404\r\ncontent-type: text/plain\r\n\r\n";
-        } else {
-            die "${path} を処理する方法がわかりません";
-        }
-
-        undef $errinfo;
-    };
-    # 発生した例外をすかさず処理する
-    if ($errinfo) {
-        die "エラー処理失敗: ${errinfo}" unless ref $errinfo eq 'HASH';
-        return if $errinfo->{finished};
-
-        warn $errinfo->{message};
-
-        print "Status: 500\r\n";
-        print "Content-type: text/html; charset=utf-8\r\n";
-        print "\r\n";
-
-        my $body = do {
-            if ($config->{menta}->{kcatch_mode}) {
-                my $msg = escape_html($errinfo->{message});
-                chomp $msg;
-                my $out = qq{<!doctype html><head><title>500 Internal Server Error</title><style type="text/css">body { margin: 0; padding: 0; background: rgb(230, 230, 230); color: rgb(44, 44, 44); } h1 { margin: 0 0 .5em; padding: .25em .5em .1em 1.5em; border-bottom: thick solid rgb(0, 0, 15); background: rgb(63, 63, 63); color: rgb(239, 239, 239); font-size: x-large; } p { margin: .5em 1em; } li { font-size: small; } pre { background: rgb(255, 239, 239); color: rgb(47, 47, 47); font-size: medium; } pre code strong { color: rgb(0, 0, 0); background: rgb(255, 143, 143); } p.f { text-align: right; font-size: xx-small; } p.f span { font-size: medium; }</style></head><h1>500 Internal Server Error</h1><p>${msg}</p><ol>};
-                for my $stack (@{$errinfo->{trace}}) {
-                    $out .= '<li>' . escape_html(join(', ', $stack->{package}, $stack->{filename}, $stack->{line}))
-                         . qq(<pre><code>$stack->{context}</code></pre></li>);
-                }
-                $out .= qq{</ol><p class="f"><span>Powered by <strong>MENTA</strong></span>, Web application framework</p>};
-                $out;
-            } else {
-                qq{<html><body><p style="color: red">500 Internal Server Error</p></body></html>\n};
+                $err_info = MENTA::DebugScreen::build($msg);
+                die;
             }
         };
-        utf8::encode($body);
-        print $body;
+        local $@;
+        eval {
+            dispatch();
+            undef $err_info;
+        };
+        if ($err_info) {
+            MENTA::DebugScreen::output($err_info);
+        }
+    };
+}
+
+sub dispatch {
+    my $path = $ENV{PATH_INFO} || '/';
+    $path =~ s!^/+!!g;
+    if ($path =~ /^[a-z0-9_]*$/) {
+        $path ||= 'index';
+        my $cdir = controller_dir();
+        my $controller = "${cdir}/${path}.pl";
+        my $controller_mt = controller_dir() . "/${path}.mt";
+        if (-f $controller) {
+            my $meth = "do_$path";
+            package main;
+            do $controller;
+            if (my $e = $@) {
+                if (ref $e) {
+                    warn "KTKR";
+                    return;
+                } else {
+                    die $e;
+                }
+            }
+            die $@ if $@;
+            if (my $code = main->can($meth)) {
+                $code->();
+                die "なにも出力してません";
+            } else {
+                die "「${path}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
+            }
+        } elsif (-f $controller_mt) {
+            my $out = __render_partial("${path}.mt", controller_dir());
+            utf8::encode($out);
+            print "Content-Type: text/html; charset=utf-8\r\n";
+            print "\r\n";
+            print $out;
+        } else {
+            die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
+        }
+    } elsif ($path ne 'menta.cgi' && -f "app/$path") {
+        $path = "app/$path";
+        if (open my $fh, '<', $path) {
+            binmode $fh;
+            binmode STDOUT;
+            printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
+            print do { local $/; <$fh> };
+            close $fh;
+        } else {
+            die "ファイルが開きません";
+        }
+    } elsif ($path =~ /^(?:crossdomain\.xml|favicon\.ico|robots\.txt)$/) {
+        print "status: 404\r\ncontent-type: text/plain\r\n\r\n";
+    } else {
+        die "${path} を処理する方法がわかりません";
     }
 }
 
