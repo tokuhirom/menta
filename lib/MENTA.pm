@@ -21,8 +21,6 @@ sub import {
     utf8->import;
 }
 
-sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
-
 package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
 use CGI::Simple ();
 
@@ -31,15 +29,10 @@ sub config () { $MENTA::CONFIG }
 sub run_menta {
     my $config = shift @_;
 
-    local $MENTA::CONFIG;
+    local $MENTA::CONFIG = $config;
     local $MENTA::REQ;
     local $MENTA::CARRIER;
     local $MENTA::STASH;
-
-    {
-        $config->{menta}->{max_post_body} ||= MENTA::DEFAULT_MAX_POST_BODY;
-        $MENTA::CONFIG = $config;
-    }
 
     # エラー発生時にスタックトレースを出すための処理
     local $SIG{__DIE__} = sub {
