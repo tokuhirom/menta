@@ -18,3 +18,5 @@
 ^\.shipit$
 \.sw[po]$
 out
+^cache/*
+^app/tmpl_cache/*
