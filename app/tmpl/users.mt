@@ -1,4 +1,5 @@
 ?=r render_partial('header.mt', 'DBI')
+<div class="blocked-content">
 <table>
  <caption>ユーザ</caption>
  <thead>
@@ -10,4 +11,5 @@
 ? }
  <tbody>
 </table>
+</div>
 ?=r render_partial('footer.mt')

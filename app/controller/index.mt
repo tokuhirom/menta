@@ -2,18 +2,20 @@
 <script type="text/javascript" src="<?= docroot ?>static/jquery.js"></script>
 <script type="text/javascript"><!--
 $(function() {
-    $('.animatedTitle').slideDown('slow');
+    setTimeout(function() {
+        $('.animatedTitle').slideDown(2000);
+    }, 1000);
 });
 //--></script>
 
-<p><?= localtime time ?></p>
+<p align="right"><?= localtime time ?></p>
 
-<div class="animatedTitle" style="display: none;">
+<div class="animatedTitle" style="display: none; padding: 1em;">
 <h2 style="text-decoration: underline;">Web Application Framework - MENTA</h2>
-<blockquote><p>MENTA is lightweight web application framework</p></blockquote>
+<div class="blocked-content"><p>MENTA is lightweight web application framework</p></div>
 </div>
 
-<h2>MENTA ってなに?</h2>
+<h2 class="subtitle">MENTA ってなに?</h2>
 <p>MENTA は CGI で気軽につかえるウェブアプリケーションフレームワークです</p>
 <ul>
     <li>CGI でも高速に動作</li>
@@ -22,13 +24,13 @@ $(function() {
     <li>正しいプログラミングスタイルが自然と身につきます</li>
 </ul>
 
-<h2>マニュアル</h2>
+<h2 class="subtitle">マニュアル</h2>
 <ul>
 <ul><a href="<?= uri_for('tutorial') ?>">取り扱い説明書</a></ul>
 <ul><a href="<?= uri_for('modules') ?>">添付モジュールについて</a></ul>
 </ul>
 
-<h2>デモ</h2>
+<h2 class="subtitle">デモ</h2>
 <ul>
     <li><a href="<?= uri_for('form') ?>">フォーム</a></li>
     <li><a href="<?= uri_for('goto_wassr') ?>">リダイレクト(Wassr にとびます)</a></li>
@@ -41,10 +43,10 @@ $(function() {
     <li><a href="<?= uri_for('perlinfo') ?>">perlinfo()</a></li>
 </ul>
 
-<h2>LICENSE</h2>
+<h2 class="subtitle">LICENSE</h2>
 <p>MENTA は Perl License のもとで配布されます。具体的にいうと、なんでも好きなようにしてよい、ということです。</p>
 
-<h2>開発者</h2>
+<h2 class="subtitle">開発者</h2>
 <ol><?=r join "\n", map { '<li>' . escape_html($_) . '</li>' } split /\n/, read_file('AUTHORS') ?></ol>
 
 ?=r render_partial('footer.mt')
