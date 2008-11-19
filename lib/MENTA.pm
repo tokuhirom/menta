@@ -2,7 +2,7 @@ package MENTA;
 use strict;
 use warnings;
 use utf8;
-use MENTA::DebugScreen;
+use CGI::ExceptionManager;
 
 our $VERSION = '0.03';
 our $REQ;
@@ -34,27 +34,12 @@ sub run_menta {
     local $MENTA::REQ;
     local $MENTA::STASH;
 
-    do {
-        my $err_info;
-        local $SIG{__DIE__} = sub {
-            my ($msg) = @_;
-            if (ref($msg) eq 'HASH' && $msg->{finished}) {
-                undef $err_info;
-                die;
-            } else {
-                $err_info = MENTA::DebugScreen::build($msg);
-                die;
-            }
-        };
-        local $@;
-        eval {
-            dispatch();
-            undef $err_info;
-        };
-        if ($err_info) {
-            MENTA::DebugScreen::output($err_info);
-        }
-    };
+    CGI::ExceptionManager->run(
+        callback => sub {
+            dispatch()
+        },
+        powered_by => '<strong>MENTA</strong>, Web Application Framework.'
+    );
 }
 
 sub dispatch {
@@ -208,9 +193,7 @@ sub render_partial {
     __render_partial($tmpl, tmpl_dir(), @params);
 }
 
-sub detach() {
-    die {finished => 1};
-}
+sub detach() { CGI::ExceptionManager::detach(@_) }
 
 sub render {
     my ($tmpl, @params) = @_;
