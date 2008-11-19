@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use lib 'vendor/lib', 'lib';
+use lib 'extlib', 'lib';
 require HTTP::Server::Simple::CGI;
 use POSIX;
 use HTTP::Response;

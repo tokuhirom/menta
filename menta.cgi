@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use lib 'lib', 'vendor/lib';
+use lib 'lib', 'extlib';
 use MENTA;
 # -- ここまではおまじない --
 
