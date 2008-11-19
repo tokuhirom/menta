@@ -11,7 +11,6 @@ our $MOBILEAGENTRE;
 our $CARRIER;
 our $STASH;
 our $PLUGIN_LOADED;
-our $BUILT = 0;
 BEGIN {
     $REQUIRED = {};
 
@@ -106,7 +105,7 @@ sub run_menta {
             $path ||= 'index';
             my $cdir = controller_dir();
             my $controller = "${cdir}/${path}.pl";
-            my $controller_mt = ($MENTA::BUILT ? cache_dir() : controller_dir()) . "/${path}.mt";
+            my $controller_mt = controller_dir() . "/${path}.mt";
             if (-f $controller) {
                 my $meth = "do_$path";
                 package main;
@@ -245,10 +244,10 @@ sub __render_partial {
     my ($tmpl, $tmpldir, @params) = @_;
     my $conf = config()->{menta};
     my $cachedir = cache_dir();
-    mkdir $cachedir unless $MENTA::BUILT || -d $cachedir;
+    mkdir $cachedir unless -d $cachedir;
     my $cachefname = "$cachedir/$tmpl";
     my $tmplfname = "$tmpldir/$tmpl";
-    my $use_cache = $MENTA::BUILT || sub {
+    my $use_cache = sub {
         my @orig = stat $tmplfname or return;
         my @cached = stat $cachefname or return;
         return $orig[9] < $cached[9];
