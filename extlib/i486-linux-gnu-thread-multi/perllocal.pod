@@ -1,10 +1,10 @@
-=head2 Wed Nov 19 16:00:24 2008: C<Module> L<Digest::HMAC|Digest::HMAC>
+=head2 Wed Nov 19 16:07:30 2008: C<Module> L<Digest::SHA::PurePerl|Digest::SHA::PurePerl>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/n3dLZQmKjE/outputdir/lib/perl5>
+C<installed into: /tmp/AR4I5FUw9G/outputdir/lib/perl5>
 
 =item *
 
@@ -12,11 +12,11 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.01>
+C<VERSION: 5.47>
 
 =item *
 
-C<EXE_FILES: >
+C<EXE_FILES: shasum>
 
 =back
 
