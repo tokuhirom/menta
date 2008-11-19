@@ -18,11 +18,13 @@ my %optional_args = (
     'DateTime'         => '--pm',
 );
 my %skip_packages = map { $_ => 1 } (
-    'Module::Build',  # only for bullding
+    'Module::Build',  # only for building
     'LWP::UserAgent', # maybe you have this.
     'HTML::Parser',   # ditto
     'HTML::Tagset',   # ditto
+    'HTTP::Headers',  # ditto
     'DBI',            # maybe you have this.
+    'WWW::MobileCarrierJP', # only for building
 );
 my $target_version = '5.008001';
 my $outdir;
