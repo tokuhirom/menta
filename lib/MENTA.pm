@@ -37,7 +37,7 @@ sub import {
 
 sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
-package main;
+package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
 
 sub config () { $MENTA::CONFIG }
 
@@ -54,6 +54,7 @@ sub run_menta {
         $MENTA::CONFIG = $config;
     }
 
+    # エラー発生時にスタックトレースを出すための処理
     local $SIG{__DIE__} = sub {
         my $msg = shift;
         warn $msg unless ref $msg;
@@ -96,6 +97,7 @@ sub run_menta {
         die { message => $msg, trace => \@trace };
     };
 
+    # 例外をまっこうからうけとめる
     eval {
         my $path = $ENV{PATH_INFO} || '/';
         $path =~ s!^/+!!g;
@@ -148,6 +150,7 @@ sub run_menta {
             die "${path} を処理する方法がわかりません";
         }
     };
+    # 発生した例外をすかさず処理する
     if (my $err = $@) {
         die "エラー処理失敗: ${err}" unless ref $err eq 'HASH';
         return if $err->{finished};
