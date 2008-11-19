@@ -1,47 +1,131 @@
 MENTA 標準添付モジュール
-------------------------
+========================
 
-日本の perl mongers が普段つかってるモジュールの中から選んでいる予定。
+ウェブアプリケーション開発に必要な CPAN モジュールを厳選して extlib/ の下に格納しています。
 
-    入れようか迷ってるもの。
-        Spreadsheet::WriteExcel
-        String::CamelCase
+CGI::Simple
+-----------
 
-    CGI では速度的に使い物にならないので却下しているもの
-        Moose
-        DBIx::Class
+CGI::Simple は CGI.pm と同じような機能を提供しますが、CGI.pm よりもシンプルで使いやすいです。
+HTML の生成機能などの余計なものがなく、シンプルでわかりやすい実装なので、これを採用しました。
 
-TPFJ が要求する 10 のモジュール認定シールに入るだろうと仮定して同梱しないもの
------------------------------------------------------------------------------
+Carp::Always
+------------
 
-というか、XS だから同梱できないのね。
+use Carp::Always と書くか perl -MCarp::Always とするだけで、die したときや warn したときにスタックトレースが
+表示されるようになります。デバッグ時には欠かせません。
 
-    DBI
-    LWP
-        HTML::Parser
-        HTML::TagSet
-    IO::Socket
-    Digest::SHA1
-    DBD::SQLite
+Class::Accessor
+---------------
 
-    以下は、あったらいいなーとおもうけど、高望みだろうか
-        XML::LibXML
-        Imager
-        Net::OpenID::Consumer
-        Encode::JP::Mobile
-        JSON::XS
-        YAML::Syck
-        Text::CSV_XS
-        Net::OpenID::Consumer(PurePerl でも動くけどしぬほど遅いかも)
+クラスを作成するためのユーティリティクラスとして長く Perl Mongers に愛されてきたモジュールです。
 
-標準添付しようかとおもったら Perl5 標準添付だったもの
------------------------------------------------------
+    package Point;
+    use base qw/Class::Accessor::Fast/;
+    __PACKAGE__->mk_accessors(qw/x y/);
 
-    Encode
-    MIME::Base64
-    Digest::MD5
-    File::Spec
-    File::stat
-    IO::Socket
-    Net::FTP
+のようにして使います。
+
+Class::Trigger
+--------------
+
+フック機構を提供します。Sledge などに採用されています。
+
+Data::Page
+----------
+
+Pager を表現するために使われるモジュールです。id:kazeburo さんの推薦により導入されました。
+
+DateTime
+--------
+
+日時を表現するオブジェクトです。実績があり高機能です。このクラスは今後 DateTime::Lite に置き換えられる可能性があります。
+
+Email::MIME
+-----------
+
+メールのパースをするのに使います。
+
+Email::Send
+-----------
+
+メールの送信をするのに使います。
+
+Filter::SQL
+-----------
+
+SQL を直接 perl のソースコードに埋め込むことができます。id:kazuhooku さんの推薦により導入されました。
+
+HTML::FillInForm
+----------------
+
+HTML の中から <form> を見つけ出して、その中にデータを埋め込みます。validator などで便利です。
+
+HTML::TreeBuilder, HTML::TreeBuilder::XPath
+-------------------------------------------
+
+スクレイピングするときに便利です。
+
+HTTP::MobileAttribute
+---------------------
+
+ケータイ端末の情報を取り出すのに使います。
+
+HTTP::Session
+-------------
+
+セッション情報の管理を行います。
+
+JSON
+----
+
+JSON の encode/decode に使います。
+
+List::MoreUtils
+---------------
+
+リスト処理を楽に行うための関数つめあわせです。
+
+Params::Validate
+----------------
+
+引数のチェックを行います。防衛的プログラミングを行うための一助として便利です
+
+Path::Class
+-----------
+
+ファイル処理するときに、これがあるととっても便利です。
+
+Text::CSV
+---------
+
+CSV の処理にはこちらをご利用ください
+
+Text::Hatena
+------------
+
+はてな記法を処理します。Blog や wiki を書くときにご利用ください。
+
+Text::Markdown
+--------------
+
+Markdown 記法を処理します。Blog や wiki を書くときにご利用ください。
+
+UNIVERSAL::require
+------------------
+
+    my $mod = "Module::CoreList";
+    $mod->require or die $@;
+
+のように、Module の require をかっこいい風にかけます。
+
+URI
+---
+
+URI の処理用モジュールです。
+
+YAML
+----
+
+YAML ファイルの読み込み/書き出しにご利用ください。
 
