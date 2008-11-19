@@ -38,6 +38,7 @@ sub import {
 sub DEFAULT_MAX_POST_BODY () { 1_024_000 }
 
 package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
+use CGI::Simple ();
 
 sub config () { $MENTA::CONFIG }
 
@@ -328,77 +329,23 @@ sub write_file {
     close $fh;
 }
 
-sub __parse_multipart {
-    my ($data, $boundary) = @_;
-
-    my @lines = split(/\n/, $data);
-    my ($key, $val, $type, $step) = ('', '', '', 0);
-    for my $line (@lines) {
-        my $sline = $line;
-        $sline =~ s![\r\n]+!!msg;
-        utf8::decode($line) if $type eq '' or $type =~ /^text\//;
-        if ($boundary eq $sline) {
-            if($step eq 2 && $key ne '') {
-                chop $val if $type eq '' or $type =~ /^text\//;
-                $MENTA::REQ->{$key} = $val;
-            }
-            $key = '';
-            $val = '';
-            $type = '';
-            $step = 1;
-        } elsif ("${boundary}--" eq $sline) {
-            if ($step eq 2 && $key ne '') {
-                chop $val if $type eq '' or $type =~ /^text\//;
-                $MENTA::REQ->{$key} = $val;
-            }
-            return 1;
-        } elsif ($step eq 2) {
-            $val .= "\n" if $val;
-            $val .= $line;
-        } elsif ($sline =~ /^(?i:Content-Disposition): *form-data; *name="((?:\\"|[^"])*)/ && $step eq 1) {
-            $key = $1;
-        } elsif ($sline =~ /^(?i:Content-Type): *(.+)/ && $step eq 1) {
-            $type = $1;
-        } elsif ($sline eq '' && $step eq 1) {
-            $step = 2;
-        }
-    }
-    return 1;
-}
-
 sub param {
     my $key = shift;
 
     unless (defined $MENTA::REQ) {
-        my $input;
-        if ($ENV{'REQUEST_METHOD'} eq 'POST') {
-            my $max_post_body = config()->{menta}->{max_post_body};
-            if ($max_post_body > 0 && $ENV{CONTENT_LENGTH} > $max_post_body) {
-                die "投稿データが長すぎです";
-            } else {
-                read(STDIN, $input, $ENV{'CONTENT_LENGTH'});
-            }
-        } else {
-            $input = $ENV{QUERY_STRING};
-        }
-
-        my $type = $ENV{'CONTENT_TYPE'};
-        if ($type && $type =~ m{^multipart/form-data; *boundary=}) {
-            __parse_multipart $input, '--'.substr($type, 30);
-        } else {
-            for (split /[&;]+/, $input) {
-                my ($key, $val) = split /=/, $_;
-                if ($val) {
-                    $val =~ tr/+/ /;
-                    $val =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack('H2', $1)/eg;
-                    utf8::decode($val);
-                }
-                $MENTA::REQ->{$key} = $val;
-            }
-        }
+        $MENTA::REQ = CGI::Simple->new;
     }
 
-    return $MENTA::REQ->{$key};
+    my $val = $MENTA::REQ->param($key);
+    utf8::decode($val);
+    return $val;
+}
+
+sub upload {
+    unless (defined $MENTA::REQ) {
+        $MENTA::REQ = CGI::Simple->new;
+    }
+    $MENTA::REQ->upload(@_);
 }
 
 sub require_once {
