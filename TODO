@@ -15,4 +15,7 @@ TODO
     http://d.hatena.ne.jp/kazuhooku/20081117/1226936533
     13:39 (kazuho) mod_rewrite 設定してないとスタイルが落ちるので menta.cgi/ にリダイレクトするほうがいいんじゃないかと思いました
     CSRF 対策
+    session 管理をサポートする
+    はてな認証をサポートする
+    DBD::CSV おｎ example はずす
 

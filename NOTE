@@ -39,11 +39,10 @@ TPFJ が要求する 10 のモジュール認定シールに入るだろうと�
     LWP
         HTML::Parser
         HTML::TagSet
-    IO::Socket
-    Digest::SHA1
     DBD::SQLite
 
     以下は、あったらいいなーとおもうけど、高望みだろうか
+        Digest::SHA1 or Digest::SHA
         XML::LibXML
         Imager
         Net::OpenID::Consumer
@@ -63,3 +62,4 @@ TPFJ が要求する 10 のモジュール認定シールに入るだろうと�
     File::stat
     IO::Socket
     Net::FTP
+
