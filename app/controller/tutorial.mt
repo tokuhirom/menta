@@ -13,7 +13,16 @@ MENTA/ ディレクトリをまるごとアップロードすれば OK です。
 
 <h2 class="subtitle">ディレクトリ構造</h2>
 <div class="blocked-content">
-XXX あとでかく XXX<br />
+<pre class="code">
+app/            - あなたのアプリケーションをいれるところです
+app/controller/ - あなたのアプリケーションそのものをいれます
+app/data/       - あなたのアプリケーションのデータがはいります
+app/static/     - 静的な画像やJavaScript, CSS などをいれます
+extlib/         - 厳選されたCPANモジュールたち
+lib/            - MENTA そのもの
+plugins/        - MENTAプラグイン
+t/              - MENTA 自体のテストスクリプト。ユーザーの方はきにする必要ありませぬ
+</pre>
 </div>
 
 <h2 class="subtitle">実際につかってみる</h2>
