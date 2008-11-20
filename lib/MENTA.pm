@@ -78,7 +78,7 @@ sub dispatch {
         } else {
             die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
         }
-    } elsif ($path ne 'menta.cgi' && -f "app/$path") {
+    } elsif ($path ne 'menta.cgi' && -f "app/$path" && $path =~ /^static\//) {
         $path = "app/$path";
         if (open my $fh, '<', $path) {
             binmode $fh;
