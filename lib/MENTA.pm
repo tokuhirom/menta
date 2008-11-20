@@ -69,10 +69,6 @@ sub mt_cache_dir {
     config->{menta}->{cache_dir} || "/tmp/menta.${MENTA::VERSION}.$>.mt_cache"
 }
 
-sub tmpl_dir {
-    config->{menta}->{cache_dir} || 'app/tmpl/'
-}
-
 sub controller_dir {
     config->{menta}->{controller_dir} || 'app/controller/'
 }
@@ -92,7 +88,7 @@ sub __render_partial {
 }
 sub render_partial {
     my ($tmpl, @params) = @_;
-    __render_partial($tmpl, tmpl_dir(), @params);
+    __render_partial($tmpl, controller_dir(), @params);
 }
 
 sub detach() { CGI::ExceptionManager::detach(@_) }
