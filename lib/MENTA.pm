@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 use CGI::ExceptionManager;
 use MENTA::Dispatch ();
-use Encode (qw/encode/);
+require Encode; # use Encode するとふるい Encode でエラーになるときがあるらしい。2.15 で確認。200810-11-20
 
 our $VERSION = '0.05';
 our $REQ;
