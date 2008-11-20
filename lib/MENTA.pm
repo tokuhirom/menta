@@ -23,7 +23,6 @@ sub import {
 }
 
 package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
-use CGI::Simple ();
 
 sub config () { $MENTA::CONFIG }
 
