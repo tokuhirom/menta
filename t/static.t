@@ -4,7 +4,7 @@ use t::Utils;
 my $out_cgi = run_cgi(
     PATH_INFO      => '/',
 );
-if ($out_cgi =~ m{src="(static/jquery\.js)"}) {
+if ($out_cgi =~ m{type="text/javascript"\s+src="([^"]+)"}) {
     my $src = $1;
     my $out_js = run_cgi(
         PATH_INFO      => "/$src",
