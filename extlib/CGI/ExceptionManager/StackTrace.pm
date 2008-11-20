@@ -29,7 +29,7 @@ sub new {
                 if $c[3];
         }
     }
-    if ($message =~ / at ([^ ]+) line (\d+)\./
+    if ($message =~ / at ([^ ]+) line (\d+)/
             && ($1 ne $trace[0]->{file} || $2 != $trace[0]->{line})) {
         unshift @trace, {
             file => $1,

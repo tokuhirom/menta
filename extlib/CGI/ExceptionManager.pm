@@ -2,10 +2,11 @@ package CGI::ExceptionManager;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.01';
-use CGI::ExceptionManager::StackTrace;
+our $VERSION = '0.02';
 
 sub detach { die bless [], 'CGI::ExceptionManager::Exception' }
+
+my $stacktrace_required;
 
 sub run {
     my ($class, %args) = @_;
@@ -16,6 +17,10 @@ sub run {
         if (ref $msg eq 'CGI::ExceptionManager::Exception') {
             undef $err_info;
         } else {
+            unless ($stacktrace_required) {
+                require CGI::ExceptionManager::StackTrace;
+                $stacktrace_required = 1;
+            }
             $err_info = CGI::ExceptionManager::StackTrace->new($msg);
         }
         die;
