@@ -67,3 +67,27 @@ td {
     padding: 1em;
     border: 1px dotted gray;
 }
+
+.markdown h2 {
+    background: transparent url(allow-right-orange.png) no-repeat scroll 0%;
+    padding-left: 26px;
+    line-height: 26px;
+    text-decoration: underline;
+}
+
+.markdown p {
+    margin-left: 1em;
+}
+
+.markdown pre {
+    margin-left: 1em;
+    border-bottom: 1px solid #777777;
+    border-left: 3px solid #777777;
+    border-right: 1px solid #777777;
+    border-top: 1px solid #777777;
+    font-family: monospace;
+    background: #555555;
+    color: white;
+    padding-left: 2px;
+    width: 100%;
+}
