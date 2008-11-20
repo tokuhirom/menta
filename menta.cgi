@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use lib 'lib', 'extlib';
+unshift @INC, 'lib', 'extlib';
 use MENTA;
 # -- ここまではおまじない --
 
