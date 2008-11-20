@@ -65,8 +65,9 @@ sub unescape_html {
     return $_;
 }
 
-sub cache_dir {
-    config->{menta}->{cache_dir} || 'cache'
+sub mt_cache_dir {
+    # $> は $EFFECTIVE_USER_ID です。詳しくは perldoc perlvar を参照。
+    config->{menta}->{cache_dir} || "/tmp/menta.${MENTA::VERSION}.$>.mt_cache"
 }
 
 sub tmpl_dir {
@@ -85,39 +86,10 @@ sub static_dir {
     config->{menta}->{static_dir} || 'app/static/'
 }
 
-# TODO: ディレクトリトラバーサル対策
 sub __render_partial {
     my ($tmpl, $tmpldir, @params) = @_;
-    my $conf = config()->{menta};
-    my $cachedir = cache_dir();
-    mkdir $cachedir unless -d $cachedir;
-    my $cachefname = "$cachedir/$tmpl";
-    my $tmplfname = "$tmpldir/$tmpl";
-    my $use_cache = sub {
-        my @orig = stat $tmplfname or return;
-        my @cached = stat $cachefname or return;
-        return $orig[9] < $cached[9];
-    }->();
-    my $out;
-    if ($use_cache) {
-        my $tmplcode = do $cachefname;
-        die $@ if $@;
-        die "テンプレートキャッシュを読み込めませんでした: ${tmplfname}" unless $tmplcode;
-        $out = $tmplcode->(@params);
-    } else {
-        die "「${tmplfname}」という名前のテンプレートファイルは見つかりません" unless -f $tmplfname;
-        require_once('MENTA/Template.pm');
-        my $tmplsrc = read_file($tmplfname);
-        my $mt = MENTA::Template->new;
-        $mt->parse($tmplsrc);
-        $mt->build();
-        my $src = $mt->code();
-        my $tmplcode = eval $src;
-        die $@ if $@;
-        $out = $tmplcode->(@params);
-        write_file($cachefname, "package main; use utf8;\n${src}");
-    }
-    $out;
+    require_once('MENTA/TemplateLoader.pm');
+    MENTA::TemplateLoader::__load("$tmpldir/$tmpl", @params);
 }
 sub render_partial {
     my ($tmpl, @params) = @_;
