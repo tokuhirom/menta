@@ -10,8 +10,6 @@ our $VERSION = '0.05';
 our $REQ;
 our $CONFIG;
 our $REQUIRED;
-our $MOBILEAGENTRE;
-our $CARRIER;
 our $STASH;
 our $PLUGIN_LOADED;
 BEGIN {
