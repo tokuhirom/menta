@@ -3,8 +3,7 @@
 
 <h2 class="subtitle">ダウンロードする</h2>
 <div class="blocked-content">
-現状では svn export しか用意されていません。。。あとでなんとかします。<br />
-<code><pre class="code">svn export http://svn.coderepos.org/share/lang/perl/MENTA/trunk/ MENTA</pre></code>としてください。
+インストール方法は<a href="<?= uri_for('install') ?>">インストール方法解説ページ</a>を参考にしてください
 </div>
 
 <h2 class="subtitle">サーバーにアップロードする</h2>
