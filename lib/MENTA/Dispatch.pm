@@ -6,8 +6,8 @@ use utf8;
 sub dispatch {
     my $path = $ENV{PATH_INFO} || '/';
     $path =~ s!^/+!!g;
+    $path ||= 'index';
     if ($path =~ m{^[a-z0-9_/]+$}) {
-        $path ||= 'index';
         my $cdir = main::controller_dir();
         my $controller = "${cdir}/${path}.pl";
         my $controller_mt = "${cdir}/${path}.mt";
@@ -32,9 +32,7 @@ sub dispatch {
         } elsif (-f $controller_mt) {
             my $out = main::__render_partial("${path}.mt", main::controller_dir());
             $out = main::encode_output($out);
-            print "Content-Type: text/html; charset=" . main::charset() . "\r\n";
-            print "\r\n";
-            print $out;
+            main::finalize($out);
         } else {
             die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
         }
@@ -43,7 +41,7 @@ sub dispatch {
     } elsif ($path =~ /^(?:crossdomain\.xml|favicon\.ico|robots\.txt)$/) {
         print "status: 404\r\ncontent-type: text/plain\r\n\r\n";
     } else {
-        die "${path} を処理する方法がわかりません";
+        die "'${path}' を処理する方法がわかりません";
     }
 }
 
