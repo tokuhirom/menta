@@ -4,7 +4,7 @@
 <p align="right"><?= localtime time ?></p>
 
 <div class="animatedTitle" style="padding: 1em;">
-<h2 style="text-decoration: underline;">Web Application Framework - MENTA</h2>
+<h2 style="text-decoration: underline;">Web Application Framework - MENTA <?= $MENTA::VERSION ?></h2>
 <div class="blocked-content"><p>MENTA is lightweight web application framework</p></div>
 </div>
 
