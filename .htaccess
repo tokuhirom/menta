@@ -1,12 +1,6 @@
 DirectoryIndex menta.cgi
 
-RewriteEngine on
-
-#RewriteBase /
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/static
-RewriteRule ^(.*)$ menta.cgi/$1 [L,QSA]
+# XXX mod_rewrite は使わない方向で
 
 <FilesMatch "(?:\.(?:mt|p[lm])|~)$">
     Order deny,allow
