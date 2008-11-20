@@ -44,7 +44,7 @@ table { text-align: left; }
     <table>
 ? my $modules = $Module::CoreList::version{$]}
 ? for my $key (sort keys %$modules) {
-    <tr><th><?= $key ?></th><td><?= $modules->{$key} ?></td>
+    <tr><th><?= $key ?></th><td><?= $modules->{$key} || '' ?></td>
 ? }
     </table>
 </div>
