@@ -28,7 +28,6 @@
 <ul>
     <li><a href="<?= uri_for('form') ?>">フォーム</a></li>
     <li><a href="<?= uri_for('goto_wassr') ?>">リダイレクト(Wassr にとびます)</a></li>
-    <li><a href="<?= uri_for('users') ?>">DBI(DBI および DBD::CSV がないとエラーになります)</a></li>
     <li><a href="<?= uri_for('die') ?>">エラー画面</a></li>
     <li><a href="<?= uri_for('mobile') ?>">モバイル</a></li>
     <li><a href="<?= uri_for('bbs_sqlite') ?>">SQLite をつかった掲示板(DBD::SQLite が必要です)</a></li>

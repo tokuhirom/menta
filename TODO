@@ -17,5 +17,4 @@ TODO
     CSRF 対策
     session 管理をサポートする
     はてな認証をサポートする
-    DBD::CSV おｎ example はずす
 
