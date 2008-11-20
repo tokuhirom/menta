@@ -1,5 +1,5 @@
 ?=r render_partial('header.mt')
-<script type="text/javascript" src="<?= docroot ?>static/jquery.js"></script>
+<script type="text/javascript" src="<?= static_file_path('jquery.js') ?>"></script>
 
 <p align="right"><?= localtime time ?></p>
 

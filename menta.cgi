@@ -13,7 +13,6 @@ run_menta({
     },
     # あなたのアプリの設定
     application => {
-        docroot => '',
         title => 'MENTA サンプルアプリ',
         sqlitefile => 'app/data/data.sqlite',
         sql => {

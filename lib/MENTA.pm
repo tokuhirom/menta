@@ -307,9 +307,7 @@ sub is_post_request () {
 }
 
 # TODO: CGI にはこのための環境変数ってなかったっけ?
-sub docroot () {
-    config()->{application}->{docroot}
-}
+sub docroot () { $ENV{SCRIPT_NAME} || '' }
 
 sub uri_for {
     my ($path, $query) = @_;
@@ -318,7 +316,12 @@ sub uri_for {
         $val = join '', map { /^[a-zA-Z0-9_.!~*'()-]$/ ? $_ : '%' . uc(unpack('H2', $_)) } split //, $val;
         push @q, "${key}=${val}";
     }
-    docroot . $path . (scalar @q ? '?' . join('&', @q) : '');
+    docroot . '/' . $path . (scalar @q ? '?' . join('&', @q) : '');
+}
+
+sub static_file_path {
+    my $path = shift;
+    docroot . '/static/' . $path;
 }
 
 1;
