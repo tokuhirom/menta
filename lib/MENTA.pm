@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 use CGI::ExceptionManager;
 use MENTA::Dispatch ();
-use Encode ();
+use Encode (qw/encode/);
 
 our $VERSION = '0.05';
 our $REQ;
