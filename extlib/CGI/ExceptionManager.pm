@@ -5,7 +5,7 @@ use 5.00800;
 our $VERSION = '0.01';
 use CGI::ExceptionManager::StackTrace;
 
-sub detach { die { finished => 1 } }
+sub detach { die bless [], 'CGI::ExceptionManager::Exception' }
 
 sub run {
     my ($class, %args) = @_;
@@ -13,7 +13,7 @@ sub run {
     my $err_info;
     local $SIG{__DIE__} = sub {
         my ($msg) = @_;
-        if (ref $msg eq 'HASH' && $msg->{finished}) {
+        if (ref $msg eq 'CGI::ExceptionManager::Exception') {
             undef $err_info;
         } else {
             $err_info = CGI::ExceptionManager::StackTrace->new($msg);
@@ -28,6 +28,7 @@ sub run {
     if ($err_info) {
         $err_info->output(
             powered_by => $args{powered_by} || __PACKAGE__,
+            ($args{renderer} ? (renderer => $args{renderer}) : ())
         );
     }
 }
@@ -39,24 +40,60 @@ __END__
 
 =head1 NAME
 
-CGI::ExceptionManager -
+CGI::ExceptionManager - DebugScreen with detach!
 
 =head1 SYNOPSIS
 
     use CGI::ExceptionManager;
     CGI::ExceptionManager->run(
         callback => sub {
-            print "Content-Type: text/html\r\n\r\n";
-            print "ktkr!\n";
+            redirect("http://wassr.jp/");
 
-            CGI::ExceptionManager->detach();
+            # do not reach here
         },
         powered_by => 'MENTA',
     );
 
+    sub redirect {
+        my $location = shift;
+        print "Status: 302\n";
+        print "Location: $location\n";
+        print "\n";
+
+        CGI::ExceptionManager::detach();
+    }
+
 =head1 DESCRIPTION
 
-Just a Proof of Concept.
+You can easy to implement DebugScreen and Detach architecture =)
+
+=head1 METHODS
+
+=over 4
+
+=item detach
+
+detach from current context.
+
+=item run
+
+    CGI::ExceptionManager->run(
+        callback => \&code,
+        powered_by => 'MENTA',
+    );
+
+run the new context.
+
+You can specify your own renderer like following code:
+
+    CGI::ExceptionManager->run(
+        callback   => \&code,
+        powered_by => 'MENTA',
+        renderer   => sub {
+        },
+    );
+
+=back
 
 =head1 AUTHOR
 
@@ -65,6 +102,8 @@ Tokuhiro Matsuno E<lt>tokuhirom@gmail.comE<gt>
 Kazuho Oku
 
 =head1 SEE ALSO
+
+L<Sledge::Plugin::DebugScreen>, L<http://kazuho.31tools.com/nanoa/nanoa.cgi>, L<http://gp.ath.cx/menta/>
 
 =head1 LICENSE
 
