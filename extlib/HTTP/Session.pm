@@ -3,12 +3,10 @@ use strict;
 use warnings;
 use base qw/Class::Accessor::Fast/;
 use 5.00800;
-our $VERSION = '0.20';
-use Digest::SHA1 ();
-use Time::HiRes ();
-use Moose::Util::TypeConstraints;
+our $VERSION = '0.22';
 use Carp ();
 use Scalar::Util ();
+use UNIVERSAL::require;
 
 __PACKAGE__->mk_ro_accessors(qw/store state request sid_length/);
 __PACKAGE__->mk_accessors(qw/session_id _data is_changed is_fresh/);
@@ -17,16 +15,18 @@ sub new {
     my $class = shift;
     my %args = ref($_[0]) ? %{$_[0]} : @_;
     # check required parameters
-    for (qw/store state request/) {
-        Carp::croak "missing parameter $_" unless $args{$_};
+    for my $key (qw/store state request/) {
+        Carp::croak "missing parameter $key" unless $args{$key};
     }
     # set default values
     $args{_data} ||= {};
     $args{is_changed} ||= 0;
     $args{is_fresh}   ||= 0;
     $args{sid_length} ||= 32;
+    $args{id}         ||= 'HTTP::Session::ID::SHA1';
     my $self = bless {%args}, $class;
     $self->_load_session();
+    Carp::croak "[BUG] we have bug" unless $self->{request};
     $self;
 }
 
@@ -59,8 +59,8 @@ sub _load_session {
 
 sub _generate_session_id {
     my $self = shift;
-    my $unique = $ENV{UNIQUE_ID} || ( [] . rand() );
-    return substr( Digest::SHA1::sha1_hex( Time::HiRes::gettimeofday . $unique ), 0, $self->sid_length );
+    $self->{id}->require or die $@;
+    $self->{id}->generate_id($self->sid_length);
 }
 
 sub response_filter {
@@ -113,7 +113,7 @@ sub expire {
     $self->store->delete($self->session_id);
 
     # XXX tricky bit to unlock
-    delete $self->{$_} for qw(is_fresh changed);
+    delete $self->{$_} for qw(is_fresh is_changed);
     $self->DESTROY;
 
     # rebless to null class
