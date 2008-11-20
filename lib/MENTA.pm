@@ -4,6 +4,7 @@ use warnings;
 use utf8;
 use CGI::ExceptionManager;
 use MENTA::Dispatch ();
+use Encode ();
 
 our $VERSION = '0.05';
 our $REQ;
@@ -101,8 +102,8 @@ sub detach() { CGI::ExceptionManager::detach(@_) }
 sub render {
     my ($tmpl, @params) = @_;
     my $out = render_partial($tmpl, @params);
-    utf8::encode($out);
-    print "Content-Type: text/html; charset=utf-8\r\n";
+    $out = encode_output($out);
+    print "Content-Type: text/html; charset=" . charset() . "\r\n";
     print "\r\n";
     print $out;
 
@@ -120,7 +121,7 @@ sub redirect {
 
 sub finalize {
     my $str = shift;
-    my $content_type = shift || 'text/html; charset=utf-8';
+    my $content_type = shift || ('text/html; charset=' . charset());
 
     print "Content-Type: $content_type\r\n";
     print "\r\n";
@@ -148,8 +149,7 @@ sub param {
     my $key = shift;
 
     unless (defined $MENTA::REQ) {
-        require_once('CGI/Simple.pm');
-        $CGI::Simple::PARAM_UTF8++;
+        require_once('MENTA/CGI.pm');
         $MENTA::REQ = CGI::Simple->new();
     }
 
@@ -158,8 +158,7 @@ sub param {
 
 sub upload {
     unless (defined $MENTA::REQ) {
-        require_once('CGI/Simple.pm');
-        $CGI::Simple::PARAM_UTF8++;
+        require_once('MENTA/CGI.pm');
         $MENTA::REQ = CGI::Simple->new();
     }
     $MENTA::REQ->upload(@_);
@@ -230,6 +229,34 @@ sub static_file_path {
 sub mobile_agent {
     require_once('HTTP/MobileAgent.pm');
     $STASH->{'HTTP::MobileAgent'} ||= HTTP::MobileAgent->new();
+}
+
+# HTTP::MobileAgent::Plugin::Charset よりポート。
+# cp932 の方が実績があるので優先させる方針。
+# Shift_JIS とかじゃなくて cp932 にしとかないと、諸問題にひっかかりがちなので注意
+sub _mobile_encoding {
+    my $ma = mobile_agent();
+    return 'utf-8' if $ma->is_non_mobile;
+    return 'utf-8' if $ma->is_docomo && $ma->xhtml_compliant; # docomo の 3G 端末では utf8 の表示が保障されている
+    return 'utf-8' if $ma->is_softbank && $ma->is_type_3gc;   # softbank 3G の一部端末は cp932 だと絵文字を送ってこない不具合がある
+    return 'cp932';                                           # au は https のときに utf8 だと文字化ける場合がある
+}
+
+# charset に設定する文字列を生成
+sub charset {
+    +{ 'utf-8' => 'utf-8', cp932 => 'Shift_JIS'}->{_mobile_encoding()};
+}
+
+# HTTP の入り口んとこで decode させる用
+sub decode_input {
+    my ($txt, $fb) = @_;
+    Encode::decode(_mobile_encoding(), $txt, $fb);
+}
+
+# 出力直前んとこで encode させる用
+sub encode_output {
+    my ($txt, $fb) = @_;
+    Encode::encode(_mobile_encoding(), $txt, $fb);
 }
 
 1;

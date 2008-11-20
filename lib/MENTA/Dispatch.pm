@@ -31,8 +31,8 @@ sub dispatch {
             }
         } elsif (-f $controller_mt) {
             my $out = main::__render_partial("${path}.mt", main::controller_dir());
-            utf8::encode($out);
-            print "Content-Type: text/html; charset=utf-8\r\n";
+            $out = main::encode_output($out);
+            print "Content-Type: text/html; charset=" . main::charset() . "\r\n";
             print "\r\n";
             print $out;
         } else {
