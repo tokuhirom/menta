@@ -1,5 +1,7 @@
 #!/usr/bin/perl
-unshift @INC, 'lib', 'extlib';
+BEGIN {
+    unshift @INC, 'lib', 'extlib';
+};
 use MENTA;
 # -- ここまではおまじない --
 
