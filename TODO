@@ -12,9 +12,10 @@ TODO
     documentation する
     controller を分割ファイル形式にしている場合に、use strict とかオンになってる?
     ファイルアップロードまわり
-    http://d.hatena.ne.jp/kazuhooku/20081117/1226936533
-    13:39 (kazuho) mod_rewrite 設定してないとスタイルが落ちるので menta.cgi/ にリダイレクトするほうがいいんじゃないかと思いました
+    data/ ディレクトリの処理
+        http://d.hatena.ne.jp/kazuhooku/20081117/1226936533
     CSRF 対策
     session 管理をサポートする
     はてな認証をサポートする
+    コンテナ志向
 
