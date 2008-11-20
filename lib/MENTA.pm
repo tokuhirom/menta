@@ -255,4 +255,9 @@ sub static_file_path {
     docroot . '/static/' . $path;
 }
 
+sub mobile_agent {
+    require_once('HTTP/MobileAgent.pm');
+    $STASH->{'HTTP::MobileAgent'} ||= HTTP::MobileAgent->new();
+}
+
 1;
