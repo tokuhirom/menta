@@ -1,4 +1,5 @@
 ? use English
+? load_plugin('bundle')
 ? use Module::CoreList
 <!doctype html>
 <style>
@@ -33,11 +34,9 @@ table { text-align: left; }
 
     <h2>MENTA標準添付モジュール</h2>
     <table>
-? no strict 'refs'
-? use UNIVERSAL::require
-? for my $mod (sort { $a cmp $b } qw/JSON DateTime CGI::Simple Scalar::Util List::MoreUtils Path::Class URI Class::Accessor HTML::FillInForm Text::Hatena Data::Page HTML::TreeBuilder Text::CSV YAML Email::Send Email::MIME HTTP::MobileAgent HTML::TreeBuilder::XPath  Carp::Always Params::Validate HTML::StickyQuery::DoCoMoGUID UNIVERSAL::require Class::Trigger Text::Markdown HTTP::Session Filter::SQL/) {
-?   $mod->require or die $@
-    <tr><th><?= $mod ?></th><td><?= ${"${mod}::VERSION"} ?></td>
+? my @vers = bundle_libs();
+? while (my ($key, $val) = splice(@vers, 0, 2)) {
+    <tr><th><?= $key ?></th><td><?= $val ?></td>
 ? }
     </table>
 
