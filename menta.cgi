@@ -7,7 +7,7 @@ run_menta({
     # MENTA 自体の設定
     menta => {
         # エラー出力するか？
-        kcatch_mode => 1,
+        fatals_to_browser  => 1,
         # 最大表示文字数
         max_post_body => 1_024_000,
     },

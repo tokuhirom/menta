@@ -38,7 +38,8 @@ sub run_menta {
         callback => sub {
             dispatch()
         },
-        powered_by => '<strong>MENTA</strong>, Web Application Framework.'
+        powered_by => '<strong>MENTA</strong>, Web Application Framework.',
+        (config->{menta}->{fatals_to_browser} ? () : (renderer => sub { "INTERNAL SERVER ERROR!" x 100 }))
     );
 }
 
