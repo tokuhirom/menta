@@ -6,7 +6,7 @@ use utf8;
 sub dispatch {
     my $path = $ENV{PATH_INFO} || '/';
     $path =~ s!^/+!!g;
-    if ($path =~ /^[a-z0-9_]*$/) {
+    if ($path =~ m{^[a-z0-9_/]+$}) {
         $path ||= 'index';
         my $cdir = main::controller_dir();
         my $controller = "${cdir}/${path}.pl";
