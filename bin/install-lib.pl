@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 use strict;
 use warnings;
 use CPAN;
@@ -5,7 +6,7 @@ use File::Temp qw/tempdir tempfile/;
 use File::Spec::Functions;
 use FindBin;
 use Cwd;
-use Data::Dumper;
+#use Data::Dumper;
 use Module::CoreList;
 use Getopt::Long;
 use IO::Prompt;
@@ -23,7 +24,7 @@ my %skip_packages = map { $_ => 1 } (
     'HTML::Parser',   # ditto
     'HTML::Tagset',   # ditto
     'HTTP::Headers',  # ditto
-    'DBI',            # maybe you have this.
+    'DBI',            # ditto
     'WWW::MobileCarrierJP', # only for building
 );
 my $target_version = '5.008001';
@@ -71,7 +72,7 @@ sub main {
     # copy to dst dir
     my $outlibdir = catfile($outdir, 'lib', 'perl5') . '/';
     print "sync $outlibdir => $dstdir\n";
-    system qw/rsync --verbose --recursive/,  $outlibdir, $dstdir;
+    system qw/rsync --verbose --recursive/, $outlibdir, $dstdir;
 }
 
 sub install_pkg {
@@ -79,11 +80,11 @@ sub install_pkg {
     return if $installed{$pkg};
     return unless should_install($pkg);
     $installed{$pkg}++;
-    local $CPAN::Config->{histfile}   = tempfile(CLEANUP => 1);
-    local $CPAN::Config->{makepl_arg} = "INSTALL_BASE=$outdir " . ($optional_args{$pkg} ? $optional_args{$pkg} : '');
+    local $CPAN::Config->{histfile}     = tempfile(CLEANUP => 1);
+    local $CPAN::Config->{makepl_arg}   = "INSTALL_BASE=$outdir " . ($optional_args{$pkg} ? $optional_args{$pkg} : '');
     local $CPAN::Config->{mbuildpl_arg} = "--install_base=$outdir";
 
-    my $mod = CPAN::Shell->expand("Module", $pkg) or die "cannot find $pkg";
+    my $mod = CPAN::Shell->expand("Module", $pkg) or die "cannot find $pkg\n";
     my $dist = $mod->distribution;
     $dist->make;
     if (my $requires = $dist->prereq_pm) {

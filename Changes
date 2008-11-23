@@ -4,7 +4,7 @@ Revision history for Perl extension MENTA
 
     - use CGI::ExceptionManager
     - Digest::SHA::PurePerl を追加。
-    -- hmac/sha1 の生成用
+    -- HMAC/SHA-1 の生成用
 
 0.04
 

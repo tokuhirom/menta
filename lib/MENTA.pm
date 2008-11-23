@@ -59,7 +59,7 @@ sub unescape_html {
     s/&gt;/>/g;
     s/&lt;/</g;
     s/&quot;/"/g;
-    s/&#39;/'/g;
+    s/&#0*39;/'/g;
     s/&amp;/&/g;
     return $_;
 }
@@ -231,14 +231,14 @@ sub mobile_agent {
 sub _mobile_encoding {
     my $ma = mobile_agent();
     return 'utf-8' if $ma->is_non_mobile;
-    return 'utf-8' if $ma->is_docomo && $ma->xhtml_compliant; # docomo の 3G 端末では utf8 の表示が保障されている
-    return 'utf-8' if $ma->is_softbank && $ma->is_type_3gc;   # softbank 3G の一部端末は cp932 だと絵文字を送ってこない不具合がある
-    return 'cp932';                                           # au は https のときに utf8 だと文字化ける場合がある
+    return 'utf-8' if $ma->is_docomo && $ma->xhtml_compliant; # docomo の 3G 端末では UTF-8 の表示が保障されている
+    return 'utf-8' if $ma->is_softbank && $ma->is_type_3gc;   # SoftBank 3G の一部端末は CP932 だと絵文字を送ってこない不具合がある
+    return 'cp932';                                           # au は HTTPS のときに UTF-8 だと文字化ける場合がある
 }
 
 # charset に設定する文字列を生成
 sub charset {
-    +{ 'utf-8' => 'utf-8', cp932 => 'Shift_JIS'}->{_mobile_encoding()};
+    +{ 'utf-8' => 'UTF-8', cp932 => 'Shift_JIS' }->{_mobile_encoding()};
 }
 
 # HTTP の入り口んとこで decode させる用
