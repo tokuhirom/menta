@@ -40,9 +40,20 @@ use HTTP::Response;
     sub CLOSE { }
 }
 
+sub HTTP::Response::cgish_filter {
+    my $self = shift;
+    if (my $status = $self->header('Status')) {
+        $self->code($status);
+        $self->message(HTTP::Status::status_message($status));
+    }
+    $self;
+}
+
+
 {
     package MENTA::Server;
     use base qw/HTTP::Server::Simple::CGI/;
+    use Time::HiRes ();
 
     sub bind_stdout {
         my ($code, ) = @_;
@@ -54,25 +65,34 @@ use HTTP::Response;
         $out;
     }
 
+    sub stopwatch {
+        my $code = shift;
+        my $start = [Time::HiRes::gettimeofday()];
+        $code->();
+        my $elapsed = Time::HiRes::tv_interval($start);
+        if ($elapsed > 0.3) {
+            print STDERR "TOO SLOW: $ENV{PATH_INFO}: $elapsed\n";
+        }
+    }
+
     sub handler {
         my $pid = fork();
         if ($pid) {
             waitpid($pid, POSIX::WNOHANG);
         } elsif ($pid == 0) {
-            my $out = bind_stdout(sub {
-                package main;
-                do './menta.cgi';
-                die $@ if $@;
+            stopwatch(sub {
+                my $out = bind_stdout(sub {
+                    package main;
+                    do './menta.cgi';
+                    die $@ if $@;
+                });
+                print HTTP::Response->parse("HTTP/1.0 200 OK\r\n$out")
+                                    ->cgish_filter()
+                                    ->as_string();
             });
-            my $res = HTTP::Response->parse("HTTP/1.0 200 OK\r\n$out");
-            if (my $status = $res->header('Status')) {
-                $res->code($status);
-                $res->message(HTTP::Status::status_message($status));
-            }
-            print $res->as_string;
             exit;
-        } elsif (defined $pid) {
-            die $!;
+        } else {
+            die "cannot fork : $!";
         }
     }
 }
