@@ -32,4 +32,12 @@ sub response {
 }
 sub res { shift->response(@_) }
 
+sub mobile_agent {
+    my $self = shift;
+    $self->{'HTTP::MobileAgent'} ||= do {
+        main::require_once('HTTP/MobileAgent.pm');
+        HTTP::MobileAgent->new();
+    };
+}
+
 1;

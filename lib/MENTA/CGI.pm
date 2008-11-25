@@ -16,7 +16,7 @@ sub CGI::Simple::_add_param {
           if $value eq ''
               and $self->{'.globals'}->{'NO_UNDEF_PARAMS'};
         $value =~ tr/\000//d if $self->{'.globals'}->{'NO_NULL'};
-        $value = main::decode_input( $value ); # XXX この行だけ変えてる
+        $value = MENTA::Util::decode_input( $value ); # XXX この行だけ変えてる
         push @{ $self->{$param} }, $value;
         unless ( $self->{'.fieldnames'}->{$param} ) {
             push @{ $self->{'.parameters'} }, $param;

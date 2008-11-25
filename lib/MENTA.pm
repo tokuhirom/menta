@@ -34,13 +34,6 @@ sub import {
 
 package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
 
-sub AUTOLOAD {
-    my $method = our $AUTOLOAD;
-    $method =~ s/.*:://o;
-    (my $prefix = $method) =~ s/_.+//;
-    load_plugin($prefix);
-    return main->can($method)->(@_);
-}
 
 sub config () { MENTA->context->config }
 
@@ -100,6 +93,8 @@ sub __render_partial {
     require_once('MENTA/TemplateLoader.pm');
     MENTA::TemplateLoader::__load("$tmpldir/$tmpl", @params);
 }
+
+# テンプレートの一部を描画する
 sub render {
     my ($tmpl, @params) = @_;
     bless \__render_partial($tmpl, controller_dir(), @params), 'MENTA::Template::RawString';
@@ -114,10 +109,10 @@ sub _finish {
 sub render_and_print {
     my ($tmpl, @params) = @_;
     my $out = __render_partial($tmpl, controller_dir(), @params);
-    $out = encode_output($out);
+    $out = MENTA::Util::encode_output($out);
 
     my $res = MENTA->context->res;
-    $res->headers->content_type("text/html; charset=" . charset());
+    $res->headers->content_type("text/html; charset=" . MENTA::Util::_charset());
     $res->headers->content_length(bytes::length($out));
     $res->content($out);
 
@@ -136,7 +131,7 @@ sub redirect {
 
 sub finalize {
     my $str = shift;
-    my $content_type = shift || ('text/html; charset=' . charset());
+    my $content_type = shift || ('text/html; charset=' . MENTA::Util::_charset());
 
     my $res = MENTA->context->res;
     $res->headers->content_type($content_type);
@@ -175,6 +170,8 @@ sub upload { MENTA->context->request->upload(@_) }
 }
 
 {
+    # プラグインのロード機構
+
     my $plugin_loaded;
     my $__menta_extract_package = sub {
         my $modulefile = shift;
@@ -190,7 +187,7 @@ sub upload { MENTA->context->request->upload(@_) }
         }
         return;
     };
-    sub load_plugin {
+    my $_load_plugin = sub {
         my $plugin = shift;
         return if $plugin_loaded->{$plugin};
         my $path = "plugins/${plugin}.pl";
@@ -205,6 +202,15 @@ sub upload { MENTA->context->request->upload(@_) }
         ) {
             *{"main::$_"} = *{"${package}::$_"}
         }
+    };
+
+    sub AUTOLOAD {
+        my $method = our $AUTOLOAD;
+        $method =~ s/.*:://o;
+        (my $prefix = $method) =~ s/_.+//;
+        die "変な関数よびだしてませんか？: $method" unless $prefix;
+        $_load_plugin->($prefix);
+        return main->can($method)->(@_);
     }
 }
 
@@ -231,37 +237,39 @@ sub static_file_path {
     docroot . '/static/' . $path;
 }
 
-sub mobile_agent {
-    require_once('HTTP/MobileAgent.pm');
-    $STASH->{'HTTP::MobileAgent'} ||= HTTP::MobileAgent->new();
-}
+sub mobile_agent { MENTA->context->mobile_agent() }
 
-# HTTP::MobileAgent::Plugin::Charset よりポート。
-# cp932 の方が実績があるので優先させる方針。
-# Shift_JIS とかじゃなくて cp932 にしとかないと、諸問題にひっかかりがちなので注意
-sub _mobile_encoding {
-    my $ma = mobile_agent();
-    return 'utf-8' if $ma->is_non_mobile;
-    return 'utf-8' if $ma->is_docomo && $ma->xhtml_compliant; # docomo の 3G 端末では UTF-8 の表示が保障されている
-    return 'utf-8' if $ma->is_softbank && $ma->is_type_3gc;   # SoftBank 3G の一部端末は CP932 だと絵文字を送ってこない不具合がある
-    return 'cp932';                                           # au は HTTPS のときに UTF-8 だと文字化ける場合がある
-}
+{
+    package MENTA::Util;
+    # ユーティリティメソッド郡
 
-# charset に設定する文字列を生成
-sub charset {
-    +{ 'utf-8' => 'UTF-8', cp932 => 'Shift_JIS' }->{_mobile_encoding()};
-}
+    # HTTP::MobileAgent::Plugin::Charset よりポート。
+    # cp932 の方が実績があるので優先させる方針。
+    # Shift_JIS とかじゃなくて cp932 にしとかないと、諸問題にひっかかりがちなので注意
+    sub _mobile_encoding {
+        my $ma = MENTA->context->mobile_agent();
+        return 'utf-8' if $ma->is_non_mobile;
+        return 'utf-8' if $ma->is_docomo && $ma->xhtml_compliant; # docomo の 3G 端末では UTF-8 の表示が保障されている
+        return 'utf-8' if $ma->is_softbank && $ma->is_type_3gc;   # SoftBank 3G の一部端末は CP932 だと絵文字を送ってこない不具合がある
+        return 'cp932';                                           # au は HTTPS のときに UTF-8 だと文字化ける場合がある
+    }
 
-# HTTP の入り口んとこで decode させる用
-sub decode_input {
-    my ($txt, $fb) = @_;
-    Encode::decode(_mobile_encoding(), $txt, $fb);
-}
+    # HTTP の入り口んとこで decode させる用
+    sub decode_input {
+        my ($txt, $fb) = @_;
+        Encode::decode(_mobile_encoding(), $txt, $fb);
+    }
 
-# 出力直前んとこで encode させる用
-sub encode_output {
-    my ($txt, $fb) = @_;
-    Encode::encode(_mobile_encoding(), $txt, $fb);
+    # 出力直前んとこで encode させる用
+    sub encode_output {
+        my ($txt, $fb) = @_;
+        Encode::encode(_mobile_encoding(), $txt, $fb);
+    }
+
+    # charset に設定する文字列を生成
+    sub _charset {
+        +{ 'utf-8' => 'UTF-8', cp932 => 'Shift_JIS' }->{_mobile_encoding()};
+    }
 }
 
 1;

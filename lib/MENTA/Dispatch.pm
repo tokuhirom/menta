@@ -31,7 +31,7 @@ sub dispatch {
             }
         } elsif (-f $controller_mt) {
             my $out = main::__render_partial("${path}.mt", main::controller_dir());
-            $out = main::encode_output($out);
+            $out = MENTA::Util::encode_output($out);
             main::finalize($out);
         } else {
             die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
