@@ -1,5 +1,4 @@
 ? use English
-? load_plugin('bundle')
 ? use Module::CoreList
 <!doctype html>
 <style>
