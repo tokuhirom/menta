@@ -1,5 +1,4 @@
 ? my ($entries, $pager) = @_
-? my $title = 'SQLite をつかった一行掲示板'
 ?= render_partial('header.mt', 'SQLite をつかった一行掲示板')
 <div class="blocked-content">
 <form method="post" action="<?= uri_for('bbs_sqlite') ?>">
