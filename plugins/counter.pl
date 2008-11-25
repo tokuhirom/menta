@@ -1,6 +1,6 @@
 package MENTA::Plugin::Counter;
 use MENTA::Plugin;
-use Fcntl ':flock';
+use Fcntl ':flock', ':seek';
 use Carp;
 
 sub counter_increment {
@@ -12,7 +12,7 @@ sub counter_increment {
     flock $fh, LOCK_EX;
     my $cnt = <$fh>;
     $cnt++;
-    seek($fh, 0, "SEEK_SET");
+    seek $fh, 0, SEEK_SET;
     print $fh $cnt or die "$fname にかきこめません: $!";
     flock $fh, LOCK_UN;
     close $fh or die "$fname を閉じることができません: $!";

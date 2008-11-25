@@ -16,7 +16,4 @@ TODO
     session 管理をサポートする
     はてな認証をサポートする
     コンテナ志向について考える
-    counter プラグインで「SEEK_SET」が文字列(?)
-        1回目:     Argument "SEEK_SET" isn't numeric in seek at plugins/counter.pl line 15.
-        2回目以降: Argument "SEEK_SET" isn't numeric in seek at plugins/counter.pl line 15, <$fh> line 1.
 
