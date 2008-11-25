@@ -23,10 +23,11 @@ sub header {
 
 sub as_string {
     my $self = shift;
+    my $CRLF = "\015\012";
     join(
         '',
-        $self->headers->as_string(),
-        "\r\n",
+        $self->headers->as_string($CRLF),
+        $CRLF,
         $self->content
     );
 }
