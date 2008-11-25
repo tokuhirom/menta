@@ -9,12 +9,7 @@ require Encode; # use Encode するとふるい Encode でエラーになると�
 our $VERSION = '0.06';
 our $REQ;
 our $CONFIG;
-our $REQUIRED;
 our $STASH;
-our $PLUGIN_LOADED;
-BEGIN {
-    $REQUIRED = {};
-}
 
 sub import {
     strict->import;
@@ -167,43 +162,48 @@ sub upload {
     $MENTA::REQ->upload(@_);
 }
 
-sub require_once {
-    my $path = shift;
-    return if $MENTA::REQUIRED->{$path};
-    require $path;
-    $MENTA::REQUIRED->{$path} = 1;
-}
-
-sub load_plugin {
-    my $plugin = shift;
-    return if $MENTA::PLUGIN_LOADED->{$plugin};
-    my $path = "plugins/${plugin}.pl";
-    require $path;
-    $MENTA::PLUGIN_LOADED->{$plugin}++;
-    my $package = __menta_extract_package($path) || '';
-    no strict 'refs';
-    for (
-        grep { /$plugin/o }
-        grep { defined &{"${package}::$_"} }
-        keys %{"${package}::"}
-    ) {
-        *{"main::$_"} = *{"${package}::$_"}
+{
+    my $required = {};
+    sub require_once {
+        my $path = shift;
+        return if $required->{$path};
+        require $path;
+        $required->{$path} = 1;
     }
 }
 
-sub __menta_extract_package {
-    my $modulefile = shift;
-    open my $fh, '<', $modulefile or die "$modulefile を開けません: $!";
-    my $in_pod = 0;
-    while (<$fh>) {
-        $in_pod = 1 if m/^=\w/;
-        $in_pod = 0 if /^=cut/;
-        next if ( $in_pod || /^=cut/ );    # skip pod text
-        next if /^\s*\#/;
+{
+    my $plugin_loaded;
+    my $__menta_extract_package = sub {
+        my $modulefile = shift;
+        open my $fh, '<', $modulefile or die "$modulefile を開けません: $!";
+        my $in_pod = 0;
+        while (<$fh>) {
+            $in_pod = 1 if m/^=\w/;
+            $in_pod = 0 if /^=cut/;
+            next if ( $in_pod || /^=cut/ );    # skip pod text
+            next if /^\s*\#/;
 
-        /^\s*package\s+(.*?)\s*;/ and return $1;
+            /^\s*package\s+(.*?)\s*;/ and return $1;
+        }
+        return;
+    };
+    sub load_plugin {
+        my $plugin = shift;
+        return if $plugin_loaded->{$plugin};
+        my $path = "plugins/${plugin}.pl";
+        require $path;
+        $plugin_loaded->{$plugin}++;
+        my $package = $__menta_extract_package->($path) || '';
+        no strict 'refs';
+        for (
+            grep { /$plugin/o }
+            grep { defined &{"${package}::$_"} }
+            keys %{"${package}::"}
+        ) {
+            *{"main::$_"} = *{"${package}::$_"}
+        }
     }
-    return;
 }
 
 sub is_post_request () {
