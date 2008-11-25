@@ -100,7 +100,7 @@ sub __render_partial {
     require_once('MENTA/TemplateLoader.pm');
     MENTA::TemplateLoader::__load("$tmpldir/$tmpl", @params);
 }
-sub render_partial {
+sub render {
     my ($tmpl, @params) = @_;
     bless \__render_partial($tmpl, controller_dir(), @params), 'MENTA::Template::RawString';
 }
@@ -111,10 +111,9 @@ sub _finish {
     CGI::ExceptionManager::detach();
 }
 
-sub render {
+sub render_and_print {
     my ($tmpl, @params) = @_;
-    my $out = render_partial($tmpl, @params);
-    $out = $$out;
+    my $out = __render_partial($tmpl, controller_dir(), @params);
     $out = encode_output($out);
 
     my $res = MENTA->context->res;

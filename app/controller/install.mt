@@ -1,4 +1,4 @@
-?= render_partial('header.mt', 'インストール方法')
+?= render('header.mt', 'インストール方法')
 
 <h2 class="subtitle">開発版スナップショットのダウンロード</h2>
 
@@ -17,5 +17,5 @@ Subversion を使用して、svn.coderepos.org/share/lang/perl/MENTA/trunk か�
 <pre class="code">% svn co http://svn.coderepos.org/share/lang/perl/MENTA/trunk
 % mv trunk ~/public_html/menta</pre>
 
-?= render_partial('footer.mt')
+?= render('footer.mt')
 

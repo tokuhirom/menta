@@ -18,7 +18,7 @@ sub do_bbs_sqlite {
                 rows => 10,
             }
         );
-        render("bbs.mt", $rows, $pager);
+        render_and_print("bbs.mt", $rows, $pager);
     }
 }
 

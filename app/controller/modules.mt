@@ -1,6 +1,6 @@
-?= render_partial('header.mt', "MENTA標準添付モジュールについて")
+?= render('header.mt', "MENTA標準添付モジュールについて")
 ? use Text::Markdown ()
 <div class="markdown">
 <?=r Text::Markdown::markdown(read_file('MODULES')) ?>
 </div>
-?= render_partial('footer.mt')
+?= render('footer.mt')

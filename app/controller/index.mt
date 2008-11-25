@@ -1,4 +1,4 @@
-?= render_partial('header.mt')
+?= render('header.mt')
 <script type="text/javascript" src="<?= static_file_path('jquery.js') ?>"></script>
 
 <p align="right"><?= localtime time ?></p>
@@ -43,4 +43,4 @@
 <h2 class="subtitle">開発者</h2>
 <ol><?=r join "\n", map { '<li>' . escape_html($_) . '</li>' } split /\n/, read_file('AUTHORS') ?></ol>
 
-?= render_partial('footer.mt')
+?= render('footer.mt')

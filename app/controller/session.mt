@@ -1,4 +1,4 @@
-?= render_partial('header.mt', 'セッションのテスト')
+?= render('header.mt', 'セッションのテスト')
 
 <h1>自分専用カウンターです</h1>
 
@@ -6,4 +6,4 @@
 
 カウンタ: <?= session_set("COUNTER", (session_get("COUNTER")||0)+1) ?>
 
-?= render_partial('footer.mt')
+?= render('footer.mt')

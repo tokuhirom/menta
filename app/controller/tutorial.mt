@@ -1,5 +1,5 @@
 ? my $title = "MENTA 取り扱い説明書"
-?= render_partial('header.mt', $title)
+?= render('header.mt', $title)
 
 <h2 class="subtitle">ダウンロードする</h2>
 <div class="blocked-content">
@@ -61,4 +61,4 @@ counter_increment() という関数は plugins/counter.pl の中で定義され�
 
 あとでかく。
 
-?= render_partial('footer.mt')
+?= render('footer.mt')
