@@ -1,7 +1,5 @@
 use MENTA;
 
-load_plugin('sql');
-
 sub do_bbs_sqlite {
     sql_prepare_exec(q{CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY, body VARCHAR(255))});
 
