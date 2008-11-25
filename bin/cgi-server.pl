@@ -80,6 +80,7 @@ sub HTTP::Response::cgish_filter {
         if ($pid) {
             waitpid($pid, POSIX::WNOHANG);
         } elsif ($pid == 0) {
+            local $ENV{HTTP_COOKIE} = $ENV{COOKIE};
             stopwatch(sub {
                 my $out = bind_stdout(sub {
                     package main;
