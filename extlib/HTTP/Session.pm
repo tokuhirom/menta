@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base qw/Class::Accessor::Fast/;
 use 5.00800;
-our $VERSION = '0.22';
+our $VERSION = '0.24';
 use Carp ();
 use Scalar::Util ();
 use UNIVERSAL::require;
@@ -70,8 +70,9 @@ sub response_filter {
     $self->state->response_filter($self->session_id, $response);
 }
 
-sub DESTROY {
-    my $self = shift;
+sub finalize {
+    my ($self, ) = @_;
+
     if ($self->is_fresh) {
         $self->store->insert( $self->session_id, $self->_data );
     } else {
@@ -79,6 +80,14 @@ sub DESTROY {
             $self->store->update( $self->session_id, $self->_data );
         }
     }
+
+    delete $self->{$_} for keys %$self;
+    bless $self, 'HTTP::Session::Finalized';
+}
+
+sub DESTROY {
+    my $self = shift;
+    $self->finalize();
 }
 
 sub keys {
@@ -146,6 +155,10 @@ BEGIN {
         };
     }
 }
+
+package HTTP::Session::Finailzed;
+sub is_fresh { 0 }
+sub AUTOLOAD { }
 
 package HTTP::Session::Expired;
 sub is_fresh { 0 }
@@ -233,6 +246,10 @@ expire the session
 =item $session->regenerate_session_id([$delete_old])
 
 regenerate session id.remove old one when $delete_old is true value.
+
+=item $session->finalize()
+
+commit the session data.
 
 =item BUILD
 
