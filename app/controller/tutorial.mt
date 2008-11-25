@@ -49,9 +49,10 @@ param("user") と書くと、<?= uri_for('hello', {user => 'kazuhooku'}) ?> の 
 
 このようにすると、カウンターが簡単に HTML の中にうめこめます。
 
-load_plugin('counter') と書くと、counter プラグインが読み込まれて、counter_increment() という名前の
-関数が使えるようになります。counter_increment("test") と書くと、test という名前のカウンターが 1 増えます。
+counter_increment("test") と書くと、test という名前のカウンターが 1 増えます。
 counter_increment の返却値として、１増えた結果がかえってきますのでそのまま表示するだけでカウンターになります。
+
+counter_increment() という関数は plugins/counter.pl の中で定義されています。counter_* という関数を呼ぶと、自動的に plugins/counter.pl が読み込まれることになっています。
 
 <p><a href="<?= uri_for('counter') ?>">実際にうごいている様子</a></p>
 </div>
