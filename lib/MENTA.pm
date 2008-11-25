@@ -6,7 +6,7 @@ use CGI::ExceptionManager;
 use MENTA::Dispatch ();
 require Encode; # use Encode するとふるい Encode でエラーになるときがあるらしい。2.15 で確認。200810-11-20
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our $REQ;
 our $CONFIG;
 our $REQUIRED;
@@ -23,6 +23,14 @@ sub import {
 }
 
 package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
+
+sub AUTOLOAD {
+    my $method = our $AUTOLOAD;
+    $method =~ s/.*:://o;
+    (my $prefix = $method) =~ s/_.+//;
+    load_plugin($prefix);
+    return main->can($method)->(@_);
+}
 
 sub config () { $MENTA::CONFIG }
 
@@ -88,7 +96,7 @@ sub __render_partial {
 }
 sub render_partial {
     my ($tmpl, @params) = @_;
-    __render_partial($tmpl, controller_dir(), @params);
+    bless \__render_partial($tmpl, controller_dir(), @params), 'MENTA::Template::RawString';
 }
 
 sub detach() { CGI::ExceptionManager::detach(@_) }
@@ -96,6 +104,7 @@ sub detach() { CGI::ExceptionManager::detach(@_) }
 sub render {
     my ($tmpl, @params) = @_;
     my $out = render_partial($tmpl, @params);
+    $out = $$out;
     $out = encode_output($out);
     print "Content-Type: text/html; charset=" . charset() . "\r\n";
     print "\r\n";
