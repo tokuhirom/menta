@@ -1,10 +1,10 @@
-=head2 Tue Nov 25 22:50:07 2008: C<Module> L<Cache::FastMmap|Cache::FastMmap>
+=head2 Tue Nov 25 23:34:31 2008: C<Module> L<Error|Error>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/5f5j4nBZeE/outputdir/lib/perl5>
+C<installed into: /tmp/8qA39npGYU/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,29 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.28>
+C<VERSION: 0.17015>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Nov 25 23:35:54 2008: C<Module> L<Cache::Cache|Cache::Cache>
+
+=over 4
+
+=item *
+
+C<installed into: /tmp/8qA39npGYU/outputdir/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.05>
 
 =item *
 
