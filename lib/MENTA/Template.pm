@@ -1,3 +1,4 @@
+# a NanoA version
 # based on Mojo::Template. Copyright (C) 2010, Sebastian Riedel.
 # some modified by tokuhirom
 
@@ -58,19 +59,20 @@ sub build {
 
             # Expression
             if ($type eq 'expr') {
-                $lines[-1] .= "\$_MENTA .= escape_html(scalar $value);";
+                $lines[-1] .= "\$_MENTA_T = scalar $value; \$_MENTA .= ref \$_MENTA_T eq 'MENTA::Template::RawString' ? \$\$_MENTA_T : escape_html(\$_MENTA_T);";
             }
 
             # Raw Expression
             if ($type eq 'raw_expr') {
-                $lines[-1] .= "\$_MENTA .= $value;";
+                
+                $lines[-1] .= "\$_MENTA_T = $value; \$_MENTA .= ref \$_MENTA_T eq q(MENTA::Template::RawString) ? \$\$_MENTA_T : \$_MENTA_T;";
             }
         }
     }
 
     # Wrap
     $lines[0] ||= '';
-    $lines[0]   = q/sub { my $_MENTA = '';/ . $lines[0];
+    $lines[0]   = q/sub { my $_MENTA = ''; my $_MENTA_T = '';/ . $lines[0];
     $lines[-1] .= q/return $_MENTA; }/;
 
     $self->{code} = join "\n", @lines;
@@ -267,6 +269,12 @@ sub _error {
 
     # No line found
     return "Template error: $error";
+}
+
+# create raw string (that does not need to be escaped)
+sub raw_string {
+    my $s = shift;
+    bless \$s, 'MENTA::Template::RawString';
 }
 
 1;
