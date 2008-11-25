@@ -198,6 +198,7 @@ sub _Build_Unique_Key
 
   Assert_Defined( $p_key );
 
+  utf8::encode($p_key) if utf8::is_utf8($p_key);
   return md5_hex( $p_key );
 }
 

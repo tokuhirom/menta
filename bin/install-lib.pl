@@ -26,6 +26,7 @@ my %skip_packages = map { $_ => 1 } (
     'HTTP::Headers',  # ditto
     'DBI',            # ditto
     'WWW::MobileCarrierJP', # only for building
+    'Digest::SHA1',   # たいていの場合、Digest::MD5 におきかえればインストール可能
 );
 my $target_version = '5.008001';
 my $outdir;

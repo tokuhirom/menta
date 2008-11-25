@@ -174,10 +174,11 @@ sub mobile_agent { MENTA->context->mobile_agent() }
         my $package = $__menta_extract_package->($path) || '';
         no strict 'refs';
         for (
-            grep { /$plugin/o }
+            grep { /$plugin/ }
             grep { defined &{"${package}::$_"} }
             keys %{"${package}::"}
         ) {
+        warn $package, $_;
             *{"main::$_"} = *{"${package}::$_"}
         }
     };
