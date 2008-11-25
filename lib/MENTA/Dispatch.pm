@@ -30,7 +30,9 @@ sub dispatch {
                 die "「${path}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
             }
         } elsif (-f $controller_mt) {
-            my $out = main::__render_partial("${path}.mt", main::controller_dir());
+            MENTA::Util::require_once('MENTA/TemplateLoader.pm');
+            my $tmpldir = main::controller_dir();
+            my $out = MENTA::TemplateLoader::__load("${tmpldir}/${path}.mt", main::controller_dir());
             $out = MENTA::Util::encode_output($out);
             main::finalize($out);
         } else {

@@ -20,7 +20,7 @@ sub __load {
         local $@;
         my $tmplcode = eval $code;
         die $@ if $@;
-        $out = $tmplcode->();
+        $out = $tmplcode->(@params);
         __update_cache($path, $code);
     }
     $out;

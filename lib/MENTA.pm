@@ -90,14 +90,14 @@ sub data_dir {
 
 sub __render_partial {
     my ($tmpl, $tmpldir, @params) = @_;
-    MENTA::Util::require_once('MENTA/TemplateLoader.pm');
     MENTA::TemplateLoader::__load("$tmpldir/$tmpl", @params);
 }
 
 # テンプレートの一部を描画する
 sub render {
     my ($tmpl, @params) = @_;
-    bless \__render_partial($tmpl, controller_dir(), @params), 'MENTA::Template::RawString';
+    my $out = MENTA::TemplateLoader::__load("@{[ controller_dir() ]}/$tmpl", @params);
+    bless \$out, 'MENTA::Template::RawString';
 }
 
 sub _finish {
@@ -108,7 +108,8 @@ sub _finish {
 
 sub render_and_print {
     my ($tmpl, @params) = @_;
-    my $out = __render_partial($tmpl, controller_dir(), @params);
+    MENTA::Util::require_once('MENTA/TemplateLoader.pm');
+    my $out = MENTA::TemplateLoader::__load("@{[ controller_dir() ]}/$tmpl", @params);
     $out = MENTA::Util::encode_output($out);
 
     my $res = MENTA->context->res;
