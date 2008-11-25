@@ -28,7 +28,7 @@ sub __load {
 
 sub __compile {
     my ($path) = @_;
-    main::require_once('MENTA/Template.pm');
+    MENTA::Util::require_once('MENTA/Template.pm');
     my $t = MENTA::Template->new;
     $t->parse(main::read_file($path));
     $t->build();

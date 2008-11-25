@@ -90,7 +90,7 @@ sub data_dir {
 
 sub __render_partial {
     my ($tmpl, $tmpldir, @params) = @_;
-    require_once('MENTA/TemplateLoader.pm');
+    MENTA::Util::require_once('MENTA/TemplateLoader.pm');
     MENTA::TemplateLoader::__load("$tmpldir/$tmpl", @params);
 }
 
@@ -158,16 +158,6 @@ sub write_file {
 
 sub param  { MENTA->context->request->param(@_) }
 sub upload { MENTA->context->request->upload(@_) }
-
-{
-    my $required = {};
-    sub require_once {
-        my $path = shift;
-        return if $required->{$path};
-        require $path;
-        $required->{$path} = 1;
-    }
-}
 
 {
     # プラグインのロード機構
@@ -241,7 +231,8 @@ sub mobile_agent { MENTA->context->mobile_agent() }
 
 {
     package MENTA::Util;
-    # ユーティリティメソッド郡
+    # ユーティリティメソッドたち。
+    # これらのメソッドは一般ユーザーはよぶべきではない。
 
     # HTTP::MobileAgent::Plugin::Charset よりポート。
     # cp932 の方が実績があるので優先させる方針。
@@ -269,6 +260,17 @@ sub mobile_agent { MENTA->context->mobile_agent() }
     # charset に設定する文字列を生成
     sub _charset {
         +{ 'utf-8' => 'UTF-8', cp932 => 'Shift_JIS' }->{_mobile_encoding()};
+    }
+
+    # 一回ロードしたクラスは二度ロードしないための仕組み。
+    {
+        my $required = {};
+        sub require_once {
+            my $path = shift;
+            return if $required->{$path};
+            require $path;
+            $required->{$path} = 1;
+        }
     }
 }
 

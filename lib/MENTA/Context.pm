@@ -20,7 +20,7 @@ sub config { shift->{config} }
 sub request {
     my $self = shift;
     unless ( defined $self->{request}) {
-        main::require_once('MENTA/CGI.pm');
+        MENTA::Util::require_once('MENTA/CGI.pm');
         $self->{request} = CGI::Simple->new();
     }
     $self->{request};
@@ -35,7 +35,7 @@ sub res { shift->response(@_) }
 sub mobile_agent {
     my $self = shift;
     $self->{'HTTP::MobileAgent'} ||= do {
-        main::require_once('HTTP/MobileAgent.pm');
+        MENTA::Util::require_once('HTTP/MobileAgent.pm');
         HTTP::MobileAgent->new();
     };
 }
