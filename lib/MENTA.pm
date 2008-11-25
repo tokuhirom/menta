@@ -95,10 +95,6 @@ sub data_dir {
     config->{menta}->{data_dir} || 'app/data/'
 }
 
-sub static_dir {
-    config->{menta}->{static_dir} || 'app/static/'
-}
-
 sub __render_partial {
     my ($tmpl, $tmpldir, @params) = @_;
     require_once('MENTA/TemplateLoader.pm');
