@@ -15,6 +15,7 @@ app/controller/mobile.mt
 app/controller/modules.mt
 app/controller/pager.mt
 app/controller/perlinfo.mt
+app/controller/session.mt
 app/controller/tutorial.mt
 app/controller/users.pl
 app/data/counter.txt
@@ -109,6 +110,7 @@ extlib/HTML/StripScripts.pm
 extlib/HTML/Tree.pm
 extlib/HTML/TreeBuilder.pm
 extlib/HTML/TreeBuilder/XPath.pm
+extlib/HTTP/Headers.pm
 extlib/HTTP/MobileAgent.pm
 extlib/HTTP/MobileAgent/AirHPhone.pm
 extlib/HTTP/MobileAgent/Display.pm
@@ -262,8 +264,10 @@ inc/Test/Builder/Module.pm
 inc/Test/More.pm
 lib/MENTA.pm
 lib/MENTA/CGI.pm
+lib/MENTA/Context.pm
 lib/MENTA/Dispatch.pm
 lib/MENTA/Plugin.pm
+lib/MENTA/Response.pm
 lib/MENTA/Template.pm
 lib/MENTA/TemplateLoader.pm
 Makefile.PL
@@ -275,6 +279,7 @@ NOTE
 plugins/bundle.pl
 plugins/counter.pl
 plugins/mail.pl
+plugins/session.pl
 plugins/sql.pl
 README
 t/080_plugins/bundle.t
