@@ -9,7 +9,7 @@ use CGI::Simple;
 use Class::Trigger qw/BEFORE_OUTPUT/;
 require Encode; # use Encode するとふるい Encode でエラーになるときがあるらしい。2.15 で確認。200810-11-20
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 our $REQ;
 our $CONFIG;
 our $STASH;
