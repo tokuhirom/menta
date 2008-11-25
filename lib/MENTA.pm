@@ -141,23 +141,10 @@ sub finalize {
     _finish();
 }
 
-sub read_file {
-    my $fname = shift;
-    open my $fh, '<:utf8', $fname or die "${fname} を読み込み用に開けません: $!";
-    my $s = do { local $/; join '', <$fh> };
-    close $fh;
-    $s;
-}
+sub param        { MENTA->context->request->param(@_) }
+sub upload       { MENTA->context->request->upload(@_) }
+sub mobile_agent { MENTA->context->mobile_agent() }
 
-sub write_file {
-    my ($fname, $stuff) = @_;
-    open my $fh, '>:utf8', $fname or die "${fname} を書き込み用に開けません: $!";
-    print $fh $stuff;
-    close $fh;
-}
-
-sub param  { MENTA->context->request->param(@_) }
-sub upload { MENTA->context->request->upload(@_) }
 
 {
     # プラグインのロード機構
@@ -226,8 +213,6 @@ sub static_file_path {
     my $path = shift;
     docroot . '/static/' . $path;
 }
-
-sub mobile_agent { MENTA->context->mobile_agent() }
 
 {
     package MENTA::Util;

@@ -33,7 +33,7 @@ t/              - MENTA 自体のテストスクリプト。ユーザーの方�
 
 下記のようなファイルを、<?= $hello ?> におきます。
 
-<code><pre class="code"><?= read_file($hello) ?></pre></code>
+<code><pre class="code"><?= file_read($hello) ?></pre></code>
 
 <p>
 param("user") と書くと、<?= uri_for('hello', {user => 'kazuhooku'}) ?> の kazuhooku の部分がとりだせます。
@@ -45,7 +45,7 @@ param("user") と書くと、<?= uri_for('hello', {user => 'kazuhooku'}) ?> の 
 
 ? my $counter = 'app/controller/counter.mt'
 
-<code><pre class="code"><?= read_file($counter) ?></pre></code>
+<code><pre class="code"><?= file_read($counter) ?></pre></code>
 
 このようにすると、カウンターが簡単に HTML の中にうめこめます。
 

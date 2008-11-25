@@ -29,8 +29,14 @@ sub __load {
 sub __compile {
     my ($path) = @_;
     MENTA::Util::require_once('MENTA/Template.pm');
+    my $src = do {
+        open my $fh, '<:utf8', $path or die "${path} を読み込み用に開けません: $!";
+        my $s = do { local $/; join '', <$fh> };
+        close $fh;
+        $s;
+    };
     my $t = MENTA::Template->new;
-    $t->parse(main::read_file($path));
+    $t->parse($src);
     $t->build();
     my $code = $t->code();
     $code = << "EOT";

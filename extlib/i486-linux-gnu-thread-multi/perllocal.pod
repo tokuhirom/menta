@@ -1,10 +1,10 @@
-=head2 Wed Nov 19 16:56:56 2008: C<Module> L<HTTP::MobileAgent|HTTP::MobileAgent>
+=head2 Tue Nov 25 22:50:07 2008: C<Module> L<Cache::FastMmap|Cache::FastMmap>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/yGLsxd6Pat/outputdir/lib/perl5>
+C<installed into: /tmp/5f5j4nBZeE/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.27>
+C<VERSION: 1.28>
 
 =item *
 
