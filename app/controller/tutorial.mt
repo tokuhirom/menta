@@ -1,5 +1,5 @@
 ? my $title = "MENTA 取り扱い説明書"
-?=r render_partial('header.mt', $title)
+?= render_partial('header.mt', $title)
 
 <h2 class="subtitle">ダウンロードする</h2>
 <div class="blocked-content">
@@ -60,4 +60,4 @@ counter_increment の返却値として、１増えた結果がかえってき�
 
 あとでかく。
 
-?=r render_partial('footer.mt')
+?= render_partial('footer.mt')
