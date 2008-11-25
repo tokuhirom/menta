@@ -49,6 +49,13 @@ sub dispatch {
 
 sub show_static {
     my $path = shift;
+    MENTA::Util::require_once('Cwd.pm');
+    MENTA::Util::require_once('File/Spec.pm');
+    $path = Cwd::realpath($path);
+    my $appdir = File::Spec->catfile(Cwd::cwd(), 'app', 'static');
+    if (index($path, $appdir) != 0) {
+        die "どうやら攻撃されているようだ: $path";
+    }
     open my $fh, '<', $path or die "ファイルを開けません: ${path}: $!";
     binmode $fh;
     binmode STDOUT;
