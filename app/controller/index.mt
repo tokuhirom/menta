@@ -34,6 +34,7 @@
     <li><a href="<?= uri_for('counter') ?>">簡単なカウンター</a></li>
     <li><a href="<?= uri_for('hello', { user => 'kazuhooku' }) ?>">PHP っぽくそのままテンプレート表示しちゃう</a></li>
     <li><a href="<?= uri_for('perlinfo') ?>">perlinfo()</a></li>
+    <li><a href="<?= uri_for('session') ?>">session管理</a></li>
 </ul>
 
 <h2 class="subtitle">LICENSE</h2>
