@@ -123,6 +123,7 @@ sub render {
 
     my $res = MENTA->context->res;
     $res->headers->content_type("text/html; charset=" . charset());
+    $res->headers->content_length(bytes::length($out));
     $res->content($out);
 
     _finish();
@@ -144,6 +145,7 @@ sub finalize {
 
     my $res = MENTA->context->res;
     $res->headers->content_type($content_type);
+    $res->headers->content_length(bytes::length($str));
     $res->content($str);
 
     _finish();
