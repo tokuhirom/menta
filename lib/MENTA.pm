@@ -178,7 +178,6 @@ sub mobile_agent { MENTA->context->mobile_agent() }
             grep { defined &{"${package}::$_"} }
             keys %{"${package}::"}
         ) {
-        warn $package, $_;
             *{"main::$_"} = *{"${package}::$_"}
         }
     };
