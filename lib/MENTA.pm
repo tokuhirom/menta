@@ -4,6 +4,8 @@ use warnings;
 use utf8;
 use CGI::ExceptionManager;
 use MENTA::Dispatch ();
+use MENTA::Context;
+use CGI::Simple;
 require Encode; # use Encode するとふるい Encode でエラーになるときがあるらしい。2.15 で確認。200810-11-20
 
 our $VERSION = '0.06';
@@ -17,6 +19,18 @@ sub import {
     utf8->import;
 }
 
+{
+    our $context;
+    sub context { $context }
+    sub run_context {
+        my ($class, $config, $code) = @_;
+        local $context = MENTA::Context->new(
+            config => $config,
+        );
+        $code->();
+    }
+}
+
 package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
 
 sub AUTOLOAD {
@@ -27,21 +41,21 @@ sub AUTOLOAD {
     return main->can($method)->(@_);
 }
 
-sub config () { $MENTA::CONFIG }
+sub config () { MENTA->context->config }
 
 sub run_menta {
     my $config = shift @_;
 
-    local $MENTA::CONFIG = $config;
-    local $MENTA::REQ;
-    local $MENTA::STASH;
-
     CGI::ExceptionManager->run(
         callback => sub {
-            MENTA::Dispatch->dispatch()
+            MENTA->run_context(
+                $config => sub {
+                    MENTA::Dispatch->dispatch()
+                }
+            );
         },
         powered_by => '<strong>MENTA</strong>, Web Application Framework.',
-        (config->{menta}->{fatals_to_browser} ? () : (renderer => sub { "INTERNAL SERVER ERROR!" x 100 }))
+        ($config->{menta}->{fatals_to_browser} ? () : (renderer => sub { "INTERNAL SERVER ERROR!" x 100 }))
     );
 }
 
@@ -94,38 +108,43 @@ sub render_partial {
     bless \__render_partial($tmpl, controller_dir(), @params), 'MENTA::Template::RawString';
 }
 
-sub detach() { CGI::ExceptionManager::detach(@_) }
+sub _finish {
+    print MENTA->context->res->as_string;
+    CGI::ExceptionManager::detach();
+}
 
 sub render {
     my ($tmpl, @params) = @_;
     my $out = render_partial($tmpl, @params);
     $out = $$out;
     $out = encode_output($out);
-    print "Content-Type: text/html; charset=" . charset() . "\r\n";
-    print "\r\n";
-    print $out;
 
-    detach;
+    my $res = MENTA->context->res;
+    $res->headers->content_type("text/html; charset=" . charset());
+    $res->content($out);
+
+    _finish();
 }
 
 sub redirect {
     my ($location, ) = @_;
-    print "Status: 302\r\n";
-    print "Location: $location\r\n";
-    print "\r\n";
 
-    detach;
+    my $res = MENTA->context->res;
+    $res->header('Status' => 302);
+    $res->header('Location' => $location);
+
+    _finish();
 }
 
 sub finalize {
     my $str = shift;
     my $content_type = shift || ('text/html; charset=' . charset());
 
-    print "Content-Type: $content_type\r\n";
-    print "\r\n";
-    print $str;
+    my $res = MENTA->context->res;
+    $res->headers->content_type($content_type);
+    $res->content($str);
 
-    detach;
+    _finish();
 }
 
 sub read_file {
@@ -143,24 +162,8 @@ sub write_file {
     close $fh;
 }
 
-sub param {
-    my $key = shift;
-
-    unless (defined $MENTA::REQ) {
-        require_once('MENTA/CGI.pm');
-        $MENTA::REQ = CGI::Simple->new();
-    }
-
-    $MENTA::REQ->param($key);
-}
-
-sub upload {
-    unless (defined $MENTA::REQ) {
-        require_once('MENTA/CGI.pm');
-        $MENTA::REQ = CGI::Simple->new();
-    }
-    $MENTA::REQ->upload(@_);
-}
+sub param  { MENTA->context->request->param(@_) }
+sub upload { MENTA->context->request->upload(@_) }
 
 {
     my $required = {};
