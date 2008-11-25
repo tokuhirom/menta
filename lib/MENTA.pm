@@ -6,6 +6,7 @@ use CGI::ExceptionManager;
 use MENTA::Dispatch ();
 use MENTA::Context;
 use CGI::Simple;
+use Class::Trigger qw/BEFORE_OUTPUT/;
 require Encode; # use Encode するとふるい Encode でエラーになるときがあるらしい。2.15 で確認。200810-11-20
 
 our $VERSION = '0.06';
@@ -109,6 +110,7 @@ sub render_partial {
 }
 
 sub _finish {
+    MENTA->call_trigger('BEFORE_OUTPUT');
     print MENTA->context->res->as_string;
     CGI::ExceptionManager::detach();
 }
