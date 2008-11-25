@@ -70,7 +70,7 @@ sub HTTP::Response::cgish_filter {
         my $start = [Time::HiRes::gettimeofday()];
         $code->();
         my $elapsed = Time::HiRes::tv_interval($start);
-        if ($elapsed > 0.3) {
+        if ($elapsed > 0.1) {
             print STDERR "TOO SLOW: $ENV{PATH_INFO}: $elapsed\n";
         }
     }
