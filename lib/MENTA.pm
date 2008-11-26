@@ -102,7 +102,10 @@ sub render {
 
 sub _finish {
     MENTA->call_trigger('BEFORE_OUTPUT');
-    print MENTA->context->res->as_string;
+    use bytes;
+    my $res = MENTA->context->res;
+    $res->headers->content_length(bytes::length($res->content));
+    print $res->as_string;
     CGI::ExceptionManager::detach();
 }
 
@@ -114,7 +117,6 @@ sub render_and_print {
 
     my $res = MENTA->context->res;
     $res->headers->content_type("text/html; charset=" . MENTA::Util::_charset());
-    $res->headers->content_length(bytes::length($out));
     $res->content($out);
 
     _finish();
@@ -136,7 +138,6 @@ sub finalize {
 
     my $res = MENTA->context->res;
     $res->headers->content_type($content_type);
-    $res->headers->content_length(bytes::length($str));
     $res->content($str);
 
     _finish();
@@ -197,7 +198,6 @@ sub is_post_request () {
     return $method eq 'POST';
 }
 
-# TODO: CGI にはこのための環境変数ってなかったっけ?
 sub docroot () { $ENV{SCRIPT_NAME} || '' }
 
 sub uri_for {
