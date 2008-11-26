@@ -1,10 +1,10 @@
-=head2 Tue Nov 25 23:34:31 2008: C<Module> L<Error|Error>
+=head2 Wed Nov 26 16:43:44 2008: C<Module> L<Object::Tiny|Object::Tiny>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/8qA39npGYU/outputdir/lib/perl5>
+C<installed into: /tmp/mAVsoPbnV4/outputdir/lib/perl5>
 
 =item *
 
@@ -12,29 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 0.17015>
-
-=item *
-
-C<EXE_FILES: >
-
-=back
-
-=head2 Tue Nov 25 23:35:54 2008: C<Module> L<Cache::Cache|Cache::Cache>
-
-=over 4
-
-=item *
-
-C<installed into: /tmp/8qA39npGYU/outputdir/lib/perl5>
-
-=item *
-
-C<LINKTYPE: dynamic>
-
-=item *
-
-C<VERSION: 1.05>
+C<VERSION: 1.06>
 
 =item *
 
