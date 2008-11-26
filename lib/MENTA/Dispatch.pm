@@ -52,7 +52,7 @@ sub show_static {
     MENTA::Util::require_once('Cwd.pm');
     MENTA::Util::require_once('File/Spec.pm');
     $path = Cwd::realpath($path);
-    my $appdir = File::Spec->catfile(Cwd::cwd(), 'app', 'static');
+    my $appdir = Cwd::realpath(File::Spec->catfile(Cwd::cwd(), 'app', 'static'));
     if (index($path, $appdir) != 0) {
         die "どうやら攻撃されているようだ: $path";
     }
