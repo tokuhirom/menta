@@ -1,7 +1,7 @@
 package MENTA::Response;
 use strict;
 use warnings;
-use HTTP::Headers;
+use HTTP::Headers::Fast;
 Class::Accessor::Lite->mk_accessors(qw/code content headers/);
 
 sub new {
@@ -9,7 +9,7 @@ sub new {
     bless {
         code    => 200,
         content => '',
-        headers => HTTP::Headers->new(),
+        headers => HTTP::Headers::Fast->new(),
         %args,
     }, $class;
 }
