@@ -2,12 +2,12 @@ package Class::Accessor::Lite;
 
 use strict;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub mk_accessors {
     shift; # usage: Class::Accessor::Lite->mk_accessors(qw(...));
     no strict 'refs';
-    my $pkg = caller(1);
+    my $pkg = caller(0);
     for my $n (@_) {
         *{$pkg . '::' . $n} = __m($n);
     }
