@@ -1,10 +1,8 @@
 package MENTA::Context;
 use strict;
 use warnings;
-use base qw/Class::Accessor::Fast/;
 use MENTA::Response;
-
-__PACKAGE__->mk_accessors(qw/config plugin_stash/);
+Class::Accessor::Lite->mk_accessors(qw/config plugin_stash/);
 
 sub new {
     my ($pkg, %args) = @_;
