@@ -4,7 +4,6 @@ use warnings;
 use utf8;
 use CGI::ExceptionManager;
 use MENTA::Dispatch ();
-use CGI::Simple;
 use Class::Trigger qw/BEFORE_OUTPUT/;
 require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
