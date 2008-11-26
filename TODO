@@ -14,10 +14,14 @@ TODO
     CSRF 対策
     はてな認証をサポートする
     コンテナ志向について考える
-    - モバイルのときのセッション管理
+    - do_* のアプローチが非常にめんどいっぽ
+    - render() したときに、current directory 以外からよめるといいかも
+    -- header.mt を読むときに、app/controller/demo/header.mt → app/controller/tmpl/
+    -- の順番で探す仕組み。
+    モバイルのときのセッション管理
+    -- 端末IDを利用するパターンもつかえるようにする
     - やるとすれば。。。
       - bookmark つくる
       - wiki つくる
       - tinyurl
         - see http://naoya.dyndns.org/~naoya/mt/archives/001682.html
-

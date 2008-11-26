@@ -17,4 +17,3 @@ my $out = run_cgi(
 unlike $out, qr{THIS IS SECRET};
 
 unlink 'app/data/secret.txt';
-
