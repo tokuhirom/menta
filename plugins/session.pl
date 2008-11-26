@@ -2,9 +2,6 @@ package MENTA::Plugin::Session;
 use MENTA::Plugin;
 use HTTP::Session;
 use HTTP::Session::Store::DBM;
-use HTTP::Session::State::Cookie;
-
-$HTTP::Session::State::Cookie::COOKIE_CLASS = 'CGI::Simple::Cookie';
 
 sub _postrun {
     my ($app, $bodyref) = @_;
@@ -15,6 +12,8 @@ my $hooked;
 
 sub _session {
     $MENTA::STASH->{'plugin::session'} ||= sub {
+        MENTA::Util::require_once 'HTTP/Session/State/Cookie.pm';
+        $HTTP::Session::State::Cookie::COOKIE_CLASS = 'CGI::Simple::Cookie';
         my $session = HTTP::Session->new(
             store   => HTTP::Session::Store::DBM->new(
                 file => join('/', main::data_dir, 'session.dbm'),
@@ -32,6 +31,9 @@ sub _session {
         $session;
     }->();
 }
+
+sub session_state_class { ref _session->state() }
+sub session_store_class { ref _session->store() }
 
 {
     no strict 'refs';
