@@ -4,7 +4,7 @@ use warnings;
 use 5.00800;
 use Carp ();
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 our $TRANSLATE_UNDERSCORE = 1;
 
@@ -349,16 +349,15 @@ sub as_string {
     join( $endl, @result, '' );
 }
 
-if ( eval { require Storable; 1 } ) {
-    *clone = \&Storable::dclone;
-}
-else {
-    *clone = sub {
-        my $self  = shift;
-        my $clone = new HTTP::Headers::Fast;
-        $self->scan( sub { $clone->push_header(@_); } );
-        $clone;
-    };
+{
+    my $storable_required;
+    sub clone {
+        unless ($storable_required) {
+            require Storable;
+            $storable_required++;
+        }
+        goto &Storable::dclone;
+    }
 }
 
 sub _date_header {
