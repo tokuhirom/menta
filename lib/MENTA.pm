@@ -6,7 +6,6 @@ use CGI::ExceptionManager;
 use MENTA::Dispatch ();
 use CGI::Simple;
 use Class::Trigger qw/BEFORE_OUTPUT/;
-require 'Encode.pm'; # use Encode するとふるい Encode でエラーになるときがあるらしい。2.15 で確認。200810-11-20
 require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
 
@@ -237,13 +236,26 @@ sub static_file_path {
     # HTTP の入り口んとこで decode させる用
     sub decode_input {
         my ($txt, $fb) = @_;
-        Encode::decode(_mobile_encoding(), $txt, $fb);
+        if (MENTA->context->config->{menta}->{support_mobile}) {
+            require_once('Encode.pm');
+            Encode::decode(_mobile_encoding(), $txt, $fb);
+        } else {
+            utf8::decode($txt);
+            $txt;
+        }
     }
 
     # 出力直前んとこで encode させる用
     sub encode_output {
         my ($txt, $fb) = @_;
-        Encode::encode(_mobile_encoding(), $txt, $fb);
+        if (MENTA->context->config->{menta}->{support_mobile}) {
+        die;
+            require_once('Encode.pm');
+            Encode::encode(_mobile_encoding(), $txt, $fb);
+        } else {
+            utf8::encode($txt);
+            $txt;
+        }
     }
 
     # charset に設定する文字列を生成

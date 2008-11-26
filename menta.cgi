@@ -12,6 +12,8 @@ run_menta({
         fatals_to_browser  => 1,
         # 最大表示文字数
         max_post_body => 1_024_000,
+        # モバイル対応
+        support_mobile => 1,
     },
     # あなたのアプリの設定
     application => {
