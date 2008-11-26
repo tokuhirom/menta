@@ -23,7 +23,7 @@ sub run {
             }
             $err_info = CGI::ExceptionManager::StackTrace->new($msg);
         }
-        die;
+        die $msg;
     };
     local $@;
     eval {
