@@ -91,3 +91,7 @@ td {
     padding-left: 2px;
     width: 100%;
 }
+
+a img {
+    border: 0px;
+}
