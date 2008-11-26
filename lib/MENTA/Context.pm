@@ -13,8 +13,6 @@ sub new {
     }, $pkg;
 }
 
-sub config { shift->{config} }
-
 sub request {
     my $self = shift;
     unless ( defined $self->{request}) {
