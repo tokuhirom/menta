@@ -249,7 +249,6 @@ sub static_file_path {
     sub encode_output {
         my ($txt, $fb) = @_;
         if (MENTA->context->config->{menta}->{support_mobile}) {
-        die;
             require_once('Encode.pm');
             Encode::encode(_mobile_encoding(), $txt, $fb);
         } else {
