@@ -12,7 +12,9 @@ sub dispatch {
         my $controller = "${cdir}/${path}.pl";
         my $controller_mt = "${cdir}/${path}.mt";
         if (-f $controller) {
-            my $meth = "do_$path";
+            my $meth = $path;
+            $meth =~ s!^.+/!!;
+            $meth = "do_$meth";
             package main;
             do $controller;
             if (my $e = $@) {
