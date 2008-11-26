@@ -259,7 +259,11 @@ sub static_file_path {
 
     # charset に設定する文字列を生成
     sub _charset {
-        +{ 'utf-8' => 'UTF-8', cp932 => 'Shift_JIS' }->{_mobile_encoding()};
+        if (MENTA->context->config->{menta}->{support_mobile}) {
+            +{ 'utf-8' => 'UTF-8', cp932 => 'Shift_JIS' }->{_mobile_encoding()};
+        } else {
+            'UTF-8';
+        }
     }
 
     # 一回ロードしたクラスは二度ロードしないための仕組み。
