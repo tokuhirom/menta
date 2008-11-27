@@ -24,7 +24,7 @@ sub as_string {
     my $CRLF = "\015\012";
     join(
         '',
-        $self->headers->as_string($CRLF),
+        $self->headers->as_string_without_sort($CRLF),
         $CRLF,
         $self->content
     );
