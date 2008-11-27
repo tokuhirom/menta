@@ -4,7 +4,6 @@ use warnings;
 use utf8;
 use CGI::ExceptionManager;
 use MENTA::Dispatch ();
-use Class::Trigger qw/BEFORE_OUTPUT/;
 require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
 
@@ -29,6 +28,20 @@ sub import {
         );
         $code->();
     }
+}
+
+# Class::Trigger はロードに時間かかるので自前で実装してる
+sub call_trigger {
+    my ($class, $triggername) = @_;
+    my $c = context();
+    for my $code (@{$c->{triggers}->{$triggername}}) {
+        $code->($c);
+    }
+}
+
+sub add_trigger {
+    my ($class, $triggername, $code) = @_;
+    push @{context()->{triggers}->{$triggername}}, $code;
 }
 
 package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
