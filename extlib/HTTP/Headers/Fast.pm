@@ -4,7 +4,7 @@ use warnings;
 use 5.00800;
 use Carp ();
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 our $TRANSLATE_UNDERSCORE = 1;
 
@@ -319,12 +319,11 @@ sub _process_newline {
     $_;
 }
 
-sub as_string {
-    my ( $self, $endl ) = @_;
-    $endl = "\n" unless defined $endl;
+sub _as_string {
+    my ($self, $endl, $fieldnames) = @_;
 
     my @result;
-    for my $key ( $self->_sorted_field_names ) {
+    for my $key ( @$fieldnames ) {
         next if index($key, '_') == 0;
         my $vals = $self->{$key};
         if ( ref($vals) eq 'ARRAY' ) {
@@ -347,6 +346,18 @@ sub as_string {
     }
 
     join( $endl, @result, '' );
+}
+
+sub as_string {
+    my ( $self, $endl ) = @_;
+    $endl = "\n" unless defined $endl;
+    $self->_as_string($endl, [$self->_sorted_field_names]);
+}
+
+sub as_string_without_sort {
+    my ( $self, $endl ) = @_;
+    $endl = "\n" unless defined $endl;
+    $self->_as_string($endl, [keys(%$self)]);
 }
 
 {
@@ -505,6 +516,18 @@ The interface is same as HTTP::Headers.
 HTTP::Headers is a very good. But I needed a faster implementation, fast  =)
 
 HTTP::Headers is also a part of LWP, but I only needed HTTP::Headers. I didn't want to require more modules than necessary.
+
+=head1 ADDITIONAL METHODS
+
+=over 4
+
+=item as_string_without_sort
+
+as_string method sorts the header names.But, sorting is bit slow.
+
+In this method, stringify the instance of HTTP::Headers::Fast without sorting.
+
+=back
 
 =head1 @ISA HACK
 
