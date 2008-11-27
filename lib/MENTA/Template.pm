@@ -35,6 +35,7 @@ sub build {
     # Compile
     my @lines;
     my @global;
+    my $last_was_code = undef;
     for my $line (@{$self->{tree}}) {
 
         # New line
@@ -45,7 +46,13 @@ sub build {
 
             # Need to fix line ending?
             my $newline = chomp $value;
-
+            
+            # add semicolon to end of code
+            if ($last_was_code && $type ne 'code') {
+                $lines[-2] .= ';';
+            }
+            $last_was_code = 0;
+            
             # Text
             if ($type eq 'text') {
 
@@ -58,7 +65,8 @@ sub build {
 
             # Code
             if ($type eq 'code') {
-                $lines[-1] .= "$value;";
+                $lines[-1] .= $value;
+                $last_was_code = 1;
             }
 
             # Global Code
@@ -79,7 +87,12 @@ sub build {
             }
         }
     }
-
+    
+    # add semicolon to end of code
+    if ($last_was_code) {
+        $lines[-1] .= ';';
+    }
+    
     # Wrap
     $lines[0] ||= '';
     $lines[0]   = q/sub { my $_MENTA = ''; my $_MENTA_T = '';/ . $lines[0];
@@ -113,7 +126,7 @@ sub parse {
     for my $line (split /\n/, $tmpl) {
 
         # Perl line without return value
-        if ($line =~ /^$line_start\s+(.+)$/) {
+        if ($line =~ /^$line_start\s?(.*)$/) {
             push @{$self->{tree}}, ['code', $1];
             $multiline_expression = 0;
             next;
