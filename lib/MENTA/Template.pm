@@ -17,6 +17,7 @@ sub new {
         expression_mark => '=',
         raw_expression_mark => '=r',
         line_start => '?',
+        global_start => '@',
         template => '',
         tree => [],
         tag_start => '<?',
@@ -26,11 +27,14 @@ sub new {
 
 sub code { shift->{code} }
 
+sub global { shift->{global} }
+
 sub build {
     my $self = shift;
 
     # Compile
     my @lines;
+    my @global;
     for my $line (@{$self->{tree}}) {
 
         # New line
@@ -57,6 +61,12 @@ sub build {
                 $lines[-1] .= "$value;";
             }
 
+            # Global Code
+            if ($type eq 'global') {
+                push @global, $value;
+                pop @lines;
+            }
+
             # Expression
             if ($type eq 'expr') {
                 $lines[-1] .= "\$_MENTA_T = scalar $value; \$_MENTA .= ref \$_MENTA_T eq 'MENTA::Template::RawString' ? \$\$_MENTA_T : escape_html(\$_MENTA_T);";
@@ -76,6 +86,7 @@ sub build {
     $lines[-1] .= q/return $_MENTA; }/;
 
     $self->{code} = join "\n", @lines;
+    $self->{global} = join "\n", @global;
     return $self;
 }
 
@@ -89,6 +100,7 @@ sub parse {
 
     # Tags
     my $line_start    = quotemeta $self->{line_start};
+    my $global_start  = quotemeta $self->{global_start};
     my $tag_start     = quotemeta $self->{tag_start};
     my $tag_end       = quotemeta $self->{tag_end};
     my $cmnt_mark     = quotemeta $self->{comment_mark};
@@ -117,6 +129,13 @@ sub parse {
         # Perl line with raw return value
         if ($line =~ /^$line_start$raw_expr_mark\s+(.+)$/) {
             push @{$self->{tree}}, ['raw_expr', $1];
+            $multiline_expression = 0;
+            next;
+        }
+
+        # Perl code to be stored in global
+        if ($line =~ /^$global_start\s?(.*)$/) {
+            push @{$self->{tree}}, ['global', $1];
             $multiline_expression = 0;
             next;
         }
