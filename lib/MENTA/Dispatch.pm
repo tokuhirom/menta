@@ -58,8 +58,7 @@ sub show_static {
     if (index($path, $appdir) != 0) {
         die "どうやら攻撃されているようだ: $path";
     }
-    open my $fh, '<', $path or die "ファイルを開けません: ${path}: $!";
-    binmode $fh;
+    open my $fh, '<:raw', $path or die "ファイルを開けません: ${path}: $!";
     binmode STDOUT;
     printf "Content-Length: %d\r\n", -s $path;
     printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
