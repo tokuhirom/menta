@@ -5,7 +5,7 @@ BEGIN {
 use MENTA;
 # -- ここまではおまじない --
 
-run_menta({
+MENTA->run_menta({
     # MENTA 自体の設定
     menta => {
         # エラー出力するか？

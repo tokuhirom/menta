@@ -7,7 +7,7 @@ use MENTA::Dispatch ();
 require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 our $REQ;
 our $CONFIG;
 our $STASH;
@@ -44,13 +44,9 @@ sub add_trigger {
     push @{context()->{triggers}->{$triggername}}, $code;
 }
 
-package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
-
-
-sub config () { MENTA->context->config }
-
 sub run_menta {
-    my $config = shift @_;
+    my $class  = shift;
+    my $config = shift;
 
     CGI::ExceptionManager->run(
         callback => sub {
@@ -64,6 +60,11 @@ sub run_menta {
         ($config->{menta}->{fatals_to_browser} ? () : (renderer => sub { "INTERNAL SERVER ERROR!" x 100 }))
     );
 }
+
+
+package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
+
+sub config () { MENTA->context->config }
 
 sub escape_html {
     local $_ = shift;

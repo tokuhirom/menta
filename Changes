@@ -1,5 +1,22 @@
 Revision history for Perl extension MENTA
 
+0.08
+
+    - core
+    -- Class::Trigger のロード時間をけちるために、自分でかきなおした
+    -- HTTP::Headers::Fast をつかう
+    -- performance の改善をいくつか
+    -- モバイル対応のコードをオフにできるようにした
+    -- Class::Accessor::Lite をつかうことにした
+    -- load_plugin よばなくても自動でロードされるようになった
+    -- obsolete なメソッドを廃止: static_dir
+    - security
+    -- ディレクトリトラバーサル脆弱性をなおした
+    - extlib/
+    -- Class::Accessor::Lite を追加
+    -- HTTP::Headers::Fast 0.04 にさしかえ
+    -- Cache::Cache をいれた。いくつかパッチあてた
+
 0.07
 
     - セッション管理機構を追加
