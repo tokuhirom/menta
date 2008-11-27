@@ -104,6 +104,7 @@ sub _finish {
 
     my $res = MENTA->context->res;
     $res->headers->content_length(length($res->content));
+    binmode STDOUT;
     print $res->as_string;
     CGI::ExceptionManager::detach();
 }
