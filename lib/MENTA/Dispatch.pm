@@ -61,6 +61,7 @@ sub show_static {
     open my $fh, '<', $path or die "ファイルを開けません: ${path}: $!";
     binmode $fh;
     binmode STDOUT;
+    printf "Content-Length: %s\r\n", -s $path;
     printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
     print do { local $/; <$fh> };
     close $fh;

@@ -30,4 +30,11 @@ sub as_string {
     );
 }
 
+sub length {
+    my $self = shift;
+    my $bytes = $self->content;
+    utf8::encode($bytes);
+    length $bytes;
+}
+
 1;

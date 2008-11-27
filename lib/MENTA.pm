@@ -103,7 +103,7 @@ sub _finish {
     MENTA->call_trigger('BEFORE_OUTPUT');
 
     my $res = MENTA->context->res;
-    $res->headers->content_length(length($res->content));
+    $res->headers->content_length($res->length);
     print $res->as_string;
     CGI::ExceptionManager::detach();
 }
