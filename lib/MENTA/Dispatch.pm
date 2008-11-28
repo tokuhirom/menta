@@ -68,16 +68,17 @@ sub show_static {
 
 sub guess_mime_type {
     my $ext = shift;
-    $ext =~ s/.+\.(.+)$/$1/;
+    $ext =~ s/.+\.([^.]+)$/$1/;
 
     # TODO should be moved to other.
     my $mime_map = {
-        css => 'text/css',
-        js  => 'application/javascript',
-        jpg => 'image/jpeg',
-        gif => 'image/gif',
-        png => 'image/png',
-        txt => 'text/plain',
+        css  => 'text/css',
+        gif  => 'image/gif',
+        jpeg => 'image/jpeg',
+        jpg  => 'image/jpeg',
+        js   => 'application/javascript',
+        png  => 'image/png',
+        txt  => 'text/plain',
     };
     $mime_map->{$ext} || 'application/octet-stream';
 }
