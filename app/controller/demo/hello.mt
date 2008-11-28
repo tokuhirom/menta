@@ -1,3 +1,4 @@
 <!doctype html>
-Hello to <?= param('user') ?>
-</html>
+<title>Hello MENTA world.</title>
+
+<p>Hello to <?= param('user') ?></p>

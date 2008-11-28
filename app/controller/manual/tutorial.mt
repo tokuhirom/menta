@@ -8,7 +8,7 @@
 
 <h2 class="subtitle">サーバーにアップロードする</h2>
 <div class="blocked-content">
-MENTA/ ディレクトリをまるごとアップロードすれば OK です。<br />
+<p><code>MENTA/</code> ディレクトリをまるごとアップロードすれば OK です。</p>
 </div>
 
 <h2 class="subtitle">ディレクトリ構造</h2>
@@ -30,35 +30,24 @@ t/              - MENTA 自体のテストスクリプト。ユーザーの方�
 
 <h3>Hello World してみる</h3>
 ? my $hello = 'app/controller/hello.mt'
-
-下記のようなファイルを、<?= $hello ?> におきます。
-
-<code><pre class="code"><?= file_read($hello) ?></pre></code>
-
-<p>
-param("user") と書くと、<?= uri_for('demo/hello', {user => 'kazuhooku'}) ?> の kazuhooku の部分がとりだせます。
-</p>
-
-<a href="<?= uri_for('hello', {user => 'kazuhooku'}) ?>">実際にうごいている様子</a>
+<p>下記のようなファイルを、<?= $hello ?> におきます。</p>
+<pre><code><?= file_read($hello) ?></code></pre>
+<p><code>param("user")</code> と書くと、<code><?= uri_for('demo/hello', { user => 'kazuhooku' }) ?></code> の <code>kazuhooku</code> の部分がとりだせます。</p>
+<p><a href="<?= uri_for('demo/hello', { user => 'kazuhooku' }) ?>">実際にうごくデモ</a></p>
 
 <h3>カウンターをつけてみる</h3>
-
 ? my $counter = 'app/controller/counter.mt'
+<pre><code><?= file_read($counter) ?></code></pre>
+<p>このようにすると、カウンターを簡単に HTML の中にうめこめます。</p>
+<p><code>counter_increment("test")</code> と書くと、<code>test</code> という名前のカウンターが 1 増えます。<code>counter_increment</code> の返却値として、1 増えた結果がかえってきますのでそのまま表示するだけでカウンターになります。</p>
+<p><code>counter_increment()</code> という関数は <code>plugins/counter.pl</code> の中で定義されています。counter_* という関数を呼ぶと、自動的に <code>plugins/counter.pl</code> が読み込まれることになっています。</p>
+<p><a href="<?= uri_for('demo/counter') ?>">実際にうごくデモ</a></p>
 
-<code><pre class="code"><?= file_read($counter) ?></pre></code>
-
-このようにすると、カウンターが簡単に HTML の中にうめこめます。
-
-counter_increment("test") と書くと、test という名前のカウンターが 1 増えます。
-counter_increment の返却値として、１増えた結果がかえってきますのでそのまま表示するだけでカウンターになります。
-
-counter_increment() という関数は plugins/counter.pl の中で定義されています。counter_* という関数を呼ぶと、自動的に plugins/counter.pl が読み込まれることになっています。
-
-<p><a href="<?= uri_for('counter') ?>">実際にうごいている様子</a></p>
 </div>
 
+<!--
 <h2 class="subtitle">プラグインの作り方</h2>
-
 あとでかく。
+-->
 
 ?= render('footer.mt')
