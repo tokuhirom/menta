@@ -8,7 +8,7 @@ sub do_bbs_sqlite {
         if ($body) {
             sql_prepare_exec('INSERT INTO entries (body) VALUES (?)', $body);
         }
-        redirect(docroot . '/bbs_sqlite'); # TODO: use uri_for
+        redirect(docroot . '/demo/bbs_sqlite'); # TODO: use uri_for
     } else {
         my ( $rows, $pager ) = sql_select_paginate(
             'SELECT id, body FROM entries ORDER BY id DESC',
@@ -18,7 +18,7 @@ sub do_bbs_sqlite {
                 rows => 10,
             }
         );
-        render_and_print("bbs.mt", $rows, $pager);
+        render_and_print('demo/bbs.mt', $rows, $pager);
     }
 }
 

@@ -1,7 +1,7 @@
 ? my ($entries, $pager) = @_
 ?= render('header.mt', 'SQLite をつかった一行掲示板')
 <div class="blocked-content">
-<form method="post" action="<?= uri_for('bbs_sqlite') ?>">
+<form method="post" action="<?= uri_for('demo/bbs_sqlite') ?>">
  <input type="text" name="body">
  <input type="submit" value="送信">
 </form>
@@ -11,6 +11,6 @@
  <li class="hentry"><?= $entry->{id} ?> <?= $entry->{body} ?></li>
 ? }
 </ul>
-?= render('pager.mt', $pager, 'bbs_sqlite')
+?= render('pager.mt', $pager, 'demo/bbs_sqlite')
 </div>
 ?= render('footer.mt')
