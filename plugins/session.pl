@@ -11,7 +11,7 @@ sub _postrun {
 my $hooked;
 
 sub _create_state {
-    my $klass = main::mobile_agent->is_non_mobile ? 'HTTP::Session::State::Cookie' : 'HTTP::Session::State::URI';
+    my $klass = MENTA::mobile_agent->is_non_mobile ? 'HTTP::Session::State::Cookie' : 'HTTP::Session::State::URI';
     $HTTP::Session::State::Cookie::COOKIE_CLASS = 'CGI::Simple::Cookie';
     (my $path = $klass) =~ s!::!/!og;
     $path .= '.pm';
@@ -23,7 +23,7 @@ sub _session {
     $MENTA::STASH->{'plugin::session'} ||= sub {
         my $session = HTTP::Session->new(
             store   => HTTP::Session::Store::DBM->new(
-                file => join('/', main::data_dir, 'session.dbm'),
+                file => join('/', MENTA::data_dir(), 'session.dbm'),
             ),
             state   => _create_state(),
             request => MENTA->context->request(),

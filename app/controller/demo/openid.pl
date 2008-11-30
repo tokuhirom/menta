@@ -1,5 +1,5 @@
 # OpenID デモモジュール
-use MENTA;
+use MENTA::Controller;
 use Net::OpenID::Consumer::Lite;
 
 my $OP_MAP = +{

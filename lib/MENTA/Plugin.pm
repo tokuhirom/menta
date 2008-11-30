@@ -11,7 +11,7 @@ sub import {
 
     no strict 'refs';
     for (qw/config data_dir/) {
-        *{"${pkg}::$_"} = *{"main::$_"}
+        *{"${pkg}::$_"} = *{"MENTA::$_"}
     }
 }
 

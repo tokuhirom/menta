@@ -8,7 +8,7 @@ sub dispatch {
     $path =~ s!^/+!!g;
     $path ||= 'index';
     if ($path =~ m{^[a-z0-9_/]+$}) {
-        my $cdir = main::controller_dir();
+        my $cdir = MENTA::controller_dir();
         my $controller = "${cdir}/${path}.pl";
         my $controller_mt = "${cdir}/${path}.mt";
         if (-f $controller) {
@@ -33,10 +33,10 @@ sub dispatch {
             }
         } elsif (-f $controller_mt) {
             MENTA::Util::require_once('MENTA/TemplateLoader.pm');
-            my $tmpldir = main::controller_dir();
-            my $out = MENTA::TemplateLoader::__load("${tmpldir}/${path}.mt", main::controller_dir());
+            my $tmpldir = MENTA::controller_dir();
+            my $out = MENTA::TemplateLoader::__load("${tmpldir}/${path}.mt", MENTA::controller_dir());
             $out = MENTA::Util::encode_output($out);
-            main::finalize($out);
+            MENTA::finalize($out);
         } else {
             die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
         }

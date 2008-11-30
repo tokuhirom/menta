@@ -61,9 +61,6 @@ sub run_menta {
     );
 }
 
-
-package main; # ここ以下の関数はすべてコントローラで呼ぶことができます
-
 sub config () { MENTA->context->config }
 
 sub escape_html {
@@ -193,7 +190,7 @@ sub mobile_agent { MENTA->context->mobile_agent() }
             grep { defined &{"${package}::$_"} }
             keys %{"${package}::"}
         ) {
-            *{"main::$_"} = *{"${package}::$_"}
+            *{"MENTA::$_"} = *{"${package}::$_"}
         }
     };
 
@@ -203,7 +200,7 @@ sub mobile_agent { MENTA->context->mobile_agent() }
         (my $prefix = $method) =~ s/_.+//;
         die "変な関数よびだしてませんか？: $method" unless $prefix;
         $_load_plugin->($prefix);
-        return main->can($method)->(@_);
+        return MENTA->can($method)->(@_);
     }
 }
 

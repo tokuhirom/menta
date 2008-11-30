@@ -7,7 +7,7 @@
 
 <body>
 <div class="container">
-<a href="<?= docroot ?>" title="Web Application Framework - MENTA"><img src="<?= static_file_path('menta-logo.png') ?>" alt="MENTA"></a>
+<a href="<?= docroot() ?>" title="Web Application Framework - MENTA"><img src="<?= static_file_path('menta-logo.png') ?>" alt="MENTA"></a>
 <h1 class="maintitle"><? if ($title) { ?><?= "$title - " ?><? } ?>MENTA</h1>
 <div class="bodyContainer">
 <div class="blocked-content">

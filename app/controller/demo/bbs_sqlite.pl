@@ -1,4 +1,4 @@
-use MENTA;
+use MENTA::Controller;
 
 sub do_bbs_sqlite {
     sql_prepare_exec(q{CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY, body VARCHAR(255))});

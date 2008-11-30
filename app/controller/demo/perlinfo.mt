@@ -31,7 +31,7 @@ td { background-color: #CCCCCC }
 
     <h2>MENTA の設定</h2>
     <table>
-    <tr><th>docroot</th><td><?= docroot ?></td></tr>
+    <tr><th>docroot</th><td><?= docroot() ?></td></tr>
     <tr><th>controller_dir</th><td><?= controller_dir ?></td></tr>
     </table>
 
