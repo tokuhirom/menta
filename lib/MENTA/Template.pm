@@ -17,7 +17,6 @@ sub new {
         expression_mark => '=',
         raw_expression_mark => '=r',
         line_start => '?',
-        global_start => '@',
         template => '',
         tree => [],
         tag_start => '<?',
@@ -27,15 +26,11 @@ sub new {
 
 sub code { shift->{code} }
 
-sub global { shift->{global} }
-
 sub build {
     my $self = shift;
 
     # Compile
     my @lines;
-    my @global;
-    my $last_was_code = undef;
     for my $line (@{$self->{tree}}) {
 
         # New line
@@ -46,13 +41,7 @@ sub build {
 
             # Need to fix line ending?
             my $newline = chomp $value;
-            
-            # add semicolon to end of code
-            if ($last_was_code && $type ne 'code') {
-                $lines[-2] .= ';';
-            }
-            $last_was_code = 0;
-            
+
             # Text
             if ($type eq 'text') {
 
@@ -65,14 +54,7 @@ sub build {
 
             # Code
             if ($type eq 'code') {
-                $lines[-1] .= $value;
-                $last_was_code = 1;
-            }
-
-            # Global Code
-            if ($type eq 'global') {
-                push @global, $value;
-                pop @lines;
+                $lines[-1] .= "$value;";
             }
 
             # Expression
@@ -87,19 +69,13 @@ sub build {
             }
         }
     }
-    
-    # add semicolon to end of code
-    if ($last_was_code) {
-        $lines[-1] .= ';';
-    }
-    
+
     # Wrap
     $lines[0] ||= '';
     $lines[0]   = q/sub { my $_MENTA = ''; my $_MENTA_T = '';/ . $lines[0];
     $lines[-1] .= q/return $_MENTA; }/;
 
     $self->{code} = join "\n", @lines;
-    $self->{global} = join "\n", @global;
     return $self;
 }
 
@@ -113,7 +89,6 @@ sub parse {
 
     # Tags
     my $line_start    = quotemeta $self->{line_start};
-    my $global_start  = quotemeta $self->{global_start};
     my $tag_start     = quotemeta $self->{tag_start};
     my $tag_end       = quotemeta $self->{tag_end};
     my $cmnt_mark     = quotemeta $self->{comment_mark};
@@ -126,7 +101,7 @@ sub parse {
     for my $line (split /\n/, $tmpl) {
 
         # Perl line without return value
-        if ($line =~ /^$line_start\s?(.*)$/) {
+        if ($line =~ /^$line_start\s+(.+)$/) {
             push @{$self->{tree}}, ['code', $1];
             $multiline_expression = 0;
             next;
@@ -142,13 +117,6 @@ sub parse {
         # Perl line with raw return value
         if ($line =~ /^$line_start$raw_expr_mark\s+(.+)$/) {
             push @{$self->{tree}}, ['raw_expr', $1];
-            $multiline_expression = 0;
-            next;
-        }
-
-        # Perl code to be stored in global
-        if ($line =~ /^$global_start\s?(.*)$/) {
-            push @{$self->{tree}}, ['global', $1];
             $multiline_expression = 0;
             next;
         }
