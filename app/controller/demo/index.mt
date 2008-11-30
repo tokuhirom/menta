@@ -13,6 +13,7 @@
     <li><a href="<?= uri_for('demo/perlinfo')   ?>">perlinfo()</a></li>
     <li><a href="<?= uri_for('demo/session')    ?>">session管理</a></li>
     <li><a href="<?= uri_for('demo/openid')     ?>">OpenID(LWP, Crypt::SSLeay|Net::SSL が必要)</a></li>
+    <li><a href="<?= uri_for('demo/openssl_path')     ?>">OpenSSL のパスを表示します(*nix系OSでのみ動作)</a></li>
 </ul>
 
 ?= render('footer.mt')
