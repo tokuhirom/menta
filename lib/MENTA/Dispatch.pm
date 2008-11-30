@@ -12,24 +12,21 @@ sub dispatch {
         my $controller = "${cdir}/${path}.pl";
         my $controller_mt = "${cdir}/${path}.mt";
         if (-f $controller) {
-            my $meth = $path;
-            $meth =~ s!^.+/!!;
-            $meth = "do_$meth";
-            package main;
-            do $controller;
+            my $pkg = do $controller;
             if (my $e = $@) {
                 if (ref $e) {
+                    warn $e;
                     return;
                 } else {
                     die $e;
                 }
             }
             die $@ if $@;
-            if (my $code = main->can($meth)) {
+            if (my $code = $pkg->run()) {
                 $code->();
                 die "なにも出力してません";
             } else {
-                die "「${path}」というモードは存在しません!${controller} の中に ${meth} が定義されていないようです";
+                die "${controller} の中に run 関数が定義されていないようです";
             }
         } elsif (-f $controller_mt) {
             MENTA::Util::require_once('MENTA/TemplateLoader.pm');

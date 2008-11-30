@@ -7,7 +7,7 @@ my $OP_MAP = +{
     livedoor => 'https://auth.livedoor.com/openid/server',
 };
 
-sub do_openid {
+sub run {
     if (param('check')) {
         # OP サーバにリダイレクトする(step 2)
         my $op = param('op') or die "op の指定がないよ";
@@ -16,7 +16,6 @@ sub do_openid {
             $server_url,
             "http://$ENV{SERVER_NAME}:$ENV{SERVER_PORT}" . uri_for('demo/openid', {back => 1}),
         );
-        warn $check_url;
         return redirect($check_url);
     } elsif (param('back')) {
         # OPサーバからのレスポンスを処理する(step 3)
