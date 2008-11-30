@@ -14,7 +14,12 @@ sub run {
         my $server_url = $OP_MAP->{$op} or die "知らない OP だ";
         my $check_url = Net::OpenID::Consumer::Lite->check_url(
             $server_url,
-            "http://$ENV{SERVER_NAME}:$ENV{SERVER_PORT}" . uri_for('demo/openid', {back => 1}),
+            "http://$ENV{SERVER_NAME}:$ENV{SERVER_PORT}" . uri_for( 'demo/openid', { back => 1 } ),
+            {
+                "http://openid.net/extensions/sreg/1.1" => {
+                    required => join( ",", qw/email nickname/ )
+                }
+            }
         );
         return redirect($check_url);
     } elsif (param('back')) {

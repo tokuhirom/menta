@@ -2,7 +2,7 @@ package Net::OpenID::Consumer::Lite;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 use LWP::UserAgent;
 use Carp ();
 
@@ -34,12 +34,28 @@ sub _get {
 }
 
 sub check_url {
-    my ($class, $server_url, $return_to) = (shift, shift, shift);
+    my ($class, $server_url, $return_to, $extensions) = (shift, shift, shift, shift);
     Carp::croak("missing params")      unless $return_to;
-    Carp::croak("Too many parameters") if @_;
     Carp::croak("this module supports only https: $server_url") unless $server_url =~ /^https/;
 
-    return "${server_url}?openid.mode=checkid_immediate&openid.return_to=" . URI::Escape::uri_escape($return_to);
+    my $url = URI->new($server_url);
+    my %args = (
+        'openid.mode' => 'checkid_immediate',
+        'openid.return_to' => $return_to,
+    );
+    if ($extensions) {
+        my $i = 1;
+        while (my ($ns, $args) = each %$extensions) {
+            my $ext_alias = "e$i";
+            $args{"openid.ns.$ext_alias"} = $ns;
+            while (my ($key, $val) = each %$args) {
+                $args{"openid.${ext_alias}.${key}"} = $val;
+            }
+            $i++;
+        }
+    }
+    $url->query_form(%args);
+    return $url->as_string;
 }
 
 sub _check_authentication {
@@ -121,6 +137,9 @@ Net::OpenID::Consumer::Lite - OpenID consumer library for minimalist
     my $check_url = Net::OpenID::Consumer::Lite->check_url(
         'https://mixi.jp/openid_server.pl',   # OpenID server url
         'http://example.com/back_to_here',    # return url
+        {
+            "http://openid.net/extensions/sreg/1.1" => { required => join( ",", qw/email nickname/ ) }
+        }, # extensions(optional)
     );
 
     # handle response of OP
