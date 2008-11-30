@@ -27,14 +27,14 @@ t/              - MENTA 自体のテストスクリプト。ユーザーの方�
 <div class="blocked-content">
 
 <h3>Hello World してみる</h3>
-? my $hello = 'app/controller/hello.mt'
+? my $hello = 'app/controller/demo/hello.mt'
 <p>下記のようなファイルを、<?= $hello ?> におきます。</p>
 <pre><code><?= file_read($hello) ?></code></pre>
 <p><code>param("user")</code> と書くと、<code><?= uri_for('demo/hello', { user => 'kazuhooku' }) ?></code> の <code>kazuhooku</code> の部分がとりだせます。</p>
 <p><a href="<?= uri_for('demo/hello', { user => 'kazuhooku' }) ?>">実際にうごくデモ</a></p>
 
 <h3>カウンターをつけてみる</h3>
-? my $counter = 'app/controller/counter.mt'
+? my $counter = 'app/controller/demo/counter.mt'
 <pre><code><?= file_read($counter) ?></code></pre>
 <p>このようにすると、カウンターを簡単に HTML の中にうめこめます。</p>
 <p><code>counter_increment("test")</code> と書くと、<code>test</code> という名前のカウンターが 1 増えます。<code>counter_increment</code> の返却値として、1 増えた結果がかえってきますのでそのまま表示するだけでカウンターになります。</p>
