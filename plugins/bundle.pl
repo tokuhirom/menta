@@ -2,7 +2,6 @@ use UNIVERSAL::require;
 
 my @vers = (
     'CGI::Simple'                   => '1.106',
-    'Carp::Always'                  => '0.09',
     'Class::Accessor'               => '0.31',
     'Class::Trigger'                => '0.13',
     'Data::Page'                    => '2.01',

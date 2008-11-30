@@ -9,12 +9,6 @@ CGI::Simple
 CGI::Simple は CGI.pm と同じような機能を提供しますが、CGI.pm よりもシンプルで使いやすいです。
 HTML の生成機能などの余計なものがなく、シンプルでわかりやすい実装なので、これを採用しました。
 
-Carp::Always
-------------
-
-use Carp::Always と書くか perl -MCarp::Always とするだけで、die したときや warn したときにスタックトレースが
-表示されるようになります。デバッグ時には欠かせません。
-
 Class::Accessor
 ---------------
 
