@@ -18,15 +18,12 @@ sub import {
 
         my $pkg = do {
             local $_ = (caller(0))[1];
-            s!^app/controller/+!!;
-            s{\.pl$}{};
+            s{^app/controller/+|\.pl$}{}g;
             s{/}{::};
             "MENTA::Controller::$_";
         };
 
-        $_ = $data;
-        s{^}{use strict;use warnings;\npackage $pkg;\nMENTA::Controller->install_functions();\n};
-        s{$}{;"$pkg";};
+        $_ = qq{use strict;use warnings;\npackage $pkg;\nMENTA::Controller->install_functions();\n$data;"$pkg";};
 
         return $count;
     });

@@ -25,3 +25,4 @@ TODO
       - TinyURL
         - see http://naoya.dyndns.org/~naoya/mt/archives/001682.html
     - Module::CoreList をやっぱりつかうのやめようかなー
+    perlinfo で controller_dir つかえずエラー
