@@ -50,11 +50,6 @@ Email::Send
 
 メールの送信をするのに使います。
 
-Filter::SQL
------------
-
-SQL を直接 Perl のソースコードに埋め込むことができます。id:kazuhooku さんの推薦により導入されました。
-
 HTML::FillInForm
 ----------------
 
