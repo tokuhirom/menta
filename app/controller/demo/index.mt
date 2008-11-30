@@ -12,6 +12,7 @@
     <li><a href="<?= uri_for('demo/hello', { user => 'kazuhooku' }) ?>">PHP っぽくそのままテンプレート表示しちゃう</a></li>
     <li><a href="<?= uri_for('demo/perlinfo')   ?>">perlinfo()</a></li>
     <li><a href="<?= uri_for('demo/session')    ?>">session管理</a></li>
+    <li><a href="<?= uri_for('demo/openid')     ?>">OpenID(LWP, Crypt::SSLeay|Net::SSL が必要)</a></li>
 </ul>
 
 ?= render('footer.mt')
