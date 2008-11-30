@@ -1,10 +1,10 @@
-=head2 Wed Nov 26 16:43:44 2008: C<Module> L<Object::Tiny|Object::Tiny>
+=head2 Sun Nov 30 15:08:33 2008: C<Module> L<Net::OpenID::Consumer::Lite|Net::OpenID::Consumer::Lite>
 
 =over 4
 
 =item *
 
-C<installed into: /tmp/mAVsoPbnV4/outputdir/lib/perl5>
+C<installed into: /tmp/eVYqVHMP3q/outputdir/lib/perl5>
 
 =item *
 
@@ -12,7 +12,7 @@ C<LINKTYPE: dynamic>
 
 =item *
 
-C<VERSION: 1.06>
+C<VERSION: 0.01>
 
 =item *
 
