@@ -14,7 +14,6 @@ TODO
     CSRF 対策
     はてな認証をサポートする
     コンテナ志向について考える
-    - do_* のアプローチが非常にめんどいっぽ
     - render() したときに、current directory 以外からよめるといいかも
     -- header.mt を読むときに、app/controller/demo/header.mt → app/controller/tmpl/
     -- の順番で探す仕組み。
