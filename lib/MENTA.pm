@@ -87,7 +87,11 @@ sub unescape_html {
 
 sub mt_cache_dir {
     # $> は $EFFECTIVE_USER_ID です。詳しくは perldoc perlvar を参照。
-    config->{menta}->{cache_dir} || "/tmp/menta.${MENTA::VERSION}.$>.mt_cache"
+    my $cachedir = config->{menta}->{cache_dir};
+    return $cachedir if $cachedir;
+
+    MENTA::Util::require_once('File/Spec.pm');
+    return File::Spec->catfile(File::Spec->tmpdir(), "menta.${MENTA::VERSION}.$>.mt_cache");
 }
 
 sub controller_dir {
