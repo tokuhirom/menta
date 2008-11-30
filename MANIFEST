@@ -9,6 +9,9 @@ app/controller/demo/hello.mt
 app/controller/demo/index.mt
 app/controller/demo/mail.pl
 app/controller/demo/mobile.mt
+app/controller/demo/openid.pl
+app/controller/demo/openid_select.mt
+app/controller/demo/openid_verified.mt
 app/controller/demo/perlinfo.mt
 app/controller/demo/session.mt
 app/controller/footer.mt
@@ -160,6 +163,7 @@ extlib/HTTP/Session/Store/Memcached.pm
 extlib/HTTP/Session/Store/Null.pm
 extlib/HTTP/Session/Store/OnMemory.pm
 extlib/HTTP/Session/Store/Test.pm
+extlib/i486-linux-gnu-thread-multi/auto/Net/OpenID/Consumer/Lite/.packlist
 extlib/i486-linux-gnu-thread-multi/perllocal.pod
 extlib/JSON.pm
 extlib/JSON/PP.pm
@@ -173,6 +177,7 @@ extlib/MIME/Types.pm
 extlib/Module/CoreList.pm
 extlib/Module/Pluggable.pm
 extlib/Module/Pluggable/Object.pm
+extlib/Net/OpenID/Consumer/Lite.pm
 extlib/Params/Validate.pm
 extlib/Params/ValidatePP.pm
 extlib/Params/ValidateXS.pm

@@ -1,5 +1,13 @@
 Revision history for Perl extension MENTA
 
+0.09
+
+    - demo
+    -- OpenID のデモを導入
+    - extlib
+    -- Net::OpenID::Consumer::Lite を導入
+    -- Carp::Always をはずす
+
 0.08
 
     - core
