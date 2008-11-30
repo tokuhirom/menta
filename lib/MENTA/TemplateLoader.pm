@@ -77,7 +77,7 @@ sub __use_cache {
 {
     package MENTA::TemplateLoader::Instance;
     no strict 'refs';
-    for my $meth (qw/escape_html unescape_html config render param mobile_agent uri_for static_file_path docroot AUTOLOAD/) {
+    for my $meth (qw/escape_html unescape_html config render param mobile_agent uri_for static_file_path docroot AUTOLOAD redirect/) {
         *{__PACKAGE__ . '::' . $meth} = *{"MENTA::$meth"};
     }
 }
