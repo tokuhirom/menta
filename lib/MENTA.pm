@@ -164,46 +164,13 @@ sub mobile_agent { MENTA->context->mobile_agent() }
 
 
 {
-    # プラグインのロード機構
-
-    my $plugin_loaded;
-    my $__menta_extract_package = sub {
-        my $modulefile = shift;
-        open my $fh, '<', $modulefile or die "$modulefile を開けません: $!";
-        my $in_pod = 0;
-        while (<$fh>) {
-            $in_pod = 1 if m/^=\w/;
-            $in_pod = 0 if /^=cut/;
-            next if ( $in_pod || /^=cut/ );    # skip pod text
-            next if /^\s*\#/;
-
-            /^\s*package\s+(.*?)\s*;/ and return $1;
-        }
-        return;
-    };
-    my $_load_plugin = sub {
-        my $plugin = shift;
-        return if $plugin_loaded->{$plugin};
-        my $path = "plugins/${plugin}.pl";
-        require $path;
-        $plugin_loaded->{$plugin}++;
-        my $package = $__menta_extract_package->($path) || '';
-        no strict 'refs';
-        for (
-            grep { /$plugin/ }
-            grep { defined &{"${package}::$_"} }
-            keys %{"${package}::"}
-        ) {
-            *{"MENTA::$_"} = *{"${package}::$_"}
-        }
-    };
-
+    # プラグインの自動ロード機構
     sub AUTOLOAD {
         my $method = our $AUTOLOAD;
         $method =~ s/.*:://o;
         (my $prefix = $method) =~ s/_.+//;
         die "変な関数よびだしてませんか？: $method" unless $prefix;
-        $_load_plugin->($prefix);
+        MENTA::Util::load_plugin->($prefix);
         return MENTA->can($method)->(@_);
     }
 }
@@ -289,6 +256,41 @@ sub static_file_path {
             return if $required->{$path};
             require $path;
             $required->{$path} = 1;
+        }
+    }
+
+    {
+        my $plugin_loaded;
+        my $__menta_extract_package = sub {
+            my $modulefile = shift;
+            open my $fh, '<', $modulefile or die "$modulefile を開けません: $!";
+            my $in_pod = 0;
+            while (<$fh>) {
+                $in_pod = 1 if m/^=\w/;
+                $in_pod = 0 if /^=cut/;
+                next if ( $in_pod || /^=cut/ );    # skip pod text
+                next if /^\s*\#/;
+
+                /^\s*package\s+(.*?)\s*;/ and return $1;
+            }
+            return;
+        };
+        sub load_plugin {
+            my $plugin = shift;
+            return if $plugin_loaded->{$plugin};
+            my $path = "plugins/${plugin}.pl";
+            require $path;
+            $plugin_loaded->{$plugin}++;
+            my $package = $__menta_extract_package->($path) || '';
+            no strict 'refs';
+            for (
+                grep { /$plugin/ }
+                grep { defined &{"${package}::$_"} }
+                keys %{"${package}::"}
+            ) {
+                *{"MENTA::$_"} = *{"${package}::$_"}
+            }
+            return $package;
         }
     }
 }

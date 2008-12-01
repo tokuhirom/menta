@@ -42,6 +42,28 @@ sub _session {
 sub session_state_class { ref _session->state() }
 sub session_store_class { ref _session->store() }
 
+sub session_logout_url {
+    my $back = shift || MENTA::docroot();
+
+    MENTA::Util::require_once('Digest/MD5.pm');
+    my $csrfkey = Digest::MD5::md5_hex(rand() . session_session_id());
+    session_set(csrf_key => $csrfkey);
+    session_set('plugin.session.logout_back', $back);
+    MENTA::uri_for('plugin/session/logout', {csrf_key => $csrfkey});
+}
+
+sub do_logout {
+    my $csrfkey = session_remove('csrf_key');
+    warn $ENV{QUERY_STRING};
+    unless ($ENV{QUERY_STRING} =~ /csrf_key=$csrfkey/) {
+         die "CSRF エラー";
+    }
+    my $back = session_get('plugin.session.logout_back') || MENTA::docroot();
+    session_expire();
+    warn "REDIRECT TO $back";
+    MENTA::redirect($back);
+}
+
 {
     no strict 'refs';
     my $pkg = __PACKAGE__;

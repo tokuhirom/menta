@@ -7,7 +7,12 @@ sub dispatch {
     my $path = $ENV{PATH_INFO} || '/';
     $path =~ s!^/+!!g;
     $path ||= 'index';
-    if ($path =~ m{^[a-z0-9_/]+$}) {
+    if ($path =~ m{^plugin/([a-z0-9_-]+)/([a-z0-9_]+)$}) {
+        my ($plugin_name, $meth) = ($1, $2);
+        $meth = "do_$meth";
+        my $pkg = MENTA::Util::load_plugin($plugin_name);
+        $pkg->$meth();
+    } elsif ($path =~ m{^[a-z0-9_/]+$}) {
         my $cdir = MENTA::controller_dir();
         my $controller = "${cdir}/${path}.pl";
         my $controller_mt = "${cdir}/${path}.mt";
