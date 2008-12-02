@@ -22,6 +22,7 @@ use HTML::AutoForm::Field::Textarea;
 
 our $VERSION;
 our %Defaults;
+our %Lang_Defaults;
 our $DEFAULT_LANG;
 our $CLASS_PREFIX;
 
@@ -29,11 +30,25 @@ BEGIN {
     $VERSION = '0.01';
     %Defaults = (
         action       => undef,
-        csrf_keyname => '__nanoa_csrf_key',
+        csrf_keyname => '__autoform_csrf_key',
         fields       => undef, # need to be copied
         secure       => 1,
+        reset_label  => undef,
     );
-    Class::Accessor::Lite->mk_accessors(keys %Defaults);
+    %Lang_Defaults = (
+        en => {
+            submit_label => 'Submit Form',
+            error_prefix => '',
+        },
+        ja => {
+            submit_label => 'フォームを投稿',
+            error_prefix => '※',
+        },
+    );
+    Class::Accessor::Lite->mk_accessors(
+        keys %Defaults,
+        keys %{$Lang_Defaults{en}},
+    );
     $DEFAULT_LANG = 'en';
     $CLASS_PREFIX = 'autoform';
 };
@@ -47,6 +62,7 @@ sub new {
             unless defined $args{$n};
     }
     my $self = bless {
+        %{$Lang_Defaults{$DEFAULT_LANG}},
         %Defaults,
         %args,
         fields => [], # filled afterwards
@@ -114,7 +130,7 @@ sub render {
                             '<div class="',
                             $CLASS_PREFIX,
                             '_error">',
-                            _escape_html('※' . $err->message),
+                            _escape_html($self->error_prefix . $err->message),
                             '</div>',
                         );
                     }
@@ -123,16 +139,32 @@ sub render {
                 @r;
             }->($_)
         } @{$self->{fields}}),
-        $self->secure
-            ? (
-                '<input type="hidden" name="',
-                _escape_html($self->csrf_keyname),
-                '" value="',
-                # TODO: use a different id
-                _escape_html($csrf_token),
+        $self->secure ? (
+            '<input type="hidden" name="',
+            _escape_html($self->csrf_keyname),
+            '" value="',
+            # TODO: use a different id
+            _escape_html($csrf_token),
+            '" />',
+        ) : (),
+        $self->submit_label || $self->reset_label ? (
+            '<tr><th></th><td>',
+            $self->submit_label ? (
+                '<input class="',
+                $CLASS_PREFIX,
+                '_field_submit" type="submit" value="',
+                _escape_html($self->submit_label),
                 '" />',
             ) : (),
-        '<tr><th></th><td><input type="submit" value="投稿する" /></td></tr>',
+            $self->reset_label ? (
+                '<input class="',
+                $CLASS_PREFIX,
+                '_field_reset" type="reset" value="',
+                _escape_html($self->reset_label),
+                '" />',
+            ) : (),
+            '</td></tr>',
+        ) : (),
         '</table></form>',
     );
     $html;
@@ -278,7 +310,7 @@ action attribute of form tag
 
 =head2 csrf_keyname
 
-set parameter name used for CSRF protection (default: '__nanoa_csrf_key')
+set parameter name used for CSRF protection (default: '__autoform_csrf_key')
 
 =head2 field($field_name)
 
