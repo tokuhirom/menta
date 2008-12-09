@@ -1,5 +1,18 @@
 Revision history for Perl extension MENTA
 
+0.10
+
+    - HTTP::Engine::MinimalCGI をベースに書き直した。この変更により、FCGI や ModPerl への移行が容易になった。
+    - HTML::AutoForm を最新版に更新
+    - テンプレート更新しめんた。`docroot()` が空だと望ましくないことになっていたのでスラッシュッシュ(by drry++)
+    - plugin が Controller をもてるようになった
+    - openid がつかいやすくなった
+    - ログアウト処理(session expire)をプラグインがうけもつようにした
+    - OpenID でニックネームをとるようにした。sreg などのサポートによるもの。
+    - Filter::SQL を削除
+    - package main; している部分を削除。一般的なプログラミングスタイルに近くなった。
+    - *.pl style でコントローラを書いた場合でもきちんと動作するようにした
+
 0.09
 
     - demo
