@@ -65,7 +65,8 @@ sub show_static {
         status => 200,
         body   => do { local $/; <$fh> },
     );
-    $res->header->content_type(guess_mime_type($path));
+    $res->content_type(guess_mime_type($path));
+    CGI::ExceptionManager::detach($res);
 }
 
 sub guess_mime_type {
