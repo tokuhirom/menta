@@ -55,6 +55,7 @@ sub show_static {
     my $path = shift;
     MENTA::Util::require_once('Cwd.pm');
     MENTA::Util::require_once('File/Spec.pm');
+    MENTA::Util::require_once('CGI/Simple/Util.pm');
     $path = Cwd::realpath($path);
     my $appdir = Cwd::realpath(File::Spec->catfile(Cwd::cwd(), 'app', 'static'));
     if (index($path, $appdir) != 0) {
@@ -66,6 +67,7 @@ sub show_static {
         body   => do { local $/; <$fh> },
     );
     $res->content_type(guess_mime_type($path));
+    $res->header( Expires => CGI::Simple::Util::expires('+1d') );
     CGI::ExceptionManager::detach($res);
 }
 
