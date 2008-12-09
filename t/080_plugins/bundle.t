@@ -5,7 +5,7 @@ use UNIVERSAL::require;
 
 do 'plugins/bundle.pl';
 
-my %libs = bundle_libs();
+my %libs = MENTA::Plugin::Bundle::bundle_libs();
 plan tests => scalar keys %libs;
 no strict 'refs';
 while (my ($key, $val) = each %libs) {
