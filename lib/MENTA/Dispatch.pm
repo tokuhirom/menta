@@ -61,11 +61,11 @@ sub show_static {
         die "どうやら攻撃されているようだ: $path";
     }
     open my $fh, '<:raw', $path or die "ファイルを開けません: ${path}: $!";
-    binmode STDOUT;
-    printf "Content-Length: %d\r\n", -s $path;
-    printf "Content-Type: %s\r\n\r\n", guess_mime_type($path);
-    print do { local $/; <$fh> };
-    close $fh;
+    my $res = HTTP::Engine::Response->new(
+        status => 200,
+        body   => do { local $/; <$fh> },
+    );
+    $res->header->content_type(guess_mime_type($path));
 }
 
 sub guess_mime_type {

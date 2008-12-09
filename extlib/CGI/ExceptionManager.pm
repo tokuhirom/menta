@@ -2,40 +2,45 @@ package CGI::ExceptionManager;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.02';
+our $VERSION = '0.04';
 
-sub detach { die bless [], 'CGI::ExceptionManager::Exception' }
+sub detach { die bless [@_], 'CGI::ExceptionManager::Exception' }
 
 my $stacktrace_required;
 
 sub run {
     my ($class, %args) = @_;
 
+    my $response;
     my $err_info;
     local $SIG{__DIE__} = sub {
         my ($msg) = @_;
         if (ref $msg eq 'CGI::ExceptionManager::Exception') {
+            $response = $msg->[0];
             undef $err_info;
         } else {
-            unless ($stacktrace_required) {
-                require CGI::ExceptionManager::StackTrace;
-                $stacktrace_required = 1;
+            my $st_class = 'CGI::ExceptionManager::StackTrace::' . ($args{stacktrace_class} || 'CGI');
+            unless ($stacktrace_required->{$st_class}) {
+                (my $s = "$st_class\.pm") =~ s!::!/!g;
+                require $s;
+                $stacktrace_required->{$st_class} = 1;
             }
-            $err_info = CGI::ExceptionManager::StackTrace->new($msg);
+            $err_info = $st_class->new($msg);
         }
         die $msg;
     };
     local $@;
     eval {
-        $args{callback}->();
+        $response = $args{callback}->();
         undef $err_info;
     };
     if ($err_info) {
-        $err_info->output(
+        $response = $err_info->output(
             powered_by => $args{powered_by} || __PACKAGE__,
             ($args{renderer} ? (renderer => $args{renderer}) : ())
         );
     }
+    return $response;
 }
 
 1;

@@ -3,6 +3,7 @@ BEGIN {
     unshift @INC, 'lib', 'extlib';
 };
 use MENTA;
+use HTTP::Engine::MinimalCGI;
 # -- ここまではおまじない --
 
 MENTA->run_menta({

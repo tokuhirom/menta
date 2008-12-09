@@ -22,9 +22,10 @@ sub import {
     our $context;
     sub context { $context }
     sub run_context {
-        my ($class, $config, $code) = @_;
+        my ($class, $config, $req, $code) = @_;
         local $context = MENTA::Context->new(
-            config => $config,
+            config  => $config,
+            request => $req,
         );
         $code->();
     }
@@ -32,10 +33,10 @@ sub import {
 
 # Class::Trigger はロードに時間かかるので自前で実装してる
 sub call_trigger {
-    my ($class, $triggername) = @_;
+    my ($class, $triggername, @args) = @_;
     my $c = context();
     for my $code (@{$c->{triggers}->{$triggername}}) {
-        $code->($c);
+        $code->($c, @args);
     }
 }
 
@@ -44,21 +45,31 @@ sub add_trigger {
     push @{context()->{triggers}->{$triggername}}, $code;
 }
 
+# run as cgi
 sub run_menta {
     my $class  = shift;
     my $config = shift;
 
-    CGI::ExceptionManager->run(
-        callback => sub {
-            MENTA->run_context(
-                $config => sub {
-                    MENTA::Dispatch->dispatch()
-                }
-            );
-        },
-        powered_by => '<strong>MENTA</strong>, Web Application Framework.',
-        ($config->{menta}->{fatals_to_browser} ? () : (renderer => sub { "INTERNAL SERVER ERROR!" x 100 }))
-    );
+    HTTP::Engine->new(
+        interface => {
+            module => 'MinimalCGI',
+            request_handler => sub {
+                my $req = shift;
+                CGI::ExceptionManager->run(
+                    callback => sub {
+                        MENTA->run_context(
+                            $config, $req, sub {
+                                MENTA::Dispatch->dispatch()
+                            }
+                        );
+                    },
+                    powered_by => '<strong>MENTA</strong>, Web Application Framework.',
+                    stacktrace_class => 'HTTPEngine',
+                    ($config->{menta}->{fatals_to_browser} ? () : (renderer => sub { "INTERNAL SERVER ERROR!" x 100 }))
+                );
+            }
+        }
+    )->run;
 }
 
 sub config () { MENTA->context->config }
@@ -115,13 +126,9 @@ sub render {
 }
 
 sub _finish {
-    MENTA->call_trigger('BEFORE_OUTPUT');
-
-    my $res = MENTA->context->res;
-    $res->headers->content_length(length($res->content));
-    binmode STDOUT;
-    print $res->as_string;
-    CGI::ExceptionManager::detach();
+    my $res = shift;
+    MENTA->call_trigger('BEFORE_OUTPUT', $res);
+    CGI::ExceptionManager::detach($res);
 }
 
 sub render_and_print {
@@ -130,35 +137,36 @@ sub render_and_print {
     my $out = MENTA::TemplateLoader::__load("@{[ controller_dir() ]}/$tmpl", @params);
     $out = MENTA::Util::encode_output($out);
 
-    my $res = MENTA->context->res;
+    my $res = HTTP::Engine::Response->new(
+        body => $out,
+    );
     $res->headers->content_type("text/html; charset=" . MENTA::Util::_charset());
-    $res->content($out);
-
-    _finish();
+    _finish($res);
 }
 
 sub redirect {
     my ($location, ) = @_;
 
-    my $res = MENTA->context->res;
-    $res->header('Status' => 302);
+    my $res = HTTP::Engine::Response->new(
+        status => 302,
+    );
     $res->header('Location' => $location);
-
-    _finish();
+    _finish($res);
 }
 
 sub finalize {
     my $str = shift;
     my $content_type = shift || ('text/html; charset=' . MENTA::Util::_charset());
 
-    my $res = MENTA->context->res;
+    my $res = HTTP::Engine::Response->new(
+        status => 200,
+        body   => $str,
+    );
     $res->headers->content_type($content_type);
-    $res->content($str);
-
-    _finish();
+    _finish($res);
 }
 
-sub param        { MENTA->context->request->param(@_) }
+sub param        { MENTA::Util::decode_input(MENTA->context->request->param(@_)) }
 sub upload       { MENTA->context->request->upload(@_) }
 sub mobile_agent { MENTA->context->mobile_agent() }
 
@@ -170,8 +178,10 @@ sub mobile_agent { MENTA->context->mobile_agent() }
         $method =~ s/.*:://o;
         (my $prefix = $method) =~ s/_.+//;
         die "変な関数よびだしてませんか？: $method" unless $prefix;
-        MENTA::Util::load_plugin->($prefix);
-        return MENTA->can($method)->(@_);
+        MENTA::Util::load_plugin($prefix);
+        my $code = MENTA->can($method);
+        die "${method} という関数が見つかりません" unless $code;
+        return $code->(@_);
     }
 }
 
@@ -282,6 +292,7 @@ sub static_file_path {
             require $path;
             $plugin_loaded->{$plugin}++;
             my $package = $__menta_extract_package->($path) || '';
+            die "${plugin} プラグインの中にパッケージ宣言がみつかりません" unless $package;
             no strict 'refs';
             for (
                 grep { /$plugin/ }

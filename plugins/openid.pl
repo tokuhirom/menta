@@ -1,13 +1,14 @@
 package MENTA::Plugin::OpenID;
 use MENTA::Plugin;
 use Net::OpenID::Consumer::Lite;
+use Encode ();
 
 my $OP_MAP = {
     mixi     => {
         endpoint => 'https://mixi.jp/openid_server.pl',
         nickname_fetcher => sub {
             my $vident = shift;
-            $vident->{'sreg.nickname'};
+            Encode::decode_utf8($vident->{'sreg.nickname'});
         }
     },
     livedoor => {

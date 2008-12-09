@@ -93,18 +93,6 @@ sub as_html {
     $out;
 }
 
-sub output {
-    my ($err, %args) = @_;
-    
-    warn $err->{message};
-    
-    print "Status: 500\r\n";
-    print "Content-type: text/html; charset=utf-8\r\n";
-    print "\r\n";
-
-    my $body = $args{renderer} ? $args{renderer}->($err, %args) : $err->as_html(%args);
-    utf8::encode($body);
-    print $body;
-}
+sub output { die 'this is abstract base method' }
 
 1;

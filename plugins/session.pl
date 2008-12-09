@@ -31,7 +31,8 @@ sub _session {
         );
         unless ($hooked++) {
             MENTA->add_trigger('BEFORE_OUTPUT' => sub {
-                $session->response_filter(MENTA->context->res);
+                my ($c, $res) = @_;
+                $session->response_filter($res);
                 $session->finalize;
             });
         }

@@ -1,3 +1,6 @@
+package MENTA::Plugin::Bundle;
+use strict;
+use warnings;
 use UNIVERSAL::require;
 
 my @vers = (
@@ -32,3 +35,4 @@ sub bundle_libs {
     @vers
 }
 
+1;
