@@ -7,6 +7,7 @@ dir('extlib')->recurse(
     callback => sub {
         my $f = shift;
         # return unless -f $f;
+        return unless $f =~ m{ \.pm \z }msx;
         $size += $f->stat->size;
     }
 );
