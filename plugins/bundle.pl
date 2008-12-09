@@ -11,7 +11,6 @@ my @vers = (
     'DateTime'                      => '0.45',
     'Email::MIME'                   => '1.861',
     'Email::Send'                   => '2.192',
-    'Filter::SQL'                   => '0.10',
     'HTML::FillInForm'              => '2.00',
     'HTML::StickyQuery::DoCoMoGUID' => '0.01',
     'HTML::TreeBuilder'             => '3.23',
