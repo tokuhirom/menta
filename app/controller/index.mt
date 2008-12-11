@@ -23,6 +23,7 @@
 <ul>
     <li><a href="<?= uri_for('manual/index') ?>">マニュアル</a></li>
     <li><a href="<?= uri_for('demo/index')   ?>">MENTA デモ</a></li>
+    <li><a href="<?= uri_for('nopaste/')   ?>">NoPaste デモ</a></li>
 </ul>
 
 ?= render('footer.mt')
