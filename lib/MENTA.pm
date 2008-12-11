@@ -169,7 +169,15 @@ sub finalize {
 sub param        { MENTA::Util::decode_input(MENTA->context->request->param(@_)) }
 sub upload       { MENTA->context->request->upload(@_) }
 sub mobile_agent { MENTA->context->mobile_agent() }
-
+sub current_url  {
+    my $req = MENTA->context->request;
+    my $protocol = 'http';
+    my $port     = $ENV{SERVER_PORT} || 80;
+    my $url = "http://" . $req->header('Host');
+    $url .= docroot();
+    $url .= "$ENV{PATH_INFO}";
+    $url .= '?' . $ENV{QUERY_STRING};
+}
 
 {
     # プラグインの自動ロード機構

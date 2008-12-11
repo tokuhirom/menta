@@ -22,6 +22,12 @@ sub sql_dbh {
     }
 }
 
+sub sql_do {
+    my ($sql, @params) = @_;
+    my $dbh = sql_dbh();
+    $dbh->do($sql) or die "prepare できません: " . $dbh->errstr();
+}
+
 sub sql_prepare_exec {
     my ($sql, @params) = @_;
     my $dbh = sql_dbh();
