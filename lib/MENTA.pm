@@ -121,10 +121,15 @@ sub mt_cache_dir {
 }
 
 sub base_dir {
-    my $basedir = config->{menta}->{base_dir};
-    return '' unless $basedir;
-    $basedir =~ s!([^/])$!$1/!;
-    return $basedir;
+    config->{menta}->{__processed_base_dir} ||= do {
+        my $basedir = config->{menta}->{base_dir};
+        unless ($basedir) {
+            require Cwd;
+            $basedir = Cwd::cwd();
+        }
+        $basedir =~ s!([^/])$!$1/!;
+        $basedir;
+    };
 }
 
 sub controller_dir {
