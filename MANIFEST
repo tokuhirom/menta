@@ -19,8 +19,13 @@ app/controller/header.mt
 app/controller/index.mt
 app/controller/manual/index.mt
 app/controller/manual/install.mt
+app/controller/manual/mod_perl.mt
 app/controller/manual/modules.mt
 app/controller/manual/tutorial.mt
+app/controller/nopaste/index.pl
+app/controller/nopaste/tmpl/error.mt
+app/controller/nopaste/tmpl/form.mt
+app/controller/nopaste/tmpl/show.mt
 app/controller/pager.mt
 app/data/counter.txt
 app/data/data.sqlite
@@ -36,6 +41,7 @@ AUTHORS
 bin/cgi-server.pl
 bin/install-lib.pl
 Changes
+deploy.sh
 extlib/Attribute/Params/Validate.pm
 extlib/Cache/BaseCache.pm
 extlib/Cache/BaseCacheTester.pm
@@ -308,6 +314,7 @@ lib/MENTA.pm
 lib/MENTA/Context.pm
 lib/MENTA/Controller.pm
 lib/MENTA/Dispatch.pm
+lib/MENTA/ModPerl.pm
 lib/MENTA/Plugin.pm
 lib/MENTA/Template.pm
 lib/MENTA/TemplateLoader.pm

@@ -1,5 +1,10 @@
 Revision history for Perl extension MENTA
 
+0.11
+
+    - mod_perl を正式にサポートすることにした。
+    - NoPaste をアプリケーションとして追加
+
 0.10
 
     - HTTP::Engine::MinimalCGI をベースに書き直した。この変更により、FCGI や ModPerl への移行が容易になった。
