@@ -41,14 +41,14 @@ sub dispatch {
             $out = MENTA::Util::encode_output($out);
             MENTA::finalize($out);
         } else {
-            die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})";
+            die "「${path}」というモードは存在しません。コントローラファイルもありません(${controller})。テンプレートファイルもありません(${controller_mt})。ベースディレクトリは @{[ MENTA::base_dir() ]} です。";
         }
-    } elsif ($path ne 'menta.cgi' && -f "app/$path" && $path =~ /^static\//) {
+    } elsif ($path ne 'menta.cgi' && -f (MENTA::base_dir() . "app/$path") && $path =~ /^static\//) {
         show_static("app/$path");
     } elsif ($path =~ /^(?:crossdomain\.xml|favicon\.ico|robots\.txt)$/) {
         print "status: 404\r\ncontent-type: text/plain\r\n\r\n";
     } else {
-        die "'${path}' を処理する方法がわかりません";
+        die "'${path}' を処理する方法がわかりません(@{[ MENTA::base_dir() . 'app/' . $path ]})";
     }
 }
 
@@ -57,8 +57,8 @@ sub show_static {
     MENTA::Util::require_once('Cwd.pm');
     MENTA::Util::require_once('File/Spec.pm');
     MENTA::Util::require_once('CGI/Simple/Util.pm');
-    $path = Cwd::realpath($path);
-    my $appdir = Cwd::realpath(File::Spec->catfile(Cwd::cwd(), 'app', 'static'));
+    $path = Cwd::realpath(File::Spec->catfile(MENTA::base_dir(), $path));
+    my $appdir = Cwd::realpath(File::Spec->catfile(MENTA::base_dir(), 'app', 'static'));
     if (index($path, $appdir) != 0) {
         die "どうやら攻撃されているようだ: $path";
     }

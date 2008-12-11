@@ -22,43 +22,58 @@ sub import {
     our $context;
     sub context { $context }
     sub run_context {
-        my ($class, $config, $req, $code) = @_;
+        my ($class, $config, $req, $engine, $code) = @_;
         local $context = MENTA::Context->new(
-            config  => $config,
-            request => $req,
+            config   => $config,
+            request  => $req,
+            __engine => $engine,
         );
         $code->();
     }
 }
 
-# Class::Trigger はロードに時間かかるので自前で実装してる
-sub call_trigger {
-    my ($class, $triggername, @args) = @_;
-    my $c = context();
-    for my $code (@{$c->{triggers}->{$triggername}}) {
-        $code->($c, @args);
+{
+    # Class::Trigger はロードに時間かかるので自前で実装してる
+    my $static_triggers;
+    sub call_trigger {
+        my ($class, $triggername, @args) = @_;
+        my $c = context();
+        for my $code (@{$c->{triggers}->{$triggername}}, @{ $static_triggers->{triggers}->{$triggername} || [] }) {
+            $code->($c, @args);
+        }
     }
-}
 
-sub add_trigger {
-    my ($class, $triggername, $code) = @_;
-    push @{context()->{triggers}->{$triggername}}, $code;
+    sub add_trigger {
+        my ($class, $triggername, $code) = @_;
+        if (ref context()) {
+            push @{context()->{triggers}->{$triggername}}, $code;
+        } else {
+            push @{$static_triggers->{triggers}->{$triggername}}, $code;
+        }
+    }
 }
 
 # run as cgi
 sub run_menta {
-    my $class  = shift;
-    my $config = shift;
+    my ($class, $config) = @_;
+    $class->create_engine($config, 'MinimalCGI')->run;
+}
 
-    HTTP::Engine->new(
+sub create_engine {
+    my ($class, $config, $interface) = @_;
+
+    my $engine;
+    $engine = HTTP::Engine->new(
         interface => {
-            module => 'MinimalCGI',
+            module => $interface,
             request_handler => sub {
                 my $req = shift;
+                local $MENTA::STASH;
                 CGI::ExceptionManager->run(
                     callback => sub {
                         MENTA->run_context(
-                            $config, $req, sub {
+                            $config, $req, $engine, sub {
+                                MENTA->call_trigger('BEFORE_DISPATCH');
                                 MENTA::Dispatch->dispatch()
                             }
                         );
@@ -69,7 +84,7 @@ sub run_menta {
                 );
             }
         }
-    )->run;
+    );
 }
 
 sub config () { MENTA->context->config }
@@ -105,12 +120,21 @@ sub mt_cache_dir {
     return File::Spec->catfile(File::Spec->tmpdir(), "menta.${MENTA::VERSION}.$>.mt_cache");
 }
 
+sub base_dir {
+    my $basedir = config->{menta}->{base_dir};
+    return '' unless $basedir;
+    $basedir =~ s!([^/])$!$1/!;
+    return $basedir;
+}
+
 sub controller_dir {
-    config->{menta}->{controller_dir} || 'app/controller/'
+    config->{menta}->{controller_dir} ||= base_dir() . 'app/controller/';
+    config->{menta}->{controller_dir};
 }
 
 sub data_dir {
-    config->{menta}->{data_dir} || 'app/data/'
+    config->{menta}->{data_dir} ||= base_dir() . 'app/controller/';
+    config->{menta}->{data_dir};
 }
 
 sub __render_partial {
@@ -296,7 +320,7 @@ sub static_file_path {
         sub load_plugin {
             my $plugin = shift;
             return if $plugin_loaded->{$plugin};
-            my $path = "plugins/${plugin}.pl";
+            my $path = MENTA::base_dir() . "plugins/${plugin}.pl";
             require $path;
             $plugin_loaded->{$plugin}++;
             my $package = $__menta_extract_package->($path) || '';

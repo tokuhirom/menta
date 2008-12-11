@@ -4,6 +4,8 @@ use warnings;
 use Filter::Util::Call ();
 
 sub import {
+    my $controller_dir = MENTA::controller_dir();
+
     Filter::Util::Call::filter_add(sub {
         my $status;
         my $data = '';
@@ -18,7 +20,7 @@ sub import {
 
         my $pkg = do {
             local $_ = (caller(0))[1];
-            s{^app/controller/+|\.pl$}{}g;
+            s{^$controller_dir/*|\.pl$}{}g;
             s{/}{::};
             "MENTA::Controller::$_";
         };
