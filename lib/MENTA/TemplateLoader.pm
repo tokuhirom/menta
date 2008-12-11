@@ -29,8 +29,9 @@ sub __load {
 sub __compile {
     my ($path) = @_;
     MENTA::Util::require_once('MENTA/Template.pm');
+    my $tmplfname = MENTA::controller_dir() . "/$path";
     my $src = do {
-        open my $fh, '<:utf8', $path or die "${path} を読み込み用に開けません: $!";
+        open my $fh, '<:utf8', $tmplfname or die "${tmplfname} を読み込み用に開けません: $!";
         my $s = do { local $/; join '', <$fh> };
         close $fh;
         $s;

@@ -37,7 +37,7 @@ sub dispatch {
         } elsif (-f $controller_mt) {
             MENTA::Util::require_once('MENTA/TemplateLoader.pm');
             my $tmpldir = MENTA::controller_dir();
-            my $out = MENTA::TemplateLoader::__load("${tmpldir}/${path}.mt", MENTA::controller_dir());
+            my $out = MENTA::TemplateLoader::__load("${path}.mt", MENTA::controller_dir());
             $out = MENTA::Util::encode_output($out);
             MENTA::finalize($out);
         } else {
