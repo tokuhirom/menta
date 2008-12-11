@@ -8,6 +8,7 @@
  <li><a href="<?= uri_for('manual/tutorial') ?>">チュートリアル</a></li>
  <li><a href="<?= uri_for('manual/install')  ?>">インストール方法</a></li>
  <li><a href="<?= uri_for('manual/modules')  ?>">添付モジュールについて</a></li>
+ <li><a href="<?= uri_for('manual/mod_perl') ?>">mod_perl で MENTA を使う方法</a></li>
 </ul>
 
 <h2 class="subtitle">LICENSE</h2>
