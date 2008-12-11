@@ -37,11 +37,11 @@ app/static/allow-right-orange.png
 app/static/jquery.js
 app/static/menta-logo.png
 app/static/style-sites.css
+author/deploy.sh
 AUTHORS
 bin/cgi-server.pl
 bin/install-lib.pl
 Changes
-deploy.sh
 extlib/Attribute/Params/Validate.pm
 extlib/Cache/BaseCache.pm
 extlib/Cache/BaseCacheTester.pm
