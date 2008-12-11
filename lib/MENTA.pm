@@ -138,7 +138,7 @@ sub controller_dir {
 }
 
 sub data_dir {
-    config->{menta}->{data_dir} ||= base_dir() . 'app/controller/';
+    config->{menta}->{data_dir} ||= base_dir() . 'app/data/';
     config->{menta}->{data_dir};
 }
 
