@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base qw/Class::Accessor::Fast/;
 use 5.00800;
-our $VERSION = '0.24';
+our $VERSION = '0.26';
 use Carp ();
 use Scalar::Util ();
 use UNIVERSAL::require;
@@ -87,7 +87,13 @@ sub finalize {
 
 sub DESTROY {
     my $self = shift;
-    $self->finalize();
+
+    if ($self->{store}) {
+        $self->finalize();
+    } else {
+        # this case happen at global destruction?
+        Carp::carp "you should call HTTP::Session->finalize method manually";
+    }
 }
 
 sub keys {
@@ -260,6 +266,12 @@ internal use only
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF GMAIL COME<gt>
+
+=head1 THANKS TO
+
+    kazuhooku
+    amachang
+    walf443
 
 =head1 SEE ALSO
 
