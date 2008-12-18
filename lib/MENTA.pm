@@ -7,7 +7,7 @@ use MENTA::Dispatch ();
 require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 our $REQ;
 our $CONFIG;
 our $STASH;

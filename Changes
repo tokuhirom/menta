@@ -1,5 +1,12 @@
 Revision history for Perl extension MENTA
 
+0.13
+
+    - MENTA::Template を Text::MicroTemplate にさしかえた
+    - Data::Page::Navigation を追加(by hidek++)
+    - String::Diff を追加(by hidek++)
+    - HTTP::Session を 0.26 にあげた(by kazuho++)
+
 0.12
 
     - template cache が効いてない不具合を修正(by mattn++)
