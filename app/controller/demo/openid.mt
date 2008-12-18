@@ -9,7 +9,7 @@
     </form>
 ? } else {
     <ul>
-?   my $map = openid_login_url_map( cancelled => uri_for('demo/openid_cancelled'), verified => uri_for('demo/openid') )
+?   my $map = openid_login_url_map( cancelled => uri_for('demo/openid_cancelled'), verified => uri_for('demo/openid') );
 ?   while (my ($name, $url) = each %$map) {
         <li><a href="<?= $url ?>"><?= $name ?> でログイン</a></li>
 ?   }

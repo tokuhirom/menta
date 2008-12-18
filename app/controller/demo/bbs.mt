@@ -1,4 +1,4 @@
-? my ($entries, $pager) = @_
+? my ($entries, $pager) = @_;
 ?= render('header.mt', 'SQLite をつかった一行掲示板')
 <div class="blocked-content">
 
@@ -16,7 +16,7 @@
 ? } else {
     <p>発言するにはログインが必要です (個人情報は記録／公開されます)</p>
     <ul>
-?   my $map = openid_login_url_map( cancelled => uri_for('demo/bbs_sqlite'), verified => uri_for('demo/bbs_sqlite') )
+?   my $map = openid_login_url_map( cancelled => uri_for('demo/bbs_sqlite'), verified => uri_for('demo/bbs_sqlite') );
 ?   while (my ($name, $url) = each %$map) {
         <li><a href="<?= $url ?>"><?= $name ?> でログイン</a></li>
 ?   }

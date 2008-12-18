@@ -151,7 +151,7 @@ sub __render_partial {
 sub render {
     my ($tmpl, @params) = @_;
     my $out = MENTA::TemplateLoader::__load($tmpl, @params);
-    bless \$out, 'MENTA::Template::RawString';
+    bless \$out, 'Text::MicroTemplate::EncodedString';
 }
 
 sub _finish {

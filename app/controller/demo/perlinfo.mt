@@ -1,5 +1,5 @@
-? use English
-? use Module::CoreList
+? use English;
+? use Module::CoreList;
 <!doctype html>
 <head>
 <title>MENTA Perl information</title>
@@ -45,7 +45,7 @@ td { background-color: #CCCCCC }
 
     <h2>Perl標準添付モジュール(perl <?= $] ?>)</h2>
     <table>
-? my $modules = $Module::CoreList::version{$]}
+? my $modules = $Module::CoreList::version{$]};
 ? for my $key (sort keys %$modules) {
     <tr><th><?= $key ?></th><td><?= $modules->{$key} || '' ?></td>
 ? }

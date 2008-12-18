@@ -1,6 +1,6 @@
-? my $pager = shift
-? my $action = shift
-? my $page_n = $pager->{page}
+? my $pager = shift;
+? my $action = shift;
+? my $page_n = $pager->{page};
 ? if ($pager->{page} == 1) {
 前
 ? } else {

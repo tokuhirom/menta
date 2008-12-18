@@ -7,52 +7,45 @@ use utf8;
 
 sub __load {
     my ($path, @params) = @_;
-    my $out;
+
     if (__use_cache($path)) {
         my $tmplfname = MENTA::mt_cache_dir . "/$path.c";
         local $@;
         my $tmplcode = do $tmplfname;
         die $@ if $@;
         die "テンプレートキャッシュを読み込めませんでした: ${tmplfname}($!)" unless $tmplcode;
-        $out = $tmplcode->(@params);
+        return $tmplcode->(@params)->as_string;
     } else {
-        my $code = __compile($path);
-        local $@;
-        my $tmplcode = eval $code;
-        die $@ if $@;
-        $out = $tmplcode->(@params);
-        __update_cache($path, $code);
+        return __compile($path, @params);
     }
-    $out;
 }
 
 sub __compile {
-    my ($path) = @_;
-    MENTA::Util::require_once('MENTA/Template.pm');
-    my $tmplfname = MENTA::controller_dir() . "/$path";
-    my $src = do {
-        open my $fh, '<:utf8', $tmplfname or die "${tmplfname} を読み込み用に開けません: $!";
-        my $s = do { local $/; join '', <$fh> };
-        close $fh;
-        $s;
-    };
-    my $t = MENTA::Template->new;
-    $t->parse($src);
-    $t->build();
-    my $code = $t->code();
-    $code = << "EOT";
-package MENTA::TemplateLoader::Instance;
-use strict;
-use warnings;
-use utf8;
-$code
-EOT
-;
-    $code;
+    my ($path, @params) = @_;
+    MENTA::Util::require_once('Text/MicroTemplate/File.pm');
+
+    my $mtf = Text::MicroTemplate::File->new(
+        include_path => [MENTA::controller_dir()],
+        package_name => 'MENTA::TemplateLoader::Instance',
+    );
+    my $out = $mtf->build_file($path)->(@params)->as_string;
+    __update_cache($path, $mtf->code);
+    return $out;
 }
 
 sub __update_cache {
     my ($path, $code) = @_;
+
+    $code = <<"...";
+package MENTA::TemplateLoader::Instance;
+sub {
+    local \$SIG{__WARN__} = sub { print STDERR \$_mt->_error(shift, 4, \$_from) };
+    Text::MicroTemplate::encoded_string((
+        $code
+    )->(\@_));
+}
+...
+
     my $cache_path = MENTA::mt_cache_dir;
     foreach my $p (split '/', $path) {
         mkdir $cache_path;
