@@ -15,6 +15,6 @@
 <p>MENTA は Perl License のもとで配布されます。具体的にいうと、なんでも好きなようにしてよい、ということです。</p>
 
 <h2 class="subtitle">開発者</h2>
-<ol><?=r join "\n", map { '<li>' . escape_html($_) . '</li>' } split /[\r\n]+/, file_read(MENTA::base_dir() . 'AUTHORS') ?></ol>
+<ol><?= raw_string(join "\n", map { '<li>' . escape_html($_) . '</li>' } split /[\r\n]+/, file_read(MENTA::base_dir() . 'AUTHORS')) ?></ol>
 
 ?= render('footer.mt')

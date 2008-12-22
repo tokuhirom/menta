@@ -111,6 +111,13 @@ sub unescape_html {
     return $_;
 }
 
+sub raw_string {
+    my $s = shift;
+    ref $s eq 'Text::MicroTemplate::EncodedString'
+        ? $s
+            : bless \$s, 'Text::MicroTemplate::EncodedString';
+}
+
 sub mt_cache_dir {
     # $> は $EFFECTIVE_USER_ID です。詳しくは perldoc perlvar を参照。
     my $cachedir = config->{menta}->{cache_dir};

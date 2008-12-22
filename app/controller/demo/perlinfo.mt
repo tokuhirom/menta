@@ -19,7 +19,7 @@ td { background-color: #CCCCCC }
     <tr><th>OS</th><td><?= $OSNAME ?></td></tr>
     <tr><th>Perl version</th><td><?= $] ?></td></tr>
     <tr><th>Perlのパス</th><td><?= $EXECUTABLE_NAME ?></td></tr>
-    <tr><th>モジュールパス</th><td><?=r join '<br>', map { escape_html $_ } @INC ?></td></tr>
+    <tr><th>モジュールパス</th><td><?= raw_string(join '<br>', map { escape_html $_ } @INC) ?></td></tr>
     <tr><th>プロセスID</th><td><?= $$ ?></td></tr>
     </table>
     <h2>環境変数</h2>
