@@ -10,13 +10,14 @@ sub sql_dbh {
             undef $MENTA::STASH->{sql_dbh};
         }
         my $dbh = DBI->connect(@args) or die "DBに接続できません: $DBI::errstr";
+        $dbh->{unicode} = 1;
         $MENTA::STASH->{sql_dbh} = $dbh;
         $dbh;
     } else {
         $MENTA::STASH->{sql_dbh} ||= do {
             my $dsn = config->{application}->{sql}->{dsn} or die "設定に application.sql.dsn がありません";
             my $dbh = DBI->connect($dsn) or die "DBに接続できません: $DBI::errstr";
-            $dbh->{unicode}++;
+            $dbh->{unicode} = 1;
             $dbh;
         };
     }
