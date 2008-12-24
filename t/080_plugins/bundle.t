@@ -1,6 +1,6 @@
 use Test::More;
 use t::Utils;
-use lib 'extlib';
+use lib 'cgi-extlib-perl/extlib';
 use UNIVERSAL::require;
 
 do 'plugins/bundle.pl';

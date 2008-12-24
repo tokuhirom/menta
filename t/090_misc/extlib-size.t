@@ -3,7 +3,7 @@ use Path::Class;
 use Test::More tests => 1;
 
 my $size = 0;
-dir('extlib')->recurse(
+dir('cgi-extlib-perl/extlib')->recurse(
     callback => sub {
         my $f = shift;
         # return unless -f $f;
