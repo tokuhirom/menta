@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 BEGIN {
-    unshift @INC, 'lib', 'extlib';
+    unshift @INC, 'lib', 'cgi-extlib-perl/extlib';
 };
 use MENTA;
 use HTTP::Engine::MinimalCGI;

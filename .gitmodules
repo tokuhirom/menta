@@ -1,0 +1,3 @@
+[submodule "cgi-extlib-perl"]
+	path = cgi-extlib-perl
+	url = git@github.com:tokuhirom/cgi-extlib-perl.git
