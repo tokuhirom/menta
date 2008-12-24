@@ -20,3 +20,4 @@
 out
 ^cache/*
 ^app/tmpl_cache/*
+\.git/

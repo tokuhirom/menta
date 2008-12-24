@@ -1,5 +1,10 @@
 Revision history for Perl extension MENTA
 
+0.14
+
+    - coderepos から github ニ移行
+    - raw_string ヲ追加(hidek++)
+
 0.13
 
     - MENTA::Template を Text::MicroTemplate にさしかえた

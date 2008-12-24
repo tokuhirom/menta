@@ -8,7 +8,7 @@ require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
 require 'Text/MicroTemplate.pm';
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 our $REQ;
 our $CONFIG;
 our $STASH;
