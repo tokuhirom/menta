@@ -6,6 +6,7 @@ use CGI::ExceptionManager;
 use MENTA::Dispatch ();
 require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
+require 'Text/MicroTemplate.pm';
 
 our $VERSION = '0.13';
 our $REQ;
