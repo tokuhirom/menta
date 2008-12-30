@@ -2,3 +2,10 @@ Makefile
 MANIFEST.bak
 MANIFEST
 META.yml
+hoge.*
+*.sw[op]
+blib/
+inc/
+pm_to_blib
+app/data/session.dbm.dir
+app/data/session.dbm.pag
