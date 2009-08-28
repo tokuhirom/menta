@@ -203,7 +203,18 @@ sub finalize {
     _finish($res);
 }
 
-sub param        { MENTA::Util::decode_input(MENTA->context->request->param(@_)) }
+sub param {
+    if (wantarray) {
+        my @results = ();
+        for my $param (MENTA->context->request->param(@_)) {
+            push(@results, MENTA::Util::decode_input($param));
+        }
+        @results;
+    }
+    else {
+        MENTA::Util::decode_input(MENTA->context->request->param(@_));
+    }
+}
 sub upload       { MENTA->context->request->upload(@_) }
 sub mobile_agent { MENTA->context->mobile_agent() }
 sub current_url  {
