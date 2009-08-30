@@ -205,11 +205,7 @@ sub finalize {
 
 sub param {
     if (wantarray) {
-        my @results = ();
-        for my $param (MENTA->context->request->param(@_)) {
-            push(@results, MENTA::Util::decode_input($param));
-        }
-        @results;
+        map { MENTA::Util::decode_input($_) } MENTA->context->request->param(@_);
     }
     else {
         MENTA::Util::decode_input(MENTA->context->request->param(@_));
