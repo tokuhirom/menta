@@ -1,5 +1,12 @@
 Revision history for Perl extension MENTA
 
+0.15
+
+    - github にちゃんとリンクをはりなおした
+    - git の説明文をちゃんといれた
+    - multiple values support by poppen++
+    - etc.
+
 0.14
 
     - coderepos から github ニ移行
