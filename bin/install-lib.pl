@@ -17,8 +17,10 @@ my %optional_args = (
     'List::MoreUtils'  => '-pm',
     'Params::Validate' => '--pm',
     'DateTime'         => '--pm',
+    'Params::Util'     => '-pm',
 );
 my %skip_packages = map { $_ => 1 } (
+    'perl',           # ignore perl itself.
     'Module::Build',  # only for building
     'LWP::UserAgent', # maybe you have this.
     'HTML::Parser',   # ditto
@@ -26,6 +28,7 @@ my %skip_packages = map { $_ => 1 } (
     'HTTP::Headers',  # ditto
     'DBI',            # ditto
     'HTTP::Headers',  # ditto.
+    'LWP',            # ditto.
     'WWW::MobileCarrierJP', # only for building
     'Digest::SHA1',   # たいていの場合、Digest::MD5 におきかえればインストール可能
 );
@@ -85,6 +88,8 @@ sub install_pkg {
     local $CPAN::Config->{histfile}     = tempfile(CLEANUP => 1);
     local $CPAN::Config->{makepl_arg}   = "INSTALL_BASE=$outdir " . ($optional_args{$pkg} ? $optional_args{$pkg} : '');
     local $CPAN::Config->{mbuildpl_arg} = "--install_base=$outdir";
+
+    print "---- installing $pkg\n";
 
     my $mod = CPAN::Shell->expand("Module", $pkg) or die "cannot find $pkg\n";
     my $dist = $mod->distribution;
