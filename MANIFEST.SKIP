@@ -21,3 +21,5 @@ out
 ^cache/*
 ^app/tmpl_cache/*
 \.git/
+^cgi-extlib-perl/extlib/i\d86-
+^author/
