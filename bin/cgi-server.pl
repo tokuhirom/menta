@@ -5,6 +5,7 @@ use lib 'extlib', 'lib';
 require HTTP::Server::Simple::CGI;
 use POSIX;
 use HTTP::Response;
+use Getopt::Long;
 
 {
     package MENTA::BindSTDOUT::Tie;
@@ -98,6 +99,11 @@ sub HTTP::Response::cgish_filter {
     }
 }
 
-my $server = MENTA::Server->new(5555);
+my $port = 5555;
+GetOptions(
+    'p|port=i' => \$port,
+);
+
+my $server = MENTA::Server->new($port);
 $server->run;
 
