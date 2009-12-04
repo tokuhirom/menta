@@ -13,6 +13,7 @@ my $out = run_cgi(
     PATH_INFO      => '/static/../data/secret.txt',
     REQUEST_METHOD => 'GET',
 );
+$out ||= '';
 
 unlike $out, qr{THIS IS SECRET};
 

@@ -4,7 +4,8 @@ use warnings;
 use utf8;
 
 sub dispatch {
-    my $path = $ENV{PATH_INFO} || '/';
+    my ($class, $env) = @_;
+    my $path = $env->{PATH_INFO} || '/';
     $path =~ s!^/+!!g;
     $path ||= 'index';
     if ($path =~ m{^plugin/([a-z0-9_-]+)/([a-z0-9_]+)$}) {
@@ -63,13 +64,14 @@ sub show_static {
         die "どうやら攻撃されているようだ: $path";
     }
     open my $fh, '<:raw', $path or die "ファイルを開けません: ${path}: $!";
-    my $res = HTTP::Engine::Response->new(
-        status => 200,
-        body   => do { local $/; <$fh> },
-    );
-    $res->content_type(guess_mime_type($path));
-    $res->header( Expires => CGI::Simple::Util::expires('+1d') );
-    CGI::ExceptionManager::detach($res);
+    die([
+        200,
+        [
+            'Content-Type' => guess_mime_type($path),
+            'Expires'      => CGI::Simple::Util::expires('+1d'),
+        ],
+        $fh,
+    ]);
 }
 
 sub guess_mime_type {

@@ -7,10 +7,7 @@ MENTA は mod_perl に対応しています。サイトの負荷があがって�
 </div>
 
 <h2 class="subtitle">MENTA の設定</h2>
-<div class="blocked-content">
-基本的な設定は CGI で動かすときと一緒です。が、設定を config.pl などという名前で、別ファイルにする必要があります。詳しくは、MENTA の配布
-パッケージに入っている config.pl をみてください。
-</div>
+<div class="blocked-content">基本的な設定は CGI で動かすときと一緒です。</div>
 
 <h2 class="subtitle">Apache の設定</h2>
 <div class="blocked-content">
@@ -20,11 +17,16 @@ httpd.conf など apache の設定ファイルの中に下記のように書き�
     use lib "/var/www/menta/lib/", '/var/www/menta/extlib/';
 &lt;/Perl&gt;
 &lt;Location /menta/&gt;
-    SetHandler modperl
-    PerlOptions +SetupEnv
-    PerlResponseHandler MENTA::ModPerl
-    PerlSetVar MENTA_CONFIG_PATH /var/www/menta/config.pl
+    SetHandler perl-script
+    PerlResponseHandler Plack::Server::Apache2
+    PerlSetVar psgi_app /path/to/menta.psgi
 &lt;/Location&gt;
+
+&lt;Perl&gt;
+use Plack::Server::Apache2;
+Plack::Server::Apache2->preload("/path/to/menta.psgi");
+&lt;/Perl&gt;
+
 </pre>
 
 </div>

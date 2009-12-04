@@ -21,8 +21,9 @@ sub run_cgi {
     my $out = bind_stdout(sub {
         package main;
         do './menta.cgi';
-        die $@ if $@;
+        warn "error: $@" if $@;
     });
+    return $out;
 }
 
 {

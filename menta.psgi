@@ -3,5 +3,5 @@ BEGIN {
     unshift @INC, 'lib', 'cgi-extlib-perl/extlib';
 };
 use MENTA;
-MENTA->run_menta(do 'config.pl');
+MENTA->create_app(do 'config.pl');
 

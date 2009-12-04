@@ -2,8 +2,9 @@ package MENTA;
 use strict;
 use warnings;
 use utf8;
-use CGI::ExceptionManager;
 use MENTA::Dispatch ();
+use Try::Tiny;
+require 'MENTA/Request.pm';
 require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
 require 'Text/MicroTemplate.pm';
@@ -23,11 +24,10 @@ sub import {
     our $context;
     sub context { $context }
     sub run_context {
-        my ($class, $config, $req, $engine, $code) = @_;
+        my ($class, $config, $req, $code) = @_;
         local $context = MENTA::Context->new(
             config   => $config,
             request  => $req,
-            __engine => $engine,
         );
         $code->();
     }
@@ -57,35 +57,58 @@ sub import {
 # run as cgi
 sub run_menta {
     my ($class, $config) = @_;
-    $class->create_engine($config, 'MinimalCGI')->run;
+    require 'Plack/Server/CGI.pm';
+    my $app = $class->create_app($config);
+    Plack::Server::CGI->new->run($app);
 }
 
-sub create_engine {
-    my ($class, $config, $interface) = @_;
-
-    my $engine;
-    $engine = HTTP::Engine->new(
-        interface => {
-            module => $interface,
-            request_handler => sub {
-                my $req = shift;
-                local $MENTA::STASH;
-                CGI::ExceptionManager->run(
-                    callback => sub {
-                        MENTA->run_context(
-                            $config, $req, $engine, sub {
-                                MENTA->call_trigger('BEFORE_DISPATCH');
-                                MENTA::Dispatch->dispatch()
-                            }
-                        );
-                    },
-                    powered_by => '<strong>MENTA</strong>, Web Application Framework.',
-                    stacktrace_class => 'HTTPEngine',
-                    ($config->{menta}->{fatals_to_browser} ? () : (renderer => sub { "INTERNAL SERVER ERROR!" x 100 }))
-                );
+sub create_app {
+    my ($class, $config) = @_;
+    my $app = sub {
+        my $env = shift;
+        local $MENTA::STASH;
+        try {
+            my $req = MENTA::Request->new($env);
+            MENTA->run_context(
+                $config, $req, sub {
+                    MENTA->call_trigger('BEFORE_DISPATCH');
+                    MENTA::Dispatch->dispatch($env)
+                }
+            );
+        } catch {
+            if ($_ && ref $_ eq 'ARRAY') {
+                return $_;
+            } else {
+                die $_;
             }
-        }
-    );
+        };
+    };
+    if ($config->{menta}->{fatals_to_browser}) {
+        require 'Devel/StackTrace.pm';
+        require 'Devel/StackTrace/AsHTML.pm';
+        my $origapp = $app;
+        $app = sub {
+            my @args = @_;
+            my $res;
+            try {
+                local $SIG{__DIE__} = sub {
+                    if (ref $@ && ref $@ eq 'ARRAY') {
+                        $res = $@;
+                    } else {
+                        $res = [
+                            500,
+                            [ 'Content-Type' => 'text/html; charset=utf-8' ],
+                            [Devel::StackTrace->new->as_html]
+                        ];
+                    }
+                    die @_;
+                };
+                $origapp->(@args);
+            };
+            return $res;
+        };
+    }
+    return $app;
 }
 
 sub config () { MENTA->context->config }
@@ -165,7 +188,7 @@ sub render {
 sub _finish {
     my $res = shift;
     MENTA->call_trigger('BEFORE_OUTPUT', $res);
-    CGI::ExceptionManager::detach($res);
+    die $res;
 }
 
 sub render_and_print {
@@ -174,33 +197,24 @@ sub render_and_print {
     my $out = MENTA::TemplateLoader::__load($tmpl, @params);
     $out = MENTA::Util::encode_output($out);
 
-    my $res = HTTP::Engine::Response->new(
-        body => $out,
-    );
-    $res->headers->content_type("text/html; charset=" . MENTA::Util::_charset());
-    _finish($res);
+    _finish([
+        200, [
+            'Content-Type' => "text/html; charset=" . MENTA::Util::_charset()
+        ], [$out]
+    ]);
 }
 
 sub redirect {
     my ($location, ) = @_;
 
-    my $res = HTTP::Engine::Response->new(
-        status => 302,
-    );
-    $res->header('Location' => $location);
-    _finish($res);
+    _finish([302, ['Location' => $location], []]);
 }
 
 sub finalize {
     my $str = shift;
     my $content_type = shift || ('text/html; charset=' . MENTA::Util::_charset());
 
-    my $res = HTTP::Engine::Response->new(
-        status => 200,
-        body   => $str,
-    );
-    $res->headers->content_type($content_type);
-    _finish($res);
+    _finish([200, ['Content-Type' => $content_type], [$str]]);
 }
 
 sub param {
@@ -215,12 +229,13 @@ sub upload       { MENTA->context->request->upload(@_) }
 sub mobile_agent { MENTA->context->mobile_agent() }
 sub current_url  {
     my $req = MENTA->context->request;
+    my $env = $req->{env};
     my $protocol = 'http';
-    my $port     = $ENV{SERVER_PORT} || 80;
+    my $port     = $env->{SERVER_PORT} || 80;
     my $url = "http://" . $req->header('Host');
     $url .= docroot();
-    $url .= "$ENV{PATH_INFO}";
-    $url .= '?' . $ENV{QUERY_STRING};
+    $url .= "$env->{PATH_INFO}";
+    $url .= '?' . $env->{QUERY_STRING};
 }
 
 {
@@ -238,11 +253,15 @@ sub current_url  {
 }
 
 sub is_post_request () {
-    my $method = $ENV{REQUEST_METHOD};
+    my $env = MENTA->context->request->{env};
+    my $method = $env->{REQUEST_METHOD};
     return $method eq 'POST';
 }
 
-sub docroot () { $ENV{SCRIPT_NAME} || '' }
+sub docroot () {
+    my $env = MENTA->context->request->{env};
+    $env->{SCRIPT_NAME} || ''
+}
 
 sub uri_for {
     my ($path, $query) = @_;

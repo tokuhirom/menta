@@ -2,6 +2,7 @@ package MENTA::Plugin::Session;
 use MENTA::Plugin;
 use HTTP::Session;
 use HTTP::Session::Store::DBM;
+use CGI::Simple::Cookie;
 
 sub _postrun {
     my ($app, $bodyref) = @_;
