@@ -2,6 +2,8 @@ package MENTA::Plugin::OpenID;
 use MENTA::Plugin;
 use Net::OpenID::Consumer::Lite;
 use Encode ();
+use Net::HTTPS;
+use Try::Tiny;
 
 my $OP_MAP = {
     mixi     => {
@@ -53,9 +55,10 @@ sub openid_login_url_map {
 sub do_check_url {
     my $op         = MENTA::param('op')    or die "op の指定がないよ";
     my $server_url = $OP_MAP->{$op}->{endpoint} or die "知らない OP だ";
+    my $env = MENTA->context->request->{env};
     my $check_url = Net::OpenID::Consumer::Lite->check_url(
         $server_url,
-        "http://$ENV{SERVER_NAME}:$ENV{SERVER_PORT}" . MENTA::uri_for( 'plugin/openid/id_res', { back => 1, ret_url => MENTA::param('ret_url') } ),
+        "http://$env->{SERVER_NAME}:$env->{SERVER_PORT}" . MENTA::uri_for( 'plugin/openid/id_res', { back => 1, ret_url => MENTA::param('ret_url') } ),
         {
             "http://openid.net/extensions/sreg/1.1" => { required => join( ",", qw/email nickname/ ) }
         }
@@ -74,33 +77,41 @@ sub do_id_res {
     } elsif (-d '/etc/ssl/certs') {
         $ENV{HTTPS_CA_DIR} = '/etc/ssl/certs';
     }
-    Net::OpenID::Consumer::Lite->handle_server_response(
-        $params => (
-            not_openid => sub {
-                die "Not an OpenID message";
-            },
-            setup_required => sub {
-                my $setup_url = shift;
-                MENTA::redirect($setup_url);
-            },
-            cancelled => sub {
-                MENTA::redirect($option->{cancelled});
-            },
-            verified => sub {
-                my $vident = shift;
-                my $identity = $vident->{identity};
-                my $id = {
-                    nickname => $ENDPOINT2NICKFETCHER->{$vident->{op_endpoint}}->( $vident ),
-                    openid   => $identity,
-                };
-                MENTA::session_set('plugin.openid.user' => $id);
-                MENTA::redirect($option->{verified});
-            },
-            error => sub {
-                die "認証エラーです。SSL 通信に失敗しました: $@";
-            },
-        )
-    );
+    try {
+        Net::OpenID::Consumer::Lite->handle_server_response(
+            $params => (
+                not_openid => sub {
+                    die "Not an OpenID message";
+                },
+                setup_required => sub {
+                    my $setup_url = shift;
+                    MENTA::redirect($setup_url);
+                },
+                cancelled => sub {
+                    MENTA::redirect($option->{cancelled});
+                },
+                verified => sub {
+                    my $vident = shift;
+                    my $identity = $vident->{identity};
+                    my $id = {
+                        nickname => $ENDPOINT2NICKFETCHER->{$vident->{op_endpoint}}->( $vident ),
+                        openid   => $identity,
+                    };
+                    MENTA::session_set('plugin.openid.user' => $id);
+                    MENTA::redirect($option->{verified});
+                },
+                error => sub {
+                    die "認証エラーです。SSL 通信に失敗しました: $@";
+                },
+            )
+        );
+    } catch {
+        if ($_ =~ /invalid ssl/) {
+            die "SSLエラー: ソケットクラスハこれです($Net::HTTPS::SSL_SOCKET_CLASS)。Net::SSL と表示されている場合には、環境変数 HTTPS_CA_DIR に正しい証明書ディレクトリのパスがはいっているかどうか確認してください。IO::Socket::SSL と表示されている場合には、Net::SSL をインストールしてください。: $_";
+        } else {
+            die $_;
+        }
+    };
 }
 
 1;
