@@ -26,6 +26,7 @@ my %skip_packages = map { $_ => 1 } (
     'HTML::Parser',   # ditto
     'HTML::Tagset',   # ditto
     'HTTP::Headers',  # ditto
+    'HTTP::Response', # ditto
     'DBI',            # ditto
     'HTTP::Headers',  # ditto.
     'LWP',            # ditto.
