@@ -98,7 +98,7 @@ sub create_app {
                         $res = [
                             500,
                             [ 'Content-Type' => 'text/html; charset=utf-8' ],
-                            [Devel::StackTrace->new->as_html]
+                            [MENTA::Util::encode_output(Devel::StackTrace->new->as_html)]
                         ];
                     }
                     die @_;
