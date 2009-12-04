@@ -358,11 +358,11 @@ sub static_file_path {
         };
         sub load_plugin {
             my $plugin = shift;
-            return if $plugin_loaded->{$plugin};
+            return $plugin_loaded->{$plugin} if $plugin_loaded->{$plugin};
             my $path = MENTA::base_dir() . "plugins/${plugin}.pl";
             require $path;
-            $plugin_loaded->{$plugin}++;
             my $package = $__menta_extract_package->($path) || '';
+            $plugin_loaded->{$plugin} = $package;
             die "${plugin} プラグインの中にパッケージ宣言がみつかりません" unless $package;
             no strict 'refs';
             for (
