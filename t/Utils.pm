@@ -1,6 +1,11 @@
 package t::Utils;
 use strict;
 use warnings;
+use lib 'lib';
+use lib 'cgi-extlib-perl/extlib';
+use MENTA;
+use Plack::Util;
+use Try::Tiny;
 
 sub import {
     my $pkg = caller(0);
@@ -11,63 +16,54 @@ sub import {
 }
 
 sub run_cgi {
-    my %args = @_;
-    $ENV{CONTENT_LENGTH} = $args{CONTENT_LENGTH} || 0;
-    $ENV{PATH_INFO} = $args{PATH_INFO} || '/';
-    $ENV{QUERY_STRING} = $args{QUERY_STRING} || '';
-    $ENV{HTTP_USER_AGENT} = $args{HTTP_USER_AGENT} || 'test';
-    $ENV{REQUEST_METHOD} = $args{REQUEST_METHOD} || 'GET';
+    my %env = @_;
+    $env{CONTENT_LENGTH}  ||= 0;
+    $env{PATH_INFO}       ||= '/';
+    $env{QUERY_STRING}    ||= '';
+    $env{HTTP_USER_AGENT} ||= 'test';
+    $env{REQUEST_METHOD}  ||= 'GET';
+    $env{'psgi.input'}    ||= do {
+        open my $fh, '<', \my $buf or die $!;
+        $fh;
+    };
 
-    my $out = bind_stdout(sub {
-        package main;
-        do './menta.cgi';
-        warn "error: $@" if $@;
-    });
+    my $conf = {
+        # MENTA 自体の設定
+        menta => {
+            # 最大表示文字数
+            max_post_body => 1_024_000,
+            # モバイル対応
+            support_mobile => 1,
+            # MENTA そのものをおいているディレクトリ。CGI の場合は設定しなくてもよい。末尾のスラッシュを忘れずに。
+            base_dir => './',
+        },
+        # あなたのアプリの設定
+        application => {
+            title => 'MENTA サンプルアプリ',
+            sqlitefile => '/var/www/menta/app/data/data.sqlite',
+            sql => {
+                dsn => 'dbi:SQLite:/var/www/menta/app/data/data.sqlite',
+            },
+            counter => {
+                file => '/var/www/menta/app/data/counter.txt'
+            },
+        },
+    };
+    my $app = MENTA->create_app($conf);
+    my $res = try {
+        $app->(\%env);
+    } catch {
+        return [500, [], ["ERROR: $_"]];
+    };
+    my $out = '';
+    $out .= "Status: $res->[0]\r\n";
+    my $headers = $res->[1];
+    while ( my ( $k, $v ) = splice( @$headers, 0, 2 ) ) {
+        $out .= "$k: $v\n";
+    }
+    $out .= "\n";
+    Plack::Util::foreach($res->[2], sub { $out .= $_[0] });
     return $out;
 }
-
-{
-    package MENTA::BindSTDOUT::Tie;
-    require Tie::Handle;
-    use base qw/Tie::Handle/;
-    use Carp;
-
-    sub TIEHANDLE {
-        my ($class, $in, $outref) = @_;
-        bless {out => $outref, in => $in, pos => 0}, $class;
-    }
-
-    sub WRITE {
-        my $self = shift;
-        ${$self->{out}} .= shift;
-    }
-
-    # $self->READ(buf, len, offset);
-    # copy from IO::Scalar
-    sub READ {
-        my $self = $_[0];
-        my $n    = $_[2];
-        my $off  = $_[3] || 0;
-
-        my $read = substr( $self->{in}, $self->{pos}, $n );
-        $n = length($read);
-        $self->{pos} += $n;
-        ( $off ? substr( $_[1], $off ) : $_[1] ) = $read;
-        return $n;
-    }
-    sub CLOSE { }
-    sub BINMODE { }
-}
-
-sub bind_stdout {
-    my ($code, ) = @_;
-    my $in;
-    read(STDIN, $in, $ENV{CONTENT_LENGTH});
-    tie *STDOUT, 'MENTA::BindSTDOUT::Tie', $in, \my $out;
-    $code->();
-    untie *STDOUT;
-    $out;
-}
-
 
 1;
