@@ -9,3 +9,4 @@ inc/
 pm_to_blib
 app/data/session.dbm.dir
 app/data/session.dbm.pag
+app/data/test
