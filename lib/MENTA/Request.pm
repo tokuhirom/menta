@@ -32,5 +32,19 @@ sub header {
     $key =~ s/-/_/;
     $self->{env}->{'HTTP_' . $key} || $self->{env}->{'HTTPS_' . $key};
 }
+sub headers {
+    my ($self) = @_;
+    $self->{headers} ||= do {
+        require "HTTP/Headers.pm";
+        my $headers = HTTP::Headers->new;
+        for my $key (grep /^HTTPS?_/, keys %{$self->{env}}) {
+            my $k = uc $key;
+               $k =~ s/^HTTPS?_//;
+               $k =~ s/_/-/;
+            $headers->header($k, $self->{env}->{$key});
+        }
+        $headers;
+    };
+}
 
 1;
