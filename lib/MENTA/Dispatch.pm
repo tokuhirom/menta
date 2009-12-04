@@ -11,7 +11,7 @@ sub dispatch {
     if ($path =~ m{^plugin/([a-z0-9_-]+)/([a-z0-9_]+)$}) {
         my ($plugin_name, $meth) = ($1, $2);
         $meth = "do_$meth";
-        my $pkg = MENTA::Util::load_plugin($plugin_name);
+        my $pkg = MENTA::Util::load_plugin($plugin_name) or die "Cannot load plugin: $plugin_name";
         $pkg->$meth();
     } elsif ($path =~ m{^[a-z0-9_/]+$}) {
         $path =~ s!/$!/index!;
