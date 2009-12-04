@@ -15,7 +15,7 @@ sub mobile_agent {
     my $self = shift;
     $self->{'HTTP::MobileAgent'} ||= do {
         MENTA::Util::require_once('HTTP/MobileAgent.pm');
-        HTTP::MobileAgent->new();
+        HTTP::MobileAgent->new($self->{request}->headers);
     };
 }
 
