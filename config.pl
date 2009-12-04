@@ -8,7 +8,7 @@
         # モバイル対応
         support_mobile => 1,
         # MENTA そのものをおいているディレクトリ。CGI の場合は設定しなくてもよい。末尾のスラッシュを忘れずに。
-        base_dir => '/var/www/menta/',
+        base_dir => './',
     },
     # あなたのアプリの設定
     application => {
