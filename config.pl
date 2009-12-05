@@ -13,12 +13,12 @@
     # あなたのアプリの設定
     application => {
         title => 'MENTA サンプルアプリ',
-        sqlitefile => '/var/www/menta/app/data/data.sqlite',
+        sqlitefile => './app/data/data.sqlite',
         sql => {
-            dsn => 'dbi:SQLite:/var/www/menta/app/data/data.sqlite',
+            dsn => 'dbi:SQLite:./app/data/data.sqlite',
         },
         counter => {
-            file => '/var/www/menta/app/data/counter.txt'
+            file => './app/data/counter.txt'
         },
     },
 }
