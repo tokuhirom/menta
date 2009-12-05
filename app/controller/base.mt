@@ -6,7 +6,7 @@
 <body>
 <div class="container">
 <a href="<?= docroot() ?>/" title="Web Application Framework - MENTA"><img src="<?= static_file_path('menta-logo.png') ?>" alt="MENTA"></a>
-<h1 class="maintitle"><? block title => "MENTA" ?></h2>
+<h1 class="maintitle"><? block title => "MENTA" ?></h1>
 <div class="bodyContainer">
 
 <? block content => "" ?>
