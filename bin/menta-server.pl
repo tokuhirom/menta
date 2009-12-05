@@ -1,7 +1,10 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use lib 'extlib', 'lib';
+use FindBin;
+use File::Spec;
+use lib File::Spec->catdir($FindBin::Bin, '..', 'cgi-extlib-perl', 'extlib');
+use lib File::Spec->catdir($FindBin::Bin, '..', 'lib');
 use Getopt::Long;
 use Plack;
 use Plack::Server::Standalone;
