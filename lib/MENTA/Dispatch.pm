@@ -47,7 +47,7 @@ sub dispatch {
     } elsif ($path ne 'menta.cgi' && -f (MENTA::base_dir() . "app/$path") && $path =~ /^static\//) {
         show_static("app/$path");
     } elsif ($path =~ /^(?:crossdomain\.xml|favicon\.ico|robots\.txt)$/) {
-        print "status: 404\r\ncontent-type: text/plain\r\n\r\n";
+        MENTA::_finish([404, [], []]);
     } else {
         die "'${path}' を処理する方法がわかりません(@{[ MENTA::base_dir() . 'app/' . $path ]})";
     }

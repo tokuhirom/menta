@@ -13,6 +13,7 @@ sub import {
     warnings->import;
     no strict 'refs';
     *{"$pkg\::run_cgi"} = \&run_cgi;
+    *{"$pkg\::run_psgi"} = \&run_psgi;
 }
 
 sub run_cgi {
@@ -65,6 +66,50 @@ sub run_cgi {
     $out .= "\n";
     Plack::Util::foreach($res->[2], sub { $out .= $_[0] });
     return $out;
+}
+
+sub run_psgi {
+    my %env = @_;
+    $env{CONTENT_LENGTH}  ||= 0;
+    $env{PATH_INFO}       ||= '/';
+    $env{QUERY_STRING}    ||= '';
+    $env{HTTP_USER_AGENT} ||= 'test';
+    $env{REQUEST_METHOD}  ||= 'GET';
+    $env{'psgi.input'}    ||= do {
+        open my $fh, '<', \my $buf or die $!;
+        $fh;
+    };
+
+    my $conf = {
+        # MENTA 自体の設定
+        menta => {
+            # fatals_to_browser => 1,
+            # 最大表示文字数
+            max_post_body => 1_024_000,
+            # モバイル対応
+            support_mobile => 1,
+            # MENTA そのものをおいているディレクトリ。CGI の場合は設定しなくてもよい。末尾のスラッシュを忘れずに。
+            base_dir => './',
+        },
+        # あなたのアプリの設定
+        application => {
+            title => 'MENTA サンプルアプリ',
+            sqlitefile => '/var/www/menta/app/data/data.sqlite',
+            sql => {
+                dsn => 'dbi:SQLite:/var/www/menta/app/data/data.sqlite',
+            },
+            counter => {
+                file => '/var/www/menta/app/data/counter.txt'
+            },
+        },
+    };
+    my $app = MENTA->create_app($conf);
+    my $res = try {
+        $app->(\%env);
+    } catch {
+        return [500, [], ["ERROR: $_"]];
+    };
+    return $res;
 }
 
 1;
