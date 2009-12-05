@@ -1,4 +1,7 @@
-?= render('header.mt')
+? extends "base.mt";
+? block title => "MENTA デモサイト";
+
+? block content => sub {
 
 <h1 class="subtitle">MENTA デモサイト</h1>
 <p>MENTA をつかったデモアプリケーションを展示しています。</p>
@@ -16,4 +19,4 @@
     <li><a href="<?= uri_for('demo/openssl_path') ?>">OpenSSL のパスを表示します(*nix系OSでのみ動作)</a></li>
 </ul>
 
-?= render('footer.mt')
+? }

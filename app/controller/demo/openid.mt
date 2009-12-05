@@ -1,4 +1,7 @@
-?= render('header.mt')
+? extends "base.mt";
+
+? block title => "OpenID demo - MENTA";
+? block content => sub {
 
 <h2>OpenID でログインするデモ</h2>
 ? if (my $user = openid_get_user()) {
@@ -16,4 +19,4 @@
     </ul>
 ? }
 
-?= render('footer.mt')
+? }

@@ -1,5 +1,7 @@
-? my $title = "MENTA 取り扱い説明書"
-?= render('header.mt', $title)
+? extends "base.mt"
+
+? block title => "MENTA 取り扱い説明書";
+? block content => sub {
 
 <h2 class="subtitle">ダウンロードする</h2>
 <div class="blocked-content">
@@ -48,4 +50,4 @@ t/              - MENTA 自体のテストスクリプト。ユーザーの方�
 あとでかく。
 -->
 
-?= render('footer.mt')
+? }

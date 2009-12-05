@@ -1,4 +1,6 @@
-?= render('header.mt', 'インストール方法')
+? extends "base.mt";
+? block title => "MENTA インストール方法";
+? block content => sub {
 
 <h2 class="subtitle">リリース版のダウンロード</h2>
 <p><a href="http://github.com/tokuhirom/menta/downloads">最新リリース版 <?= $MENTA::VERSION ?> の ZIP アーカイブをダウンロード</a>できます。</p>
@@ -9,4 +11,4 @@
 <p>以下の例では、<code>http://localhost/~user/menta/</code> といったディレクトリが MENTA のインストール先になります。</p>
 <pre><code>% git clone git://github.com/tokuhirom/menta.git ~/public_html/menta</code></pre>
 
-?= render('footer.mt')
+? };

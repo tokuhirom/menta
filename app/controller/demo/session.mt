@@ -1,4 +1,7 @@
-?= render('header.mt', 'セッションのテスト')
+? extends "base.mt";
+
+? block title => "セッションのテスト - MENTA";
+? block content => sub {
 
 <h1>自分専用カウンターです</h1>
 <table>
@@ -8,4 +11,4 @@
     <tr><td>セッション保存クラス</td><td><?= session_store_class() ?></td></tr>
 </table>
 
-?= render('footer.mt')
+? }

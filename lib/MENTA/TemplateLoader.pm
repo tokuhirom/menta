@@ -8,11 +8,12 @@ use utf8;
 sub __load {
     my ($path, @params) = @_;
 
-    MENTA::Util::require_once('Text/MicroTemplate/File.pm');
+    MENTA::Util::require_once('Text/MicroTemplate/Extended.pm');
 
-    my $mtf = Text::MicroTemplate::File->new(
+    my $mtf = Text::MicroTemplate::Extended->new(
         include_path => [MENTA::controller_dir()],
         package_name => 'MENTA::TemplateLoader::Instance',
+        extension    => '',
         cache        => 1,
     );
     return $mtf->render_file($path, @params)->as_string;

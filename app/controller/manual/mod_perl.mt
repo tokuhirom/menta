@@ -1,5 +1,7 @@
-? my $title = "MENTA 取り扱い説明書(mod_perl 編)"
-?= render('header.mt', $title)
+? extends "base.mt";
+? block title => "MENTA 取り扱い説明書(mod_perl 編)";
+
+? block content => sub {
 
 <h2 class="subtitle">MENTA の mod_perl 対応について</h2>
 <div class="blocked-content">
@@ -31,4 +33,4 @@ Plack::Server::Apache2->preload("/path/to/menta.psgi");
 
 </div>
 
-?= render('footer.mt')
+? }

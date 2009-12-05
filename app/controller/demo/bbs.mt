@@ -1,5 +1,6 @@
 ? my ($entries, $pager) = @_;
-?= render('header.mt', 'SQLite をつかった一行掲示板')
+? block title => "SQLite をつかった一行掲示板 - MENTA";
+? block content => sub {
 <div class="blocked-content">
 
 ? if (my $user = openid_get_user()) {
@@ -30,4 +31,4 @@
 </ul>
 ?= render('pager.mt', $pager, 'demo/bbs_sqlite')
 </div>
-?= render('footer.mt')
+? }

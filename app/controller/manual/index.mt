@@ -1,4 +1,6 @@
-?= render('header.mt')
+? extends "base.mt";
+? block content => sub {
+
 <script type="text/javascript" src="<?= static_file_path('jquery.js') ?>"></script>
 
 <p align="right"><?= localtime time ?></p>
@@ -17,4 +19,4 @@
 <h2 class="subtitle">開発者</h2>
 <ol><?= raw_string(join "\n", map { '<li>' . escape_html($_) . '</li>' } split /[\r\n]+/, file_read(MENTA::base_dir() . 'AUTHORS')) ?></ol>
 
-?= render('footer.mt')
+? }
