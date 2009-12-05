@@ -31,7 +31,7 @@ sub _session {
             id      => 'HTTP::Session::ID::MD5',
         );
         unless ($hooked++) {
-            MENTA->add_trigger('BEFORE_OUTPUT' => sub {
+            MENTA->add_trigger_static('BEFORE_OUTPUT' => sub {
                 my ($c, $res) = @_;
                 $session->response_filter($res);
                 $session->finalize;
@@ -55,13 +55,13 @@ sub session_logout_url {
 }
 
 sub do_logout {
+    my $env = MENTA::context->request->{env};
     my $csrfkey = session_remove('csrf_key');
-    warn $ENV{QUERY_STRING};
-    unless ($ENV{QUERY_STRING} =~ /csrf_key=$csrfkey/) {
+    unless ($env->{QUERY_STRING} =~ /csrf_key=$csrfkey/) {
          die "CSRF エラー";
     }
     my $back = session_get('plugin.session.logout_back') || MENTA::docroot();
-    session_expire();
+    session_regenerate_session_id(1);
     warn "REDIRECT TO $back";
     MENTA::redirect($back);
 }
