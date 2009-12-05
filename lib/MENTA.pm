@@ -52,6 +52,10 @@ sub import {
             push @{$static_triggers->{triggers}->{$triggername}}, $code;
         }
     }
+    sub add_trigger_static {
+        my ($class, $triggername, $code) = @_;
+        push @{$static_triggers->{triggers}->{$triggername}}, $code;
+    }
 }
 
 # run as cgi
@@ -206,6 +210,7 @@ sub render_and_print {
 
 sub redirect {
     my ($location, ) = @_;
+    Carp::confess("missing location for redirect") unless defined $location;
 
     _finish([302, ['Location' => $location], []]);
 }
