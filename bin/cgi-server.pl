@@ -26,7 +26,7 @@ sub build(&;$) {
 
 my $psgi = 'menta.psgi';
 my $handler = build { Plack::Util::load_psgi $psgi };
-my $loader = Plack::Loader::Reloadable->new(['.']);
+my $loader = Plack::Loader::Reloadable->new(['app/controller/', 'lib', 'plugins', 'cgi-extlib-perl']);
 $handler = build { Plack::Middleware::StackTrace->wrap($_[0]) } $handler;
 $handler = build { Plack::Middleware::AccessLog->wrap($_[0], logger => sub { print STDERR @_ }) } $handler;
 my $app = $handler;
