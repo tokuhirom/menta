@@ -1,10 +1,6 @@
 TODO
 ----
 
-- psgi based
- - upload のテスト
- - mod_perl 関連ドキュメントのアップデート
-
 - hatena 記法を docs の中でつかえるようにする
  ? hatena {
  * foo
