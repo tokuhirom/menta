@@ -31,7 +31,7 @@ sub run_cgi {
     my $conf = {
         # MENTA 自体の設定
         menta => {
-            fatals_to_browser => 1,
+            # fatals_to_browser => 1,
             # 最大表示文字数
             max_post_body => 1_024_000,
             # モバイル対応
@@ -42,12 +42,12 @@ sub run_cgi {
         # あなたのアプリの設定
         application => {
             title => 'MENTA サンプルアプリ',
-            sqlitefile => '/var/www/menta/app/data/data.sqlite',
+            sqlitefile => './app/data/data.sqlite',
             sql => {
-                dsn => 'dbi:SQLite:/var/www/menta/app/data/data.sqlite',
+                dsn => 'dbi:SQLite:./app/data/data.sqlite',
             },
             counter => {
-                file => '/var/www/menta/app/data/counter.txt'
+                file => './app/data/counter.txt'
             },
         },
     };
@@ -94,12 +94,12 @@ sub run_psgi {
         # あなたのアプリの設定
         application => {
             title => 'MENTA サンプルアプリ',
-            sqlitefile => '/var/www/menta/app/data/data.sqlite',
+            sqlitefile => './app/data/data.sqlite',
             sql => {
-                dsn => 'dbi:SQLite:/var/www/menta/app/data/data.sqlite',
+                dsn => 'dbi:SQLite:./app/data/data.sqlite',
             },
             counter => {
-                file => '/var/www/menta/app/data/counter.txt'
+                file => './app/data/counter.txt'
             },
         },
     };
