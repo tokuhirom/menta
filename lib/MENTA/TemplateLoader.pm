@@ -7,8 +7,12 @@ use Carp ();
 # originaly code from NanoA::TemplateLoader
 
 sub __load {
-    my ($path, @params) = @_;
+    local $MENTA::TemplateLoader::Instance::render_context = {};
+    __load_internal(@_);
+}
 
+sub __load_internal {
+    my ($path, @params) = @_;
     if (__use_cache($path)) {
         my $tmplfname = MENTA::mt_cache_dir . "/$path.c";
         local $@;
@@ -64,12 +68,11 @@ package MENTA::TemplateLoader::Instance;
 #line 1
 sub {
     my \$_mt = shift;
-    local \$MENTA::TemplateLoader::Instance::render_context = {};
     my \$out = Text::MicroTemplate::encoded_string((
         $code
     )->(\@_));
-    if (my \$parent = \$MENTA::TemplateLoader::Instance::render_context->{extends}) {
-        \$out = MENTA::TemplateLoader::__load(\$parent);
+    if (my \$parent = delete \$MENTA::TemplateLoader::Instance::render_context->{extends}) {
+        \$out = MENTA::TemplateLoader::__load_internal(\$parent);
     }
     \$out;
 }
@@ -85,6 +88,7 @@ sub __update_cache {
         $cache_path .= "/$p";
     }
     $cache_path .= '.c';
+
     open my $fh, '>:utf8', $cache_path
         or die "キャッシュファイルを作れません: $cache_path($!)";
     print $fh $code;
@@ -122,7 +126,7 @@ sub __use_cache {
         my $block;
         if (defined $code) {
             $block = $render_context->{blocks}{$name} ||= {
-                context_ref => "MENTA::TemplateLoader::Instance::_MTREF",
+                context_ref => $MENTA::TemplateLoader::Instance::_MTREF,
                 code        => ref($code) eq 'CODE' ? $code : sub { return $code },
             };
         }
