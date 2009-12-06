@@ -7,6 +7,7 @@ use Try::Tiny;
 require 'MENTA/Request.pm';
 require 'Class/Accessor/Lite.pm';
 require 'MENTA/Context.pm';
+require 'MENTA/MobileAgent.pm';
 require 'Text/MicroTemplate.pm';
 
 our $VERSION = '0.15';
@@ -287,18 +288,11 @@ sub static_file_path {
     package MENTA::Util;
     # ユーティリティメソッドたち。
     # これらのメソッドは一般ユーザーはよぶべきではない。
-
-    # HTTP::MobileAgent::Plugin::Charset よりポート。
-    # cp932 の方が実績があるので優先させる方針。
-    # Shift_JIS とかじゃなくて cp932 にしとかないと、諸問題にひっかかりがちなので注意
     sub _mobile_encoding {
-        MENTA->context->{encoding} ||= sub {
-            my $ma = MENTA->context->mobile_agent();
-            return 'utf-8' if $ma->is_non_mobile;
-            return 'utf-8' if $ma->is_docomo && $ma->xhtml_compliant; # docomo の 3G 端末では UTF-8 の表示が保障されている
-            return 'utf-8' if $ma->is_softbank && $ma->is_type_3gc;   # SoftBank 3G の一部端末は CP932 だと絵文字を送ってこない不具合がある
-            return 'cp932';                                           # au は HTTPS のときに UTF-8 だと文字化ける場合がある
-        }->();
+        MENTA->context->{encoding} ||= do {
+            my $ua = MENTA->context->request->{env}->{HTTP_USER_AGENT};
+            MENTA::MobileAgent->detect_charset($ua);
+        };
     }
 
     # HTTP の入り口んとこで decode させる用
