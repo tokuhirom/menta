@@ -149,7 +149,7 @@ sub raw_string {
 
 sub mt_cache_dir {
     # $> は $EFFECTIVE_USER_ID です。詳しくは perldoc perlvar を参照。
-    my $cachedir = config->{menta}->{cache_dir};
+    my $cachedir = MENTA->context->config->{menta}->{cache_dir};
     return $cachedir if $cachedir;
 
     MENTA::Util::require_once('File/Spec.pm');
@@ -157,8 +157,8 @@ sub mt_cache_dir {
 }
 
 sub base_dir {
-    config->{menta}->{__processed_base_dir} ||= do {
-        my $basedir = config->{menta}->{base_dir};
+    MENTA->context->config->{menta}->{__processed_base_dir} ||= do {
+        my $basedir = MENTA->context->config->{menta}->{base_dir};
         unless ($basedir) {
             require Cwd;
             $basedir = Cwd::cwd();
@@ -169,13 +169,13 @@ sub base_dir {
 }
 
 sub controller_dir {
-    config->{menta}->{controller_dir} ||= base_dir() . 'app/controller/';
-    config->{menta}->{controller_dir};
+    MENTA->context->config->{menta}->{controller_dir} ||= base_dir() . 'app/controller/';
+    MENTA->context->config->{menta}->{controller_dir};
 }
 
 sub data_dir {
-    config->{menta}->{data_dir} ||= base_dir() . 'app/data/';
-    config->{menta}->{data_dir};
+    MENTA->context->config->{menta}->{data_dir} ||= base_dir() . 'app/data/';
+    MENTA->context->config->{menta}->{data_dir};
 }
 
 sub __render_partial {
@@ -299,8 +299,14 @@ sub static_file_path {
     sub decode_input {
         my ($txt, $fb) = @_;
         if (MENTA->context->config->{menta}->{support_mobile}) {
-            require_once('Encode.pm');
-            Encode::decode(_mobile_encoding(), $txt, $fb);
+            my $encoding = _mobile_encoding();
+            if ($encoding eq 'utf-8') {
+                utf8::decode($txt);
+                $txt;
+            } else {
+                require_once('Encode.pm');
+                Encode::decode($encoding, $txt, $fb);
+            }
         } else {
             utf8::decode($txt);
             $txt;
@@ -311,8 +317,14 @@ sub static_file_path {
     sub encode_output {
         my ($txt, $fb) = @_;
         if (MENTA->context->config->{menta}->{support_mobile}) {
-            require_once('Encode.pm');
-            Encode::encode(_mobile_encoding(), $txt, $fb);
+            my $encoding = _mobile_encoding();
+            if ($encoding eq 'utf-8') {
+                utf8::encode($txt);
+                $txt;
+            } else {
+                require_once('Encode.pm');
+                Encode::encode($encoding, $txt, $fb);
+            }
         } else {
             utf8::encode($txt);
             $txt;
