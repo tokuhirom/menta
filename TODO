@@ -9,7 +9,6 @@ TODO
     ソースに書いてあるものもろもろ
     サンプルアプリを作ってみる
     テストを十分に書く。安定したフレームワークにするためにはテストが必須だ。
-    mod_perl のテスト
     uri_with っぽいのもほしい。
     documentation する
     controller を分割ファイル形式にしている場合に、use strict とかオンになってる?
@@ -28,4 +27,4 @@ TODO
       - wiki つくる
       - TinyURL
         - see http://naoya.dyndns.org/~naoya/mt/archives/001682.html
-    - Module::CoreList をやっぱりつかうのやめようかなー
+
