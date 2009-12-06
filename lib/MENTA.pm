@@ -88,8 +88,6 @@ sub create_app {
         };
     };
     if ($config->{menta}->{fatals_to_browser}) {
-        require 'Devel/StackTrace.pm';
-        require 'Devel/StackTrace/AsHTML.pm';
         my $origapp = $app;
         $app = sub {
             my @args = @_;
@@ -99,6 +97,8 @@ sub create_app {
                     if (ref $@ && ref $@ eq 'ARRAY') {
                         $res = $@;
                     } else {
+                        require 'Devel/StackTrace.pm';
+                        require 'Devel/StackTrace/AsHTML.pm';
                         $res = [
                             500,
                             [ 'Content-Type' => 'text/html; charset=utf-8' ],
