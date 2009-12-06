@@ -14,12 +14,16 @@ sub __load {
 sub __load_internal {
     my ($path, @params) = @_;
     if (__use_cache($path)) {
-        my $tmplfname = MENTA::mt_cache_dir . "/$path.c";
+        my $tmplfname = MENTA::mt_cache_dir() . "/$path.c";
+
+        open my $fh, '<', $tmplfname or die "テンプレートキャッシュを読み込めませんでした: ${tmplfname}($!)";
+        my $tmplsrc = do { local $/; <$fh> };
+        close $fh;
+
         local $@;
-        my $tmplcode = do $tmplfname;
+        my $tmplcode = eval $tmplsrc;
         die $@ if $@;
-        die "テンプレートキャッシュを読み込めませんでした: ${tmplfname}($!)" unless $tmplcode;
-        return $tmplcode->(@params)->as_string;
+        return $tmplcode->(@params);
     } else {
         return __compile($path, @params);
     }
@@ -50,7 +54,7 @@ sub __compile {
 
 sub __build_file {
     my ($mt, $file) = @_;
-    my $path = MENTA::controller_dir;
+    my $path = MENTA::controller_dir();
     my $filepath = $path . '/' . $file;
 
     open my $fh, "<:utf8", $filepath
@@ -82,13 +86,14 @@ sub {
 sub __update_cache {
     my ($path, $code) = @_;
 
-    my $cache_path = MENTA::mt_cache_dir;
+    my $cache_path = MENTA::mt_cache_dir();
     foreach my $p (split '/', $path) {
         mkdir $cache_path;
         $cache_path .= "/$p";
     }
     $cache_path .= '.c';
 
+    warn "WRITING $cache_path";
     open my $fh, '>:utf8', $cache_path
         or die "キャッシュファイルを作れません: $cache_path($!)";
     print $fh $code;
@@ -97,11 +102,10 @@ sub __update_cache {
 
 sub __use_cache {
     my ($path) = @_;
-    return if $ENV{DEBUG};
-    return unless MENTA::mt_cache_dir;
-    my @orig = stat $path
+    my $cache_dir = MENTA::mt_cache_dir();
+    my @orig = stat MENTA::controller_dir() . "/$path"
         or return;
-    my @cached = stat MENTA::mt_cache_dir . "/${path}.c"
+    my @cached = stat "$cache_dir/${path}.c"
         or return;
     return $orig[9] < $cached[9];
 }
