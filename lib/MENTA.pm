@@ -152,8 +152,15 @@ sub mt_cache_dir {
     my $cachedir = MENTA->context->config->{menta}->{cache_dir};
     return $cachedir if $cachedir;
 
-    MENTA::Util::require_once('File/Spec.pm');
-    return File::Spec->catfile(File::Spec->tmpdir(), "menta.${MENTA::VERSION}.$>.mt_cache");
+    my $tmpdir = do {
+        if (-d '/tmp/') {
+            '/tmp/';
+        } else {
+            MENTA::Util::require_once('File/Spec.pm');
+            File::Spec->tmpdir()
+        }
+    };
+    return "$tmpdir/menta.${MENTA::VERSION}.$>.mt_cache";
 }
 
 sub base_dir {
