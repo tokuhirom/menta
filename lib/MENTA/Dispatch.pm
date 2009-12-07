@@ -6,6 +6,7 @@ use utf8;
 sub dispatch {
     my ($class, $env) = @_;
     my $path = $env->{PATH_INFO} || '/';
+    $path =~ s!^$env->{SCRIPT_NAME}!!g;
     $path =~ s!^/+!!g;
     $path ||= 'index';
     if ($path =~ m{^plugin/([a-z0-9_-]+)/([a-z0-9_]+)$}) {
