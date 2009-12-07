@@ -273,7 +273,7 @@ sub is_post_request () {
 
 sub docroot () {
     my $env = MENTA->context->request->{env};
-    $env->{SCRIPT_NAME} || ''
+    $env->{SCRIPT_NAME} || '/'
 }
 
 sub uri_for {
@@ -283,12 +283,12 @@ sub uri_for {
         $val = join '', map { /^[a-zA-Z0-9_.!~*'()-]$/ ? $_ : '%' . uc(unpack('H2', $_)) } split //, $val;
         push @q, "${key}=${val}";
     }
-    docroot . '/' . $path . (scalar @q ? '?' . join('&', @q) : '');
+    docroot . $path . (scalar @q ? '?' . join('&', @q) : '');
 }
 
 sub static_file_path {
     my $path = shift;
-    docroot . '/static/' . $path;
+    docroot . 'static/' . $path;
 }
 
 {
