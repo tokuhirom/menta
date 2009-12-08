@@ -51,7 +51,7 @@ sub sql_select_all {
     $sth->finish;
     undef $sth;
 
-    return \@res;
+    return wantarray ? @res : \@res;
 }
 
 sub sql_select_paginate {
