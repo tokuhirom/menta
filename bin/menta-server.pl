@@ -17,8 +17,11 @@ use Plack::Util;
 use Plack::Loader;
 
 my $port = 5555;
+my $env = "development";
 GetOptions(
     'p|port=i' => \$port,
+    'docroot=s' => \my $docroot,
+    "E|env=s"      => \$env,
 );
 
 # delay the build process for reloader
@@ -31,10 +34,26 @@ sub build(&;$) {
 my $psgi = 'menta.psgi';
 my $handler = build { Plack::Util::load_psgi $psgi };
 my $loader = Plack::Loader::Reloadable->new(['app/controller/', 'lib', 'plugins', 'cgi-extlib-perl']);
-$handler = build { Plack::Middleware::StackTrace->wrap($_[0]) } $handler;
-$handler = build { Plack::Middleware::Lint->wrap($_[0]) } $handler;
-$handler = build { Plack::Middleware::AccessLog->wrap($_[0], logger => sub { print STDERR @_ }) } $handler;
+if (is_devel()) {
+    $handler = build { Plack::Middleware::StackTrace->wrap($_[0]) } $handler;
+    $handler = build { Plack::Middleware::Lint->wrap($_[0]) } $handler;
+    $handler = build { Plack::Middleware::AccessLog->wrap($_[0], logger => sub { print STDERR @_ }) } $handler;
+}
+if ($docroot) {
+    $handler = build {
+        my $app = $_[0];
+        sub {
+            my $env = $_[0];
+            my $sn = $env->{SCRIPT_NAME};
+            $env->{SCRIPT_NAME} = $docroot . $sn;
+            $app->($env);
+        }
+    }
+    $handler;
+}
 my $app = $handler;
-my $server = $loader->load('Standalone', port => $port);
+my $server = $loader->load(is_devel() ? 'Standalone::Prefork' : 'Standalone', port => $port);
 $server->run($app);
+
+sub is_devel { $env eq 'development' }
 
