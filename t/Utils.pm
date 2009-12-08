@@ -23,6 +23,7 @@ sub run_cgi {
     $env{QUERY_STRING}    ||= '';
     $env{HTTP_USER_AGENT} ||= 'test';
     $env{REQUEST_METHOD}  ||= 'GET';
+    $env{SCRIPT_NAME}     ||= '/';
     $env{'psgi.input'}    ||= do {
         open my $fh, '<', \my $buf or die $!;
         $fh;
@@ -75,6 +76,7 @@ sub run_psgi {
     $env{QUERY_STRING}    ||= '';
     $env{HTTP_USER_AGENT} ||= 'test';
     $env{REQUEST_METHOD}  ||= 'GET';
+    $env{SCRIPT_NAME}     ||= '/';
     $env{'psgi.input'}    ||= do {
         open my $fh, '<', \my $buf or die $!;
         $fh;
