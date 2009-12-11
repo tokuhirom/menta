@@ -1,7 +1,10 @@
 #!/usr/bin/perl
+use File::Basename qw/dirname/;
 BEGIN {
-    unshift @INC, 'lib', 'cgi-extlib-perl/extlib';
+    my $base = dirname(__FILE__);
+    unshift @INC, "$base/lib", "$base/cgi-extlib-perl/extlib";
 };
 use MENTA;
-MENTA->create_app(do 'config.pl');
+my $base = dirname(__FILE__);
+MENTA->create_app(do "$base/config.pl");
 

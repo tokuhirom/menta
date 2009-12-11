@@ -84,7 +84,9 @@ sub create_app {
             if ($_ && ref $_ eq 'ARRAY') {
                 return $_;
             } else {
-                die $_;
+                my $e = $_;
+                utf8::encode($e) if utf8::is_utf8($e);
+                die $e;
             }
         };
     };
@@ -273,7 +275,9 @@ sub is_post_request () {
 
 sub docroot () {
     my $env = MENTA->context->request->{env};
-    $env->{SCRIPT_NAME} || '/'
+    my $root = $env->{SCRIPT_NAME} || '/';
+    $root =~ s{([^/])$}{$1/};
+    $root;
 }
 
 sub uri_for {
