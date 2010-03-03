@@ -20,11 +20,6 @@ Class::Accessor
 
 のようにして使います。
 
-Class::Trigger
---------------
-
-フック機構を提供します。Sledge などに採用されています。
-
 Data::Page
 ----------
 
