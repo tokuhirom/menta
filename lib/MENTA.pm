@@ -240,6 +240,7 @@ sub param {
         MENTA::Util::decode_input(MENTA->context->request->param(@_));
     }
 }
+sub env          { MENTA->context->request->env() }
 sub upload       { MENTA->context->request->upload(@_) }
 sub mobile_agent { MENTA->context->mobile_agent() }
 sub current_url  {
