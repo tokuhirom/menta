@@ -10,7 +10,7 @@ require 'MENTA/Context.pm';
 require 'MENTA/MobileAgent.pm';
 require 'Text/MicroTemplate.pm';
 
-our $VERSION = '0.15';
+our $VERSION = '0.40';
 our $REQ;
 our $CONFIG;
 our $STASH;
