@@ -1,5 +1,9 @@
 Revision history for Perl extension MENTA
 
+0.41
+
+    - psgi の $env を直接さわれるアクセサなどを追加した
+
 0.40
 
     - HTTP::Engine::MinimalCGI から PSGI/Plack ベースになった。
