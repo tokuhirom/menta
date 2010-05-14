@@ -8,6 +8,8 @@ sub new {
     bless { env => $env }, $class;
 }
 
+sub env { $_[0]->{env} }
+
 sub hostname { $_[0]->{env}->{HTTP_HOST} || $_[0]->{env}->{SERVER_HOST} }
 sub protocol { $_[0]->{env}->{SERVER_PROTOCOL} || 'HTTP/1.0' }
 sub method   { $_[0]->{env}->{HTTP_METHOD} || 'GET' }
