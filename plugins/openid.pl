@@ -58,7 +58,7 @@ sub do_check_url {
     my $env = MENTA->context->request->{env};
     my $check_url = Net::OpenID::Consumer::Lite->check_url(
         $server_url,
-        "http://$env->{SERVER_NAME}:$env->{SERVER_PORT}" . MENTA::uri_for( 'plugin/openid/id_res', { back => 1, ret_url => MENTA::param('ret_url') } ),
+        "http://$env->{HTTP_HOST}:$env->{SERVER_PORT}" . MENTA::uri_for( 'plugin/openid/id_res', { back => 1, ret_url => MENTA::param('ret_url') } ),
         {
             "http://openid.net/extensions/sreg/1.1" => { required => join( ",", qw/email nickname/ ) }
         }
@@ -69,7 +69,7 @@ sub do_check_url {
 sub do_id_res {
     my $req = MENTA->context->request;
     my $params = +{ map { $_ => $req->param($_) } $req->param };
-    my $option = MENTA::session_get('plugin.openid._id_res');
+    my $option = MENTA::session_get('plugin.openid._id_res') or die "セッションエラーです。最初からやりなおしてください";
     my $cadir = $ENV{HTTPS_CA_DIR};
     local $ENV{HTTPS_CA_DIR};
     if ($cadir) {
