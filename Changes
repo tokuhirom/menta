@@ -1,9 +1,9 @@
 Revision history for Perl extension MENTA
 
+0.40
 
-    - Text::MicroTemplate::Extended ベースになった
-     - block 構文がテンプレート中でつかえるようになりました。
-    - PSGI/Plack ベースになった。
+    - HTTP::Engine::MinimalCGI から PSGI/Plack ベースになった。
+    - Class::Trigger は利用されていないため削除
 
 0.15
 
