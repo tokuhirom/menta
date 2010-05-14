@@ -29,6 +29,14 @@ td { background-color: #CCCCCC }
 ? }
     </table>
 
+    <h2>$env from PSGI</h2>
+    <table>
+? my $env = env();
+? while (my ($key, $val) = each %$env) {
+    <tr><th><?= $key ?></th><td><?= $val ?></td>
+? }
+    </table>
+
     <h2>MENTA の設定</h2>
     <table>
     <tr><th>docroot</th><td><?= docroot() ?></td></tr>
