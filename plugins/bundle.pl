@@ -26,7 +26,7 @@ my @vers = (
     'Text::Hatena'                  => '0.20',
     'Text::Markdown'                => '1.0.24',
     'UNIVERSAL::require'            => '0.11',
-    'URI'                           => '1.51',
+    'URI'                           => '1.58',
     'YAML'                          => '0.66',
 );
 
