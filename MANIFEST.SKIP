@@ -23,3 +23,5 @@ out
 \.git/
 ^cgi-extlib-perl/extlib/i\d86-
 ^author/
+^app/data/session.dbm.dir$
+^app/data/session.dbm.pag$

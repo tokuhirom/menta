@@ -1,5 +1,13 @@
 Revision history for Perl extension MENTA
 
+0.43
+
+    - upgrade Plack and CGI::Accessor::Lite.
+
+0.42
+
+    - upgrade Plack.
+
 0.41
 
     - psgi の $env を直接さわれるアクセサなどを追加した
