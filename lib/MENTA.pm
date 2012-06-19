@@ -95,22 +95,42 @@ sub create_app {
         $app = sub {
             my @args = @_;
             my $res;
-            try {
+            my $trace;
+            my $caught;
+            $res = try {
                 local $SIG{__DIE__} = sub {
                     if (ref $@ && ref $@ eq 'ARRAY') {
-                        $res = $@;
+                        # nop
                     } else {
                         require 'Devel/StackTrace.pm';
                         require 'Devel/StackTrace/AsHTML.pm';
-                        $res = [
-                            500,
-                            [ 'Content-Type' => 'text/html; charset=utf-8' ],
-                            [MENTA::Util::encode_output(Devel::StackTrace->new->as_html)]
-                        ];
+                        my $munge_error = sub {
+                            my($err, $caller) = @_;
+                            return $err if ref $err;
+
+                            # Ugly hack to remove " at ... line ..." automatically appended by perl
+                            # If there's a proper way to do this, please let me know.
+                            $err =~ s/ at \Q$caller->[1]\E line $caller->[2]\.\n$//;
+
+                            return $err;
+                        };
+                        $trace = MENTA::Util::encode_output(Devel::StackTrace->new(
+                            message => $munge_error->($_[0], [ caller ])
+                        )->as_html);
                     }
                     die @_;
                 };
                 $res = $origapp->(@args);
+            } catch {
+                if (ref $_ && ref $_ eq 'ARRAY') {
+                    return $_;
+                } else {
+                    return [
+                        500,
+                        [ 'Content-Type' => 'text/html; charset=utf-8', 'Content-Length' => length($trace) ],
+                        [ $trace ]
+                    ]
+                }
             };
             return $res;
         };
