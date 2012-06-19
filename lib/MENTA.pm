@@ -110,7 +110,7 @@ sub create_app {
                     }
                     die @_;
                 };
-                $origapp->(@args);
+                $res = $origapp->(@args);
             };
             return $res;
         };
