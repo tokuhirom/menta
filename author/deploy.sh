@@ -14,6 +14,9 @@ sudo initctl reload-configuration
 sudo stop $DOMAIN
 sudo start $DOMAIN
 
+chmod 777 app/data/*.sqlite
+chmod 777 app/data
+
 echo "--------------------------"
 echo "Deployment finished"
 sudo tail /var/log/upstart/$DOMAIN.log
